@@ -1,36 +1,71 @@
 part of battlecity;
 
+List<List<Entity>> _field = new List(xFieldSize);
+
 class BattleGame {
   Symbol _gamestate;
-  List<List<Entity>> _field;
-  Player _player;
+  var player;
 
   BattleGame() {
     start();
-    _player = new Player();
-
+    for(int i = 0; i < yFieldSize; i++) {
+      _field[i] = new List(yFieldSize);
+    }
+    player = new Player(0,0);
   }
   bool get stopped => _gamestate == #stopped;
   bool get running => _gamestate == #running;
   void start() { _gamestate = #running; }
   void stop() { _gamestate = #stopped; }
 
+
 }
 
 abstract class Entity {
   int positionX;
   int positionY;
-  bool active;
   bool transparent;
+  String sprite;
 }
 abstract class DynamicEntity extends Entity {
-
+  void moveLeft() {
+    if(positionX > 0) {
+      _field[positionY][positionX] = null;
+      positionX -= 1;
+      _field[positionY][positionX] = this;
+    }
+  }
+  void moveRight() {
+    if(positionX < (xFieldSize - 1)) {
+      _field[positionY][positionX] = null;
+      positionX += 1;
+      _field[positionY][positionX] = this;
+    }
+  }
+  void moveUp() {
+    if(positionY > 0 ) {
+      _field[positionY][positionX] = null;
+      positionY -= 1;
+      _field[positionY][positionX] = this;
+    }
+  }
+  void moveDown() {
+    if(positionY < (yFieldSize - 1)) {
+      _field[positionY][positionX] = null;
+      positionY += 1;
+      _field[positionY][positionX] = this;
+    }
+  }
 }
 abstract class StaticEntity extends Entity {
 
 }
 class Player extends DynamicEntity {
-  Player() {
-
-  }
+  Player(posX, posY) {
+      positionX = posX;
+      positionY = posY;
+      transparent = false;
+      sprite = "player.png";
+      _field[posX][posY] = this;
+    }
 }
