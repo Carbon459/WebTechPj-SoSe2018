@@ -1,6 +1,3 @@
-import 'dart:html';
+import 'package:battlecity/battlecity.dart';
 
-void main() {
-  querySelector('#output').text = 'Your Dart app is running!';
-
-}
+main() => new BattleGameController();
