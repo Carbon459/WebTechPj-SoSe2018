@@ -1,6 +1,6 @@
 part of battlecity;
 
-List<List<Entity>> _field = new List(xFieldSize);
+List<List<Entity>> _field = new List(yFieldSize);
 
 class BattleGame {
   Symbol _gamestate;
@@ -9,7 +9,7 @@ class BattleGame {
   BattleGame() {
     start();
     for(int i = 0; i < yFieldSize; i++) {
-      _field[i] = new List(yFieldSize);
+      _field[i] = new List(xFieldSize);
     }
     player = new Player(0,0);
   }

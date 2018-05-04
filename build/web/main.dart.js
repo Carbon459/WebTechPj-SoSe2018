@@ -3324,7 +3324,7 @@ z.cD()
 z.bx(this.a)
 W.cw(window,"keydown",new M.dl(this),!1,W.aI)},
 l:{
-dk:function(){var z=new M.dj(M.di(),new M.dm(new Array(10),document.querySelector("#snakegame")))
+dk:function(){var z=new M.dj(M.di(),new M.dm(new Array(10)))
 z.bX()
 return z}}},dl:{"^":"f:14;a",
 $1:function(a){var z,y,x,w,v,u,t
@@ -3396,7 +3396,7 @@ this.b=y},
 l:{
 di:function(){var z=new M.dh(null,null)
 z.bW()
-return z}}},dz:{"^":"a;"},dx:{"^":"dz;"},ea:{"^":"dx;a,b,c,d"},dm:{"^":"a;a,b",
+return z}}},dz:{"^":"a;"},dx:{"^":"dz;"},ea:{"^":"dx;a,b,c,d"},dm:{"^":"a;a",
 bx:function(a){var z,y,x,w,v,u,t
 for(z=this.a,y=0;y<10;++y)for(x=0;x<10;++x){w=z[y][x]
 v=$.$get$S()[y][x]

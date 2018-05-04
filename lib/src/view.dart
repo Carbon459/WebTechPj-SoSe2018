@@ -1,9 +1,7 @@
 part of battlecity;
 
 class BattleView {
-  List<List<Element>> tableFields = new List(xFieldSize);
-
-  final game = querySelector('#snakegame');
+  List<List<Element>> tableFields = new List(yFieldSize);
 
   void update(BattleGame model) {
     for (int y = 0; y < yFieldSize; y++) {
@@ -32,7 +30,7 @@ class BattleView {
     querySelector('#game').innerHtml = table;
 
     for (int y = 0; y < yFieldSize; y++) {
-      tableFields[y] = new List<Element>(yFieldSize);
+      tableFields[y] = new List<Element>(xFieldSize);
       for (int x = 0; x < xFieldSize; x++) {
         tableFields[y][x] = querySelector("#x${x}y${y}");
       }
