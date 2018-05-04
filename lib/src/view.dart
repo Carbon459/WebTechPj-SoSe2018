@@ -1,15 +1,19 @@
 part of battlecity;
 
 class BattleView {
+  /// Enthält die Referenzen zu den Tabellenzellen
   List<List<Element>> tableFields = new List(yFieldSize);
 
+  /**
+   * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
+   */
   void update(BattleGame model) {
     for (int y = 0; y < yFieldSize; y++) {
       for (int x = 0; x < xFieldSize; x++) {
         final td = tableFields[y][x];
-        final modelField = _field[y][x];
+        final modelField = activeField.levelField[y][x];
         if(modelField != null) {
-          td.style.backgroundImage = "url('img/${modelField.sprite}')";
+          td.style.backgroundImage = "url('img/${modelField.getSprite()}')";
         } else {
           td.style.backgroundImage = "none";
         }
@@ -17,6 +21,9 @@ class BattleView {
     }
   }
 
+  /**
+   * Erzeugt eine leere Tabelle und initialisiert die [tableFields] Liste.
+   */
   void createEmptyField() {
     String table = "";
     for (int y = 0; y < yFieldSize; y++) {
