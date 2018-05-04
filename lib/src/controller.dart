@@ -18,14 +18,13 @@ class BattleGameController {
     window.onKeyDown.listen((KeyboardEvent ev) {
       if (game.stopped) return;
       switch (ev.keyCode) {
-        case KeyCode.LEFT:  game.player.moveLeft(); break;
-        case KeyCode.RIGHT: game.player.moveRight(); break;
-        case KeyCode.UP:    game.player.moveUp(); break;
-        case KeyCode.DOWN:  game.player.moveDown(); break;
+        case KeyCode.LEFT:  game.player.setOrientation(#left); game.player.move(); break;
+        case KeyCode.RIGHT: game.player.setOrientation(#right); game.player.move(); break;
+        case KeyCode.UP:    game.player.setOrientation(#up); game.player.move(); break;
+        case KeyCode.DOWN:  game.player.setOrientation(#down); game.player.move(); break;
         case KeyCode.SPACE: game.player.shoot(#basic); break;
       }
       view.update(game);
-
     });
   }
 
@@ -42,7 +41,7 @@ class BattleGameController {
     toRemove.forEach((dEntity) {
       dEntity.destroy();
     });
-
+    if(debug) {print("Active Selfmoving DynEntities: ${selfmoving.length}");};
     view.update(game);
   }
 }

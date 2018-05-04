@@ -8,7 +8,7 @@ abstract class Entity {
   bool transparent;
   String baseSprite;
   Symbol orientation;
-
+  Map toJson() => {"positionX":positionX,"positionY":positionY,"transparent":transparent, "baseSprite":baseSprite, "orientation":orientation };
   /**
    * Gibt den Dateinamen des korrekt orientierten Sprites für dieses [Entity] zurück.
    */
@@ -33,22 +33,6 @@ abstract class Entity {
  * Beschreibt ein dynamisches bewegbares Objekt auf dem Spielfeld.
  */
 abstract class DynamicEntity extends Entity {
-  void moveLeft() {
-    activeField.moveEntityRelative(positionX, positionY, #left);
-    this.orientation = #left;
-  }
-  void moveRight() {
-    activeField.moveEntityRelative(positionX, positionY, #right);
-    this.orientation = #right;
-  }
-  void moveUp() {
-    activeField.moveEntityRelative(positionX, positionY, #up);
-    this.orientation = #up;
-  }
-  void moveDown() {
-    activeField.moveEntityRelative(positionX, positionY, #down);
-    this.orientation = #down;
-  }
   void shoot(Symbol projectile) {
     if(projectile == #basic ) {
       new Projectile(this, #basic);
@@ -90,8 +74,17 @@ class Player extends DynamicEntity {
     baseSprite = "player";
     activeField.setEntity(posX, posY, this);
   }
+  void setOrientation(Symbol or) {
+    orientation = or;
+  }
+
   bool move() {
-    //TODO:?
+    switch(this.orientation.toString()) {
+      case 'Symbol("left")': return activeField.moveEntityRelative(positionX, positionY, #left); break;
+      case 'Symbol("right")': return activeField.moveEntityRelative(positionX, positionY, #right); break;
+      case 'Symbol("up")': return activeField.moveEntityRelative(positionX, positionY, #up); break;
+      case 'Symbol("down")': return activeField.moveEntityRelative(positionX, positionY, #down); break;
+    }
     return false;
   }
 }

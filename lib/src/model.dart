@@ -7,7 +7,7 @@ List<DynamicEntity> selfmoving;
 
 class BattleGame {
   Symbol _gamestate;
-  var player;
+  Player player;
 
   BattleGame() {
     start();
@@ -27,10 +27,10 @@ class BattleGame {
 /**
  * Repräsentiert ein Level
  */
-class Level {
+class Level{
   List<List<Entity>> _levelField;
   List<List<Entity>> get levelField => _levelField;
-
+  Map toJson() => {"levelField":_levelField};
   /**
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
    */
@@ -154,8 +154,12 @@ class Level {
  * Dient dazu, Level zu laden.
  */
 class LevelLoader {
+  //TODO json level loader implementieren
   static Level getLevelFromJson(String name) {
-    //TODO json level loader implementieren
+    //Level lvl = JSON.decode(name);
     return new Level(xFieldSize, yFieldSize);
+  }
+  static void saveLevelToJson(Level lvl) {
+    print(JSON.encode(lvl));
   }
 }
