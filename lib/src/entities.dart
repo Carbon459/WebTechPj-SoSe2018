@@ -3,12 +3,21 @@ part of battlecity;
  * Ein Objekt auf dem Spielfeld
  */
 abstract class Entity {
+  Map toJson() => {"type":this.runtimeType.toString(),"positionX":positionX,"positionY":positionY,"transparent":transparent, "baseSprite":baseSprite, "orientation":MirrorSystem.getName(orientation)};
+  Entity fromJson(Map json) {
+    this.positionX = json["positionX"];
+    this.positionY = json["positionY"];
+    this.transparent = json["transparent"];
+    this.baseSprite = json["baseSprite"];
+    this.orientation = MirrorSystem.getSymbol(json["orientation"]);
+    return this;
+  }
   int positionX;
   int positionY;
   bool transparent;
   String baseSprite;
   Symbol orientation;
-  Map toJson() => {"positionX":positionX,"positionY":positionY,"transparent":transparent, "baseSprite":baseSprite, "orientation":orientation };
+
   /**
    * Gibt den Dateinamen des korrekt orientierten Sprites für dieses [Entity] zurück.
    */
@@ -29,11 +38,14 @@ abstract class Entity {
     activeField.removeEntity(positionX, positionY);
   }
 }
+
 /**
  * Beschreibt ein dynamisches bewegbares Objekt auf dem Spielfeld.
  */
 abstract class DynamicEntity extends Entity {
+  ///EventListener für die nötigen Bewegungen bei jedem Tick
   EventListener ev;
+
   void shoot(Symbol projectile) {
     if(projectile == #basic ) {
       new Projectile(this, #basic);
@@ -48,6 +60,7 @@ abstract class DynamicEntity extends Entity {
     return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
 }
+
 /**
  * Die Spielerklasse
  */
@@ -63,6 +76,7 @@ class Player extends DynamicEntity {
     orientation = or;
   }
 }
+
 /**
  * Klasse für alle Arten von Projektilen
  */
@@ -114,6 +128,7 @@ class Projectile extends DynamicEntity {
       activeField.setEntity(this.positionX, this.positionY, this);
     }
   }
+
   /**
    * Bewegt die Entität auf dem Modellfeld
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
@@ -127,6 +142,7 @@ class Projectile extends DynamicEntity {
     return output;
   }
 }
+
 abstract class Enemy extends DynamicEntity {}
 
 /**

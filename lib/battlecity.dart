@@ -3,6 +3,7 @@ library battlecity;
 import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:mirrors';
 
 //Model--------------------
 part 'src/model.dart';

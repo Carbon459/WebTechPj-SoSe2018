@@ -9,7 +9,7 @@ class BattleGame {
 
   BattleGame() {
     start();
-    activeField = LevelLoader.getLevelFromJson("1.json");
+    activeField = new Level(xFieldSize, yFieldSize);
     player = new Player(0,0);
   }
   bool get stopped => _gamestate == #stopped;
@@ -20,7 +20,6 @@ class BattleGame {
 
 }
 
-
 /**
  * Repräsentiert ein Level
  */
@@ -28,6 +27,10 @@ class Level{
   List<List<Entity>> _levelField;
   List<List<Entity>> get levelField => _levelField;
   Map toJson() => {"levelField":_levelField};
+  Level fromJson(Map json) {
+    this._levelField = json["levelField"];
+    return this;
+  }
   /**
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
    */
@@ -47,28 +50,37 @@ class Level{
   /**
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
-  bool outOfBounds(int atPosX, int atPosY) {
+  bool isOutOfBounds(int atPosX, int atPosY) {
     if(atPosX < 0 || atPosX >= xFieldSize || atPosY < 0 || atPosY >= yFieldSize) {
       return true;
     }
     return false;
   }
+
   /**
    * Prüft ob an der gegeben Koordinate etwas zum kollidieren ist.
    * true: Kollision!
    */
   bool collisionAt(int atPosX, int atPosY) {
-    //Wenn Ziel außerhalb des Spielfeldes -> Kollision
-    if(outOfBounds(atPosX, atPosY)) {
-      if(debug) {print("Pos($atPosX|$atPosY) invalid!");}
+    if(isOutOfBounds(atPosX, atPosY)) { //Wenn Ziel außerhalb des Spielfeldes
+      if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}
       return true;
     }
-    //TODO Kollision mit anderen Entitys prüfen
+    if(getEntityAt(atPosX, atPosY) != null) { //Kollision mit anderen Entitäten
+      if(debug) {print("Pos($atPosX|$atPosY) collision!");}
+      return true;
+    }
     return false;
   }
+
+  /**
+   * Gibt die Entität an der gegebenen Position zurück.
+   * Falls dort keine existiert wird null zurückgegeben.
+   */
   Entity getEntityAt(int atPosX, int atPosY) {
     return _levelField[atPosY][atPosX];
   }
+
   /**
    * Bewegt im Level der aktuellen Instanz eine Entität um eine Einheit in die gewünschte Richtung.
    * Mögliche Richtungen: #left, #right, #up, #down
@@ -97,8 +109,8 @@ class Level{
       this.removeEntity(fromPosX, fromPosY);
       this.setEntity(newPosX, newPosY, ent);
       return true;
-    } else if(!activeField.outOfBounds(newPosX, newPosY)) {
-      //TODO: Kollision mit Entity
+    } else if(!activeField.isOutOfBounds(newPosX, newPosY)) {
+        //TODO: Kollision mit Entity
       return false;
     } else { //OutofBounds
       return false;
@@ -115,16 +127,17 @@ class Level{
     }
   }
 }
+
 /**
  * Dient dazu, Level zu laden.
  */
 class LevelLoader {
   //TODO json level loader implementieren
-  static Level getLevelFromJson(String name) {
-    //Level lvl = JSON.decode(name);
-    return new Level(xFieldSize, yFieldSize);
+  static Level getLevelFromJson(String url) {
+    HttpRequest.getString(url).then((String json) {return JSON.decode(json);});
+    return null;
   }
-  static void saveLevelToJson(Level lvl) {
-    print(JSON.encode(lvl));
+  static void saveLevelToJson(Level lvl, String fileName) {
+    if(debug) { print(JSON.encode(lvl)); }
   }
 }
