@@ -2,8 +2,6 @@ part of battlecity;
 
 /// Das momentan aktive Modellspielfeld
 Level activeField;
-///Liste aller Objekte, die zu jedem Tick bewegt werden müssen (Projektile und Gegner).
-List<DynamicEntity> selfmoving;
 
 class BattleGame {
   Symbol _gamestate;
@@ -12,7 +10,6 @@ class BattleGame {
   BattleGame() {
     start();
     activeField = LevelLoader.getLevelFromJson("1.json");
-    selfmoving = new List<DynamicEntity>();
     player = new Player(0,0);
   }
   bool get stopped => _gamestate == #stopped;
@@ -78,66 +75,34 @@ class Level{
    * Gibt true zurück, falls bewegt wurde. Bei Kolission false
    */
   bool moveEntityRelative(int fromPosX, int fromPosY, Symbol direction) {
-    final ent = _levelField[fromPosY][fromPosX];
+    DynamicEntity ent = _levelField[fromPosY][fromPosX];
+    if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}
+    int newPosX = fromPosX;
+    int newPosY = fromPosY;
     switch(direction.toString()) {
       case 'Symbol("left")':
-        final int newPosX = fromPosX - 1;
-        if(!activeField.collisionAt(newPosX, fromPosY)) {
-          this.removeEntity(fromPosX, fromPosY);
-          this.setEntity(newPosX, fromPosY, ent);
-          return true;
-        } else if(!activeField.outOfBounds(newPosX, fromPosY)) {
-          //TODO: Kollision mit Entity
-          return false;
-        } else { //OutofBounds
-          //wird in _moveDynamicEntities() gesammelt und zerstört, um "Uncaught Error: Concurrent modification during iteration" zu verhindern
-          return false;
-        }
+        newPosX = fromPosX - 1;
         break;
       case 'Symbol("right")':
-        final int newPosX = fromPosX + 1;
-        if(!activeField.collisionAt(newPosX, fromPosY)) {
-          this.removeEntity(fromPosX, fromPosY);
-          this.setEntity(newPosX, fromPosY, ent);
-          return true;
-        } else if(!activeField.outOfBounds(newPosX, fromPosY)) {
-          //TODO: Kollision mit Entity
-          return false;
-        } else { //OutofBounds
-          //wird in _moveDynamicEntities() gesammelt und zerstört, um "Uncaught Error: Concurrent modification during iteration" zu verhindern
-          return false;
-        }
+        newPosX = fromPosX + 1;
         break;
       case 'Symbol("up")':
-        final int newPosY = fromPosY - 1;
-        if(!activeField.collisionAt(fromPosX, newPosY)) {
-          this.removeEntity(fromPosX, fromPosY);
-          this.setEntity(fromPosX, newPosY, ent);
-          return true;
-        } else if(!activeField.outOfBounds(fromPosX, newPosY)) {
-          //TODO: Kollision mit Entity
-          return false;
-        } else { //OutofBounds
-          //wird in _moveDynamicEntities() gesammelt und zerstört, um "Uncaught Error: Concurrent modification during iteration" zu verhindern
-          return false;
-        }
+        newPosY = fromPosY - 1;
         break;
       case 'Symbol("down")':
-        final int newPosY = fromPosY + 1;
-        if(!activeField.collisionAt(fromPosX, newPosY)) {
-          this.removeEntity(fromPosX, fromPosY);
-          this.setEntity(fromPosX, newPosY, ent);
-          return true;
-        } else if(!activeField.outOfBounds(fromPosX, newPosY)) {
-          //TODO: Kollision mit Entity
-          return false;
-        } else { //OutofBounds
-          //wird in _moveDynamicEntities() gesammelt und zerstört, um "Uncaught Error: Concurrent modification during iteration" zu verhindern
-          return false;
-        }
+        newPosY = fromPosY + 1;
         break;
     }
-    return false;
+    if(!activeField.collisionAt(newPosX, newPosY)) {
+      this.removeEntity(fromPosX, fromPosY);
+      this.setEntity(newPosX, newPosY, ent);
+      return true;
+    } else if(!activeField.outOfBounds(newPosX, newPosY)) {
+      //TODO: Kollision mit Entity
+      return false;
+    } else { //OutofBounds
+      return false;
+    }
   }
 
   /**

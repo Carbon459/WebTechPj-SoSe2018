@@ -12,7 +12,7 @@ class BattleGameController {
     view.createEmptyField();
     view.update(game);
 
-    tick = new Timer.periodic(tickSpeed, (_) => _moveDynamicEntities());
+    tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
 
     //Tastatursteuerung Events
     window.onKeyDown.listen((KeyboardEvent ev) {
@@ -28,20 +28,11 @@ class BattleGameController {
     });
   }
 
-  void _moveDynamicEntities() {
-    //Uncaught Error: Concurrent modification during iteration -> dEntity wird bei kollision mit spielfeldrändern entfernt während hier iteriert wird.
-    //Lösung: zu entfernende entities in liste sammeln und anschließend entfernen
-    var toRemove = [];
-    selfmoving.forEach((dEntity) {
-      if(!dEntity.move()) {
-        toRemove.add(dEntity);
-      }
-    });
-
-    toRemove.forEach((dEntity) {
-      dEntity.destroy();
-    });
-    if(debug) {print("Active Selfmoving DynEntities: ${selfmoving.length}");};
+  /**
+   * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
+   */
+  void _tickUpdate() {
+    window.dispatchEvent(new CustomEvent("mDE"));
     view.update(game);
   }
 }

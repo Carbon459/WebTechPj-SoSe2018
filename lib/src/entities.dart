@@ -33,6 +33,7 @@ abstract class Entity {
  * Beschreibt ein dynamisches bewegbares Objekt auf dem Spielfeld.
  */
 abstract class DynamicEntity extends Entity {
+  EventListener ev;
   void shoot(Symbol projectile) {
     if(projectile == #basic ) {
       new Projectile(this, #basic);
@@ -41,26 +42,10 @@ abstract class DynamicEntity extends Entity {
 
   /**
    * Bewegt die Entität auf dem Modellfeld
+   * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
-  bool move();
-
-  /**
-   * Entfernt zusätzlich noch die Entität aus der Liste der selbst bewegenden dynamischen Entitäten.
-   */
-  void destroy() {
-    super.destroy();
-    selfmoving.remove(this);
-  }
-}
-/**
- * Beschreibt ein statisches nicht bewegbares Objekt auf dem Spielfeld.
- */
-abstract class StaticEntity extends Entity {
-  bool destroyable;
-  void destroy() {
-    if(destroyable) {
-      //TODO
-    }
+  bool move() {
+    return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
 }
 /**
@@ -76,16 +61,6 @@ class Player extends DynamicEntity {
   }
   void setOrientation(Symbol or) {
     orientation = or;
-  }
-
-  bool move() {
-    switch(this.orientation.toString()) {
-      case 'Symbol("left")': return activeField.moveEntityRelative(positionX, positionY, #left); break;
-      case 'Symbol("right")': return activeField.moveEntityRelative(positionX, positionY, #right); break;
-      case 'Symbol("up")': return activeField.moveEntityRelative(positionX, positionY, #up); break;
-      case 'Symbol("down")': return activeField.moveEntityRelative(positionX, positionY, #down); break;
-    }
-    return false;
   }
 }
 /**
@@ -103,49 +78,60 @@ class Projectile extends DynamicEntity {
     //TODO verschiedene schusstypen implementieren nach [type]
     this.positionX = shooter.positionX;
     this.positionY = shooter.positionY;
+    this.orientation = shooter.orientation;
+    this.transparent = false;
+    this.baseSprite = "bullet";
 
     switch(shooter.orientation.toString()) {
       case 'Symbol("left")':
-        if(debug) {print("Left:${activeField.collisionAt(shooter.positionX - 1, shooter.positionY).toString()}");}
         if(!activeField.collisionAt(shooter.positionX - 1, shooter.positionY)) { //Schießen nach links nicht möglich, wenn Schütze am linken Rand ist.
           this.positionX = shooter.positionX - 1;
-          this.orientation = #left;
-          selfmoving.add(this);
+          window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("right")':
         if(!activeField.collisionAt(shooter.positionX + 1, shooter.positionY)) {
           this.positionX = shooter.positionX + 1;
-          this.orientation = #right;
-          selfmoving.add(this);
+          window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("up")':
         if(!activeField.collisionAt(shooter.positionX, shooter.positionY - 1)) {
           this.positionY = shooter.positionY - 1;
-          this.orientation = #up;
-          selfmoving.add(this);
+          window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("down")':
         if(!activeField.collisionAt(shooter.positionX, shooter.positionY + 1)) {
           this.positionY = shooter.positionY + 1;
-          this.orientation = #down;
-          selfmoving.add(this);
+          window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
     }
-    transparent = false;
-    baseSprite = "bullet";
-    //Projektil ins modellFeld setzen falls in die gewünschte Richtung überhaupt Platz ist(Kein Platz = richtung wurde oben nicht gesetzt).
-    if(this.orientation != null) {
+
+    //Projektil ins modellFeld setzen falls in die gewünschte Richtung überhaupt Platz ist(Kein Platz = eventListener leer).
+    if(this.ev != null) {
       activeField.setEntity(this.positionX, this.positionY, this);
     }
   }
+  /**
+   * Bewegt die Entität auf dem Modellfeld
+   * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
+   */
   bool move() {
-    return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
+    final bool output = activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
+    if(!output) { //Wenn OutofBounds oder Kolission -> Projektil zerstören TODO: bei kolission mit anderen entity schaden verteilen
+      this.destroy();
+      window.removeEventListener("mDE", this.ev);
+    }
+    return output;
   }
 }
 abstract class Enemy extends DynamicEntity {}
+
+/**
+ * Beschreibt ein statisches nicht bewegbares Objekt auf dem Spielfeld.
+ */
+abstract class StaticEntity extends Entity {}
 class Scenery extends StaticEntity {}
 class Powerup extends StaticEntity {}

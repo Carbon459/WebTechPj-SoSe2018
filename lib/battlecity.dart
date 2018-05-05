@@ -15,4 +15,4 @@ part 'src/controller.dart';
 
 const xFieldSize = 10;
 const yFieldSize = 10;
-const bool debug = false;
+const bool debug = true;
