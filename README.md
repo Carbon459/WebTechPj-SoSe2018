@@ -2,9 +2,6 @@
 
 A Battle City (1985, NES) clone made with Dart.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
-
 
 Play now:
 https://carbon459.github.io/WebTechPj-SoSe2018/build/web/

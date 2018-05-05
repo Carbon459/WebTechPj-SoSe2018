@@ -1,7 +1,5 @@
 part of battlecity;
-/**
- * Ein Objekt auf dem Spielfeld
- */
+
 abstract class Entity {
   Map toJson() => {"type":this.runtimeType.toString(),"positionX":positionX,"positionY":positionY,"transparent":transparent, "baseSprite":baseSprite, "orientation":MirrorSystem.getName(orientation)};
   Entity fromJson(Map json) {
@@ -22,6 +20,7 @@ abstract class Entity {
    * Gibt den Dateinamen des korrekt orientierten Sprites für dieses [Entity] zurück.
    */
   String getSprite() {
+    if(this.orientation == null) return this.baseSprite + ".png";//Falls es keine orientierung gibt:
     switch(this.orientation.toString()) {
       case 'Symbol("left")': return this.baseSprite + "Left.png"; break;
       case 'Symbol("right")': return this.baseSprite + "Right.png"; break;
@@ -39,21 +38,16 @@ abstract class Entity {
   }
 }
 
-/**
- * Beschreibt ein dynamisches bewegbares Objekt auf dem Spielfeld.
- */
 abstract class DynamicEntity extends Entity {
   ///EventListener für die nötigen Bewegungen bei jedem Tick
   EventListener ev;
 
   void shoot(Symbol projectile) {
-    if(projectile == #basic ) {
-      new Projectile(this, #basic);
-    }
+    new Projectile(this, #basic);
   }
 
   /**
-   * Bewegt die Entität auf dem Modellfeld
+   * Bewegt die Entität auf dem Modellfeld entsprechend der [orientation]
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
   bool move() {
@@ -61,9 +55,6 @@ abstract class DynamicEntity extends Entity {
   }
 }
 
-/**
- * Die Spielerklasse
- */
 class Player extends DynamicEntity {
   Player(posX, posY) {
     positionX = posX;
@@ -77,9 +68,6 @@ class Player extends DynamicEntity {
   }
 }
 
-/**
- * Klasse für alle Arten von Projektilen
- */
 class Projectile extends DynamicEntity {
   /// Maximale Distanz, die der Schuss zurücklegen kann, bevor er verschwindet. -1 = unlimitiert TODO: unbenutzt
   int maxRemainingDistance = -1;
@@ -98,7 +86,7 @@ class Projectile extends DynamicEntity {
 
     switch(shooter.orientation.toString()) {
       case 'Symbol("left")':
-        if(!activeField.collisionAt(shooter.positionX - 1, shooter.positionY)) { //Schießen nach links nicht möglich, wenn Schütze am linken Rand ist.
+        if(!activeField.collisionAt(shooter.positionX - 1, shooter.positionY)) {
           this.positionX = shooter.positionX - 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
@@ -137,17 +125,58 @@ class Projectile extends DynamicEntity {
     final bool output = activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
     if(!output) { //Wenn OutofBounds oder Kolission -> Projektil zerstören TODO: bei kolission mit anderen entity schaden verteilen
       this.destroy();
-      window.removeEventListener("mDE", this.ev);
     }
     return output;
   }
+
+  /**
+   * Entfernt das Projektil vom Spielfeld
+   */
+  void destroy() {
+    window.removeEventListener("mDE", this.ev);
+    activeField.removeEntity(positionX, positionY);
+  }
 }
 
-abstract class Enemy extends DynamicEntity {}
+abstract class Enemy extends DynamicEntity {
+  int hp;
+  /**
+   * Bewegt den Gegner
+   * Gibt true zurück, falls bewegt wurde. Ansonsten false
+   */
+  bool move() {
+    //TODO: Gegner wegfindung implementieren
+    return false;
+  }
+}
+class BasicTank extends Enemy {
+  BasicTank(int posX, int posY) {
+    positionX = posX;
+    positionY = posY;
+    transparent = false;
+    baseSprite = "basictank";
+    hp = 1;
+    activeField.setEntity(posX, posY, this);
+    window.addEventListener("mDE", ev = (e) => this.move());
+  }
+  /**
+   * Entfernt den Gegner vom Spielfeld. (vermutlich zerstört worden)
+   */
+  void destroy() {
+    window.removeEventListener("mDE", this.ev);
+    activeField.removeEntity(positionX, positionY);
+  }
+}
 
-/**
- * Beschreibt ein statisches nicht bewegbares Objekt auf dem Spielfeld.
- */
 abstract class StaticEntity extends Entity {}
-class Scenery extends StaticEntity {}
+
+class Scenery extends StaticEntity {
+  Scenery(int posX, int posY, sprite) {
+    positionX = posX;
+    positionY = posY;
+    transparent = false;
+    baseSprite = sprite;
+    activeField.setEntity(posX, posY, this);
+  }
+}
 class Powerup extends StaticEntity {}

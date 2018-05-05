@@ -20,9 +20,6 @@ class BattleGame {
 
 }
 
-/**
- * Repräsentiert ein Level
- */
 class Level{
   List<List<Entity>> _levelField;
   List<List<Entity>> get levelField => _levelField;
@@ -128,9 +125,6 @@ class Level{
   }
 }
 
-/**
- * Dient dazu, Level zu laden.
- */
 class LevelLoader {
   //TODO json level loader implementieren
   static Level getLevelFromJson(String url) {
@@ -139,5 +133,13 @@ class LevelLoader {
   }
   static void saveLevelToJson(Level lvl, String fileName) {
     if(debug) { print(JSON.encode(lvl)); }
+  }
+  static void testlevel() {
+    new Scenery(5, 5, "house");
+    new Scenery(6, 5, "house");
+    new Scenery(7, 5, "house");
+    new Scenery(8, 5, "house");
+    new Scenery(8, 4, "house");
+    new Scenery(8, 6, "house");
   }
 }

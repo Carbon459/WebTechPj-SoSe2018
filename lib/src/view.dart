@@ -34,7 +34,7 @@ class BattleView {
       }
       table += "</tr>";
     }
-    querySelector('#game').innerHtml = table;
+    querySelector('#gameTable').innerHtml = table;
 
     for (int y = 0; y < yFieldSize; y++) {
       tableFields[y] = new List<Element>(xFieldSize);

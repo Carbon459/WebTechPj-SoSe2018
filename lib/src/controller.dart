@@ -11,7 +11,6 @@ class BattleGameController {
   BattleGameController() {
     view.createEmptyField();
     view.update(game);
-
     tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
 
     //Tastatursteuerung Events
@@ -26,6 +25,7 @@ class BattleGameController {
       }
       view.update(game);
     });
+    LevelLoader.testlevel();
   }
 
   /**
