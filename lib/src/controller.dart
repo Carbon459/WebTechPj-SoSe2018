@@ -22,6 +22,8 @@ class BattleGameController {
         case KeyCode.UP:    game.player.setOrientation(#up); game.player.move(); break;
         case KeyCode.DOWN:  game.player.setOrientation(#down); game.player.move(); break;
         case KeyCode.SPACE: game.player.shoot(#basic); break;
+        //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
+        //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
       }
       view.update(game);
     });

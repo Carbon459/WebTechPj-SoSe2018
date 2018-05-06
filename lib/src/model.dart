@@ -25,8 +25,7 @@ class Level{
   List<List<Entity>> get levelField => _levelField;
   Map toJson() => {"levelField":_levelField};
   Level fromJson(Map json) {
-    this._levelField = json["levelField"];
-    return this;
+    return new Level.fromList(json["levelField"]);
   }
   /**
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
@@ -123,16 +122,19 @@ class Level{
       _levelField[i] = new List(xSize);
     }
   }
+  Level.fromList(List<List<Entity>> l) {
+    _levelField = l;
+  }
 }
 
 class LevelLoader {
   //TODO json level loader implementieren
-  static Level getLevelFromJson(String url) {
-    HttpRequest.getString(url).then((String json) {return JSON.decode(json);});
-    return null;
+  static Future<Level> getLevelFromJson (String url) async {
+    String s = await HttpRequest.getString(url);
+    return JSON.decode(s);
   }
-  static void saveLevelToJson(Level lvl, String fileName) {
-    if(debug) { print(JSON.encode(lvl)); }
+  static void printLevelAsJson(Level lvl) {
+    print(JSON.encode(lvl));
   }
   static void testlevel() {
     new Scenery(5, 5, "house");

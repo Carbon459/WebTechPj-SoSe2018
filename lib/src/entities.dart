@@ -1,18 +1,24 @@
 part of battlecity;
 
 abstract class Entity {
-  Map toJson() => {"type":this.runtimeType.toString(),"positionX":positionX,"positionY":positionY,"transparent":transparent, "baseSprite":baseSprite, "orientation":MirrorSystem.getName(orientation)};
+  Map toJson() => {"type":this.runtimeType.toString(),"positionX":positionX,"positionY":positionY, "baseSprite":baseSprite};
   Entity fromJson(Map json) {
-    this.positionX = json["positionX"];
-    this.positionY = json["positionY"];
-    this.transparent = json["transparent"];
-    this.baseSprite = json["baseSprite"];
-    this.orientation = MirrorSystem.getSymbol(json["orientation"]);
-    return this;
+    //this.orientation = MirrorSystem.getSymbol(json["orientation"]);
+    switch(json["type"]) {
+      case "Player":
+        return new Player(json["positionX"],json["positionY"]);
+        break;
+      case "Scenery":
+        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"]);
+        break;
+      default:
+        return null;
+    }
   }
   int positionX;
   int positionY;
-  bool transparent;
+  ///Lebenspunkte (hp<0 = Unzerstörbar)
+  int hp = -1;
   String baseSprite;
   Symbol orientation;
 
@@ -36,6 +42,16 @@ abstract class Entity {
   void destroy() {
     activeField.removeEntity(positionX, positionY);
   }
+
+  /**
+   * Schadensberechnung
+   */
+  void damage(int dmg) {
+    if(this.hp < 0) return; //Unzerstörbar: nichts machen
+    else if(hp - dmg <= 0) { this.destroy(); return;}
+    else { hp -= dmg; return;}
+  }
+
 }
 
 abstract class DynamicEntity extends Entity {
@@ -59,8 +75,8 @@ class Player extends DynamicEntity {
   Player(posX, posY) {
     positionX = posX;
     positionY = posY;
-    transparent = false;
     baseSprite = "player";
+    hp = 5;
     activeField.setEntity(posX, posY, this);
   }
   void setOrientation(Symbol or) {
@@ -81,7 +97,6 @@ class Projectile extends DynamicEntity {
     this.positionX = shooter.positionX;
     this.positionY = shooter.positionY;
     this.orientation = shooter.orientation;
-    this.transparent = false;
     this.baseSprite = "bullet";
 
     switch(shooter.orientation.toString()) {
@@ -139,7 +154,6 @@ class Projectile extends DynamicEntity {
 }
 
 abstract class Enemy extends DynamicEntity {
-  int hp;
   /**
    * Bewegt den Gegner
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
@@ -153,7 +167,6 @@ class BasicTank extends Enemy {
   BasicTank(int posX, int posY) {
     positionX = posX;
     positionY = posY;
-    transparent = false;
     baseSprite = "basictank";
     hp = 1;
     activeField.setEntity(posX, posY, this);
@@ -174,7 +187,6 @@ class Scenery extends StaticEntity {
   Scenery(int posX, int posY, sprite) {
     positionX = posX;
     positionY = posY;
-    transparent = false;
     baseSprite = sprite;
     activeField.setEntity(posX, posY, this);
   }
