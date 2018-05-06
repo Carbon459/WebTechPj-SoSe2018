@@ -74,9 +74,33 @@ class Level{
    * Falls dort keine existiert wird null zurückgegeben.
    */
   Entity getEntityAt(int atPosX, int atPosY) {
+    if(isOutOfBounds(atPosX, atPosY)) return null;
     return _levelField[atPosY][atPosX];
   }
-
+  static int getNewPosX(int posX, Symbol direction) {
+    int newPosX = posX;
+    switch(direction.toString()) {
+      case 'Symbol("left")':
+        newPosX = posX - 1;
+        break;
+      case 'Symbol("right")':
+        newPosX = posX + 1;
+        break;
+    }
+    return newPosX;
+  }
+  static int getNewPosY(int posY, Symbol direction) {
+    int newPosY = posY;
+    switch(direction.toString()) {
+      case 'Symbol("up")':
+        newPosY = posY - 1;
+        break;
+      case 'Symbol("down")':
+        newPosY = posY + 1;
+        break;
+    }
+    return newPosY;
+  }
   /**
    * Bewegt im Level der aktuellen Instanz eine Entität um eine Einheit in die gewünschte Richtung.
    * Mögliche Richtungen: #left, #right, #up, #down
@@ -85,22 +109,10 @@ class Level{
   bool moveEntityRelative(int fromPosX, int fromPosY, Symbol direction) {
     DynamicEntity ent = _levelField[fromPosY][fromPosX];
     if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}
-    int newPosX = fromPosX;
-    int newPosY = fromPosY;
-    switch(direction.toString()) {
-      case 'Symbol("left")':
-        newPosX = fromPosX - 1;
-        break;
-      case 'Symbol("right")':
-        newPosX = fromPosX + 1;
-        break;
-      case 'Symbol("up")':
-        newPosY = fromPosY - 1;
-        break;
-      case 'Symbol("down")':
-        newPosY = fromPosY + 1;
-        break;
-    }
+
+    final int newPosX = getNewPosX(fromPosX, direction);
+    final int newPosY = getNewPosY(fromPosY, direction);
+
     if(!activeField.collisionAt(newPosX, newPosY)) {
       this.removeEntity(fromPosX, fromPosY);
       this.setEntity(newPosX, newPosY, ent);

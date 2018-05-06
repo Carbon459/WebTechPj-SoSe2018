@@ -85,8 +85,7 @@ class Player extends DynamicEntity {
 }
 
 class Projectile extends DynamicEntity {
-  /// Maximale Distanz, die der Schuss zurücklegen kann, bevor er verschwindet. -1 = unlimitiert TODO: unbenutzt
-  int maxRemainingDistance = -1;
+  int dmg = 1;
 
   /**
    * Der Konstruktor erzeugt das Projektilelement und setzt es direkt in die Spielwelt falls möglich.
@@ -138,8 +137,12 @@ class Projectile extends DynamicEntity {
    */
   bool move() {
     final bool output = activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
-    if(!output) { //Wenn OutofBounds oder Kolission -> Projektil zerstören TODO: bei kolission mit anderen entity schaden verteilen
-      this.destroy();
+    if(!output) { //Wenn OutofBounds oder Kolission TODO: bei kolission mit anderen entity schaden verteilen
+      this.destroy(); //Projektil zerstören
+      final Entity hitEntity = activeField.getEntityAt(Level.getNewPosX(this.positionX, this.orientation), Level.getNewPosY(this.positionY, this.orientation));
+      if(hitEntity != null) {
+        hitEntity.damage(this.dmg);
+      }
     }
     return output;
   }
