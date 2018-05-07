@@ -69,6 +69,13 @@ abstract class DynamicEntity extends Entity {
   bool move() {
     return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
+  /**
+   * Entfernt die Entität vom Spielfeld. Entfernt Eventlistener falls vorhanden
+   */
+  void destroy() {
+    super.destroy();
+    if(ev != null) window.removeEventListener("mDE", this.ev);
+  }
 }
 
 class Player extends DynamicEntity {
@@ -147,13 +154,6 @@ class Projectile extends DynamicEntity {
     return output;
   }
 
-  /**
-   * Entfernt das Projektil vom Spielfeld
-   */
-  void destroy() {
-    window.removeEventListener("mDE", this.ev);
-    activeField.removeEntity(positionX, positionY);
-  }
 }
 
 abstract class Enemy extends DynamicEntity {
@@ -174,13 +174,6 @@ class BasicTank extends Enemy {
     hp = 1;
     activeField.setEntity(posX, posY, this);
     window.addEventListener("mDE", ev = (e) => this.move());
-  }
-  /**
-   * Entfernt den Gegner vom Spielfeld. (vermutlich zerstört worden)
-   */
-  void destroy() {
-    window.removeEventListener("mDE", this.ev);
-    activeField.removeEntity(positionX, positionY);
   }
 }
 
