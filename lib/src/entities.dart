@@ -23,17 +23,17 @@ abstract class Entity {
   Symbol orientation;
 
   /**
-   * Gibt den Dateinamen des korrekt orientierten Sprites für dieses [Entity] zurück.
+   * Gibt die korrekte Rotation in Grad für dieses [Entity] zurück.
    */
-  String getSprite() {
-    if(this.orientation == null) return this.baseSprite + ".png";//Falls es keine orientierung gibt:
+  int getSpriteRotation() {
+    if(this.orientation == null) return 0;//Falls es keine orientierung gibt:
     switch(this.orientation.toString()) {
-      case 'Symbol("left")': return this.baseSprite + "Left.png"; break;
-      case 'Symbol("right")': return this.baseSprite + "Right.png"; break;
-      case 'Symbol("up")': return this.baseSprite + "Up.png"; break;
-      case 'Symbol("down")': return this.baseSprite + "Down.png"; break;
+      case 'Symbol("left")': return 270; break;
+      case 'Symbol("right")': return 90; break;
+      case 'Symbol("up")': return 0; break;
+      case 'Symbol("down")': return 180; break;
     }
-    return this.baseSprite + ".png"; //Falls keine orientierung vorhanden ist, vorallem bei statischen Sprites verwendet:
+    return 0; //Falls keine orientierung vorhanden ist, vorallem bei statischen Sprites verwendet:
   }
 
   /**
@@ -75,7 +75,7 @@ class Player extends DynamicEntity {
   Player(posX, posY) {
     positionX = posX;
     positionY = posY;
-    baseSprite = "player";
+    baseSprite = "player.png";
     hp = 5;
     activeField.setEntity(posX, posY, this);
   }
@@ -96,7 +96,7 @@ class Projectile extends DynamicEntity {
     this.positionX = shooter.positionX;
     this.positionY = shooter.positionY;
     this.orientation = shooter.orientation;
-    this.baseSprite = "bullet";
+    this.baseSprite = "bullet.png";
 
     switch(shooter.orientation.toString()) {
       case 'Symbol("left")':
@@ -170,7 +170,7 @@ class BasicTank extends Enemy {
   BasicTank(int posX, int posY) {
     positionX = posX;
     positionY = posY;
-    baseSprite = "basictank";
+    baseSprite = "basictank.png";
     hp = 1;
     activeField.setEntity(posX, posY, this);
     window.addEventListener("mDE", ev = (e) => this.move());

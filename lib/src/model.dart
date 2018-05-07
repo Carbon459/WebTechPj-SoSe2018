@@ -149,11 +149,11 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    new Scenery(5, 5, "house");
-    new Scenery(6, 5, "house");
-    new Scenery(7, 5, "house");
-    new Scenery(8, 5, "house");
-    new Scenery(8, 4, "house");
-    new Scenery(8, 6, "house");
+    new Scenery(5, 5, "house.png");
+    new Scenery(6, 5, "house.png");
+    new Scenery(7, 5, "house.png");
+    new Scenery(8, 5, "house.png");
+    new Scenery(8, 4, "house.png");
+    new Scenery(8, 6, "house.png");
   }
 }

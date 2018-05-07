@@ -13,7 +13,8 @@ class BattleView {
         final td = tableFields[y][x];
         final modelField = activeField.levelField[y][x];
         if(modelField != null) {
-          td.style.backgroundImage = "url('img/${modelField.getSprite()}')";
+          td.style.backgroundImage = "url('img/${modelField.baseSprite}')";
+          td.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
         } else {
           td.style.backgroundImage = "none";
         }
@@ -30,7 +31,7 @@ class BattleView {
       table += "<tr>";
       for (int x = 0; x < xFieldSize; x++) {
         final pos = "x${x}y${y}";
-        table += "<td id='$pos'></td>";
+        table += "<td><div id='$pos' class='field'></div></td>";
       }
       table += "</tr>";
     }
