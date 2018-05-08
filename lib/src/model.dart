@@ -2,10 +2,10 @@ part of battlecity;
 
 /// Das momentan aktive Modellspielfeld
 Level activeField;
+Player player;
 
 class BattleGame {
   Symbol _gamestate;
-  Player player;
 
   BattleGame() {
     start();

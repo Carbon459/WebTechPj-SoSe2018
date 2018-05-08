@@ -17,11 +17,11 @@ class BattleGameController {
     window.onKeyDown.listen((KeyboardEvent ev) {
       if (game.stopped) return;
       switch (ev.keyCode) {
-        case KeyCode.LEFT:  game.player.setOrientation(#left); game.player.move(); break;
-        case KeyCode.RIGHT: game.player.setOrientation(#right); game.player.move(); break;
-        case KeyCode.UP:    game.player.setOrientation(#up); game.player.move(); break;
-        case KeyCode.DOWN:  game.player.setOrientation(#down); game.player.move(); break;
-        case KeyCode.SPACE: game.player.shoot(#basic); break;
+        case KeyCode.LEFT:  if (player != null) { player.setOrientation(#left); player.move(); } break;
+        case KeyCode.RIGHT: if (player != null) { player.setOrientation(#right); player.move(); } break;
+        case KeyCode.UP:    if (player != null) { player.setOrientation(#up); player.move(); } break;
+        case KeyCode.DOWN:  if (player != null) { player.setOrientation(#down); player.move(); } break;
+        case KeyCode.SPACE: if (player != null) { player.shoot(#basic); } break;
         //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
         //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
       }

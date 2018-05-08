@@ -83,11 +83,18 @@ class Player extends DynamicEntity {
     positionX = posX;
     positionY = posY;
     baseSprite = "player.png";
-    hp = 5;
+    hp = 3;
     activeField.setEntity(posX, posY, this);
   }
   void setOrientation(Symbol or) {
     orientation = or;
+  }
+  /**
+   * Entfernt den Spieler vom Spielfeld und die Referenz.
+   */
+  void destroy() {
+    super.destroy();
+    player = null;
   }
 }
 
