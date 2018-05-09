@@ -3438,12 +3438,12 @@ z.cZ()
 z.aR(this.a)
 this.c=P.f1(C.x,new M.dF(this))
 W.cQ(window,"keydown",new M.dG(this),!1,W.aN)
-M.ae(5,5,"house.png")
-M.ae(6,5,"house.png")
-M.ae(7,5,"house.png")
-M.ae(8,5,"house.png")
-M.ae(8,4,"house.png")
-M.ae(8,6,"house.png")},
+M.ae(5,5,"wall.png")
+M.ae(6,5,"wall.png")
+M.ae(7,5,"wall.png")
+M.ae(8,5,"wall.png")
+M.ae(8,4,"wall.png")
+M.ae(8,6,"wall.png")},
 k:{
 dE:function(){var z=new M.dC(null)
 z.a=C.K
