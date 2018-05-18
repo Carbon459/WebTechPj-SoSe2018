@@ -185,6 +185,7 @@ class BasicTank extends Enemy {
   }
 }
 
+//TODO falls nicht nötig entfernen
 abstract class StaticEntity extends Entity {}
 
 class Scenery extends StaticEntity {

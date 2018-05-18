@@ -4,6 +4,7 @@ part of battlecity;
 Level activeField;
 Player player;
 
+//TODO eventuell klasse in controller integrieren
 class BattleGame {
   Symbol _gamestate;
 
