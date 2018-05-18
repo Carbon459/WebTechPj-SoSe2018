@@ -27,7 +27,32 @@ class BattleGameController {
       }
       view.update(game);
     });
+
+    if(TouchEvent.supported) {
+      querySelector("#controls").style.visibility = "visible";
+      //Smartphonesteuerung Events
+      querySelector("#up").onClick.listen(dpadEvent);
+      querySelector("#down").onClick.listen(dpadEvent);
+      querySelector("#right").onClick.listen(dpadEvent);
+      querySelector("#left").onClick.listen(dpadEvent);
+
+      querySelector("#gameTable").onClick.listen((MouseEvent event) {
+        if (player != null) {
+          player.shoot(#basic);
+        }
+        view.update(game);
+      });
+    }
+
     LevelLoader.testlevel();
+  }
+  void dpadEvent(MouseEvent event) {
+    HtmlElement he = event.target;
+    if (player != null) {
+      player.setOrientation(new Symbol(he.id));
+      player.move();
+    }
+    view.update(game);
   }
 
   /**

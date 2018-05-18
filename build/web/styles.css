@@ -29,3 +29,28 @@ td {
     height: 500px;
     margin: 5% auto 0 auto;
 }
+#controls {
+    visibility: hidden;
+    position: fixed;
+    bottom: 1%;
+    left: 1%;
+    width: 264px;
+    height: 264px;
+    display: flex;
+}
+.dpad {
+    width: 88px;
+    height: 88px;
+}
+#up {
+    background-image: url("img/dpadup.png");
+}
+#down {
+    background-image: url("img/dpaddown.png");
+}
+#left {
+    background-image: url("img/dpadleft.png");
+}
+#right {
+    background-image: url("img/dpadright.png");
+}

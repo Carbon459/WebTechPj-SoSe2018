@@ -152,7 +152,7 @@ class Projectile extends DynamicEntity {
    */
   bool move() {
     final bool output = activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
-    if(!output) { //Wenn OutofBounds oder Kolission TODO: bei kolission mit anderen entity schaden verteilen
+    if(!output) { //Wenn OutofBounds oder Kolission
       this.destroy(); //Projektil zerstören
       final Entity hitEntity = activeField.getEntityAt(Level.getNewPosX(this.positionX, this.orientation), Level.getNewPosY(this.positionY, this.orientation));
       if(hitEntity != null) {

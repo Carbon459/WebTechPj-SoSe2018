@@ -118,8 +118,7 @@ class Level{
       this.removeEntity(fromPosX, fromPosY);
       this.setEntity(newPosX, newPosY, ent);
       return true;
-    } else if(!activeField.isOutOfBounds(newPosX, newPosY)) {
-        //TODO: Kollision mit Entity
+    } else if(!activeField.isOutOfBounds(newPosX, newPosY)) { //Kollision mit Entity
       return false;
     } else { //OutofBounds
       return false;
