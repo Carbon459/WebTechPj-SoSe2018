@@ -63,7 +63,7 @@ class Level{
       return true;
     }
     if(getEntityAt(atPosX, atPosY) != null) { //Kollision mit anderen Entitäten
-      if(debug) {print("Pos($atPosX|$atPosY) collision!");}
+      if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}
       return true;
     }
     return false;
@@ -154,6 +154,5 @@ class LevelLoader {
     new Scenery(7, 5, "wall.png");
     new Scenery(8, 5, "wall.png");
     new Scenery(8, 4, "wall.png");
-    new Scenery(8, 6, "wall.png");
   }
 }

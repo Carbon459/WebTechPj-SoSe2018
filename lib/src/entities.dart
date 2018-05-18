@@ -41,6 +41,7 @@ abstract class Entity {
    */
   void destroy() {
     activeField.removeEntity(positionX, positionY);
+    if(debug) {print("${this} destroyed");}
   }
 
   /**
