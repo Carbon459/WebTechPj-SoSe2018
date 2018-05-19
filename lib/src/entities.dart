@@ -186,6 +186,18 @@ abstract class Enemy extends DynamicEntity {
     if(this.positionX == player.positionX || this.positionY == player.positionY) return true;
     return false;
   }
+
+  /**
+   * Gibt die Richtung zum spieler zurück.
+   * Falls beide Entitys nicht auf einer ebene sind wird null zurückgegeben
+   */
+  Symbol getDirectionToPlayer() {
+    if(this.positionX < player.positionX && this.positionY == player.positionY) return #right;
+    if(this.positionX > player.positionX && this.positionY == player.positionY) return #left;
+    if(this.positionY < player.positionY && this.positionX == player.positionX) return #down;
+    if(this.positionY > player.positionY && this.positionX == player.positionX) return #up;
+    return null;
+  }
   /**
    * Bewegt den Gegner
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
@@ -223,6 +235,7 @@ abstract class Enemy extends DynamicEntity {
       }
     }
     if(this.hasLineOfSight()) {
+      if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
       this.shoot(#basic);
     }
     return activeField.moveEntityRelative(this.positionX, this.positionY, dir);
