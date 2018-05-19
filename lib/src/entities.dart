@@ -117,39 +117,39 @@ class Projectile extends DynamicEntity {
 
     switch(orientation.toString()) {
       case 'Symbol("left")':
-        if(activeField.getEntityAt(positionX - 1, positionY) is DynamicEntity) {
-          activeField.getEntityAt(positionX - 1, positionY).damage(dmg);
-        }
         if(!activeField.collisionAt(positionX - 1, positionY)) {
           this.positionX = positionX - 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
+        if(activeField.getEntityAt(positionX - 1, positionY) is DynamicEntity) {
+          activeField.getEntityAt(positionX - 1, positionY).damage(dmg);
+        }
         break;
       case 'Symbol("right")':
-        if(activeField.getEntityAt(positionX + 1, positionY) is DynamicEntity) {
-          activeField.getEntityAt(positionX + 1, positionY).damage(dmg);
-        }
         if(!activeField.collisionAt(positionX + 1, positionY)) {
           this.positionX = positionX + 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
+        if(activeField.getEntityAt(positionX + 1, positionY) is DynamicEntity) {
+          activeField.getEntityAt(positionX + 1, positionY).damage(dmg);
+        }
         break;
       case 'Symbol("up")':
-        if(activeField.getEntityAt(positionX, positionY - 1) is DynamicEntity) {
-          activeField.getEntityAt(positionX, positionY - 1).damage(dmg);
-        }
         if(!activeField.collisionAt(positionX, positionY - 1)) {
           this.positionY = positionY - 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
+        if(activeField.getEntityAt(positionX, positionY - 1) is DynamicEntity) {
+          activeField.getEntityAt(positionX, positionY - 1).damage(dmg);
+        }
         break;
       case 'Symbol("down")':
-        if(activeField.getEntityAt(positionX, positionY + 1) is DynamicEntity) {
-          activeField.getEntityAt(positionX, positionY + 1).damage(dmg);
-        }
         if(!activeField.collisionAt(positionX, positionY + 1)) {
           this.positionY = positionY + 1;
           window.addEventListener("mDE", ev = (e) => this.move());
+        }
+        if(activeField.getEntityAt(positionX, positionY + 1) is DynamicEntity) {
+          activeField.getEntityAt(positionX, positionY + 1).damage(dmg);
         }
         break;
     }

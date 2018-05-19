@@ -3718,7 +3718,7 @@ z=$.j.V(this.a,this.b,this.e)
 if(!z){this.ad()
 y=$.j.C(M.cq(this.a,this.e),M.cr(this.b,this.e))
 if(y!=null)y.ab(this.r)}return z},
-cw:function(a,b,c,d){var z,y
+cw:function(a,b,c,d){var z,y,x
 this.a=a
 this.b=b
 this.e=c
@@ -3726,39 +3726,39 @@ this.d="bullet.png"
 switch(J.z(c)){case'Symbol("left")':z=$.j
 if(typeof a!=="number")return a.E()
 y=a-1
-if(z.C(y,b) instanceof M.a4)$.j.C(y,b).ab(this.r)
-if(!$.j.F(y,b)){this.a=y
+if(!z.F(y,b)){this.a=y
 z=window
-y=new M.fb(this)
-this.f=y
-C.d.a0(z,"mDE",y,null)}break
+x=new M.fb(this)
+this.f=x
+C.d.a0(z,"mDE",x,null)}if($.j.C(y,b) instanceof M.a4)$.j.C(y,b).ab(this.r)
+break
 case'Symbol("right")':z=$.j
 if(typeof a!=="number")return a.A()
 y=a+1
-if(z.C(y,b) instanceof M.a4)$.j.C(y,b).ab(this.r)
-if(!$.j.F(y,b)){this.a=y
+if(!z.F(y,b)){this.a=y
 z=window
-y=new M.fc(this)
-this.f=y
-C.d.a0(z,"mDE",y,null)}break
+x=new M.fc(this)
+this.f=x
+C.d.a0(z,"mDE",x,null)}if($.j.C(y,b) instanceof M.a4)$.j.C(y,b).ab(this.r)
+break
 case'Symbol("up")':z=$.j
 if(typeof b!=="number")return b.E()
 y=b-1
-if(z.C(a,y) instanceof M.a4)$.j.C(a,y).ab(this.r)
-if(!$.j.F(a,y)){this.b=y
+if(!z.F(a,y)){this.b=y
 z=window
-y=new M.fd(this)
-this.f=y
-C.d.a0(z,"mDE",y,null)}break
+x=new M.fd(this)
+this.f=x
+C.d.a0(z,"mDE",x,null)}if($.j.C(a,y) instanceof M.a4)$.j.C(a,y).ab(this.r)
+break
 case'Symbol("down")':z=$.j
 if(typeof b!=="number")return b.A()
 y=b+1
-if(z.C(a,y) instanceof M.a4)$.j.C(a,y).ab(this.r)
-if(!$.j.F(a,y)){this.b=y
+if(!z.F(a,y)){this.b=y
 z=window
-y=new M.fe(this)
-this.f=y
-C.d.a0(z,"mDE",y,null)}break}if(this.f!=null)$.j.a8(this.a,this.b,this)},
+x=new M.fe(this)
+this.f=x
+C.d.a0(z,"mDE",x,null)}if($.j.C(a,y) instanceof M.a4)$.j.C(a,y).ab(this.r)
+break}if(this.f!=null)$.j.a8(this.a,this.b,this)},
 k:{
 bF:function(a,b,c,d){var z=new M.fa(1,null,null,null,-1,null,null)
 z.cw(a,b,c,d)
