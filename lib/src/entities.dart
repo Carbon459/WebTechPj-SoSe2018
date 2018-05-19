@@ -60,7 +60,7 @@ abstract class DynamicEntity extends Entity {
   EventListener ev;
 
   void shoot(Symbol projectile) {
-    new Projectile(this, #basic);
+    new Projectile(this.positionX, this.positionY, this.orientation, #basic);
   }
 
   /**
@@ -104,37 +104,39 @@ class Projectile extends DynamicEntity {
 
   /**
    * Der Konstruktor erzeugt das Projektilelement und setzt es direkt in die Spielwelt falls möglich.
-   * Wenn nicht sollte die Referenz auf das Projektil beim Aufruf nicht gespeichert werden, damit es vom GC entfernt werden kann.
+   * @positionX, positionY X und Y Koordinate vom Schützen
+   * @orientation Blickrichtung vom Schützen
+   * @type Art des Schusses
    */
-  Projectile(Entity shooter, Symbol type) {
+  Projectile(int positionX, int positionY, Symbol orientation, Symbol type) {
     //TODO verschiedene schusstypen implementieren nach [type]
-    this.positionX = shooter.positionX;
-    this.positionY = shooter.positionY;
-    this.orientation = shooter.orientation;
+    this.positionX = positionX;
+    this.positionY = positionY;
+    this.orientation = orientation;
     this.baseSprite = "bullet.png";
 
-    switch(shooter.orientation.toString()) {
+    switch(orientation.toString()) {
       case 'Symbol("left")':
-        if(!activeField.collisionAt(shooter.positionX - 1, shooter.positionY)) {
-          this.positionX = shooter.positionX - 1;
+        if(!activeField.collisionAt(positionX - 1, positionY)) {
+          this.positionX = positionX - 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("right")':
-        if(!activeField.collisionAt(shooter.positionX + 1, shooter.positionY)) {
-          this.positionX = shooter.positionX + 1;
+        if(!activeField.collisionAt(positionX + 1, positionY)) {
+          this.positionX = positionX + 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("up")':
-        if(!activeField.collisionAt(shooter.positionX, shooter.positionY - 1)) {
-          this.positionY = shooter.positionY - 1;
+        if(!activeField.collisionAt(positionX, positionY - 1)) {
+          this.positionY = positionY - 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
       case 'Symbol("down")':
-        if(!activeField.collisionAt(shooter.positionX, shooter.positionY + 1)) {
-          this.positionY = shooter.positionY + 1;
+        if(!activeField.collisionAt(positionX, positionY + 1)) {
+          this.positionY = positionY + 1;
           window.addEventListener("mDE", ev = (e) => this.move());
         }
         break;
@@ -166,22 +168,67 @@ class Projectile extends DynamicEntity {
 
 abstract class Enemy extends DynamicEntity {
   /**
+   * Gibt an ob sich etwas zwischen dem Spieler und dem Gegner befindet
+   */
+  bool hasLineOfSight() { //TODO: richtig implementieren
+    if(this.positionX == player.positionX || this.positionY == player.positionY) return true;
+    return false;
+  }
+  /**
    * Bewegt den Gegner
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
-  bool move() {
-    //TODO: Gegner wegfindung implementieren
-    return false;
+  bool move() { //TODO: refactoren
+    if(player == null) return false;
+    int tmp = 0;
+    Symbol dir;
+
+    //vorgemappte path mit niedrigsten wert auswählen
+    if(!activeField.collisionAt(this.positionX + 1, this.positionY)) {
+      tmp = activeField.pathToPlayer[this.positionY][this.positionX + 1];
+      this.orientation = #right;
+      dir = #right;
+    }
+    if(!activeField.collisionAt(this.positionX - 1, this.positionY)) {
+      if(activeField.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
+        tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
+        this.orientation = #left;
+        dir = #left;
+      }
+    }
+    if(!activeField.collisionAt(this.positionX, this.positionY + 1)) {
+      if(activeField.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
+        tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
+        this.orientation = #down;
+        dir = #down;
+      }
+    }
+    if(!activeField.collisionAt(this.positionX, this.positionY - 1)) {
+      if(activeField.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
+        tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
+        this.orientation = #up;
+        dir = #up;
+      }
+    }
+    if(this.hasLineOfSight()) {
+      this.shoot(#basic);
+    }
+    return activeField.moveEntityRelative(this.positionX, this.positionY, dir);
+  }
+  void destroy() {
+    super.destroy();
+    enemies.remove(this);
   }
 }
 class BasicTank extends Enemy {
   BasicTank(int posX, int posY) {
     positionX = posX;
     positionY = posY;
-    baseSprite = "basictank.png";
+    baseSprite = "enemyBasic.png";
     hp = 1;
     activeField.setEntity(posX, posY, this);
     window.addEventListener("mDE", ev = (e) => this.move());
+    enemies.add(this);
   }
 }
 

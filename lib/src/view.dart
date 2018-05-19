@@ -7,7 +7,7 @@ class BattleView {
   /**
    * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
    */
-  void update(BattleGame model) {
+  void update() {
     for (int y = 0; y < yFieldSize; y++) {
       for (int x = 0; x < xFieldSize; x++) {
         final td = tableFields[y][x];
