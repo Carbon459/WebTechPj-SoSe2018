@@ -198,18 +198,19 @@ abstract class Enemy extends DynamicEntity {
         }
         break;
       case 'Symbol("up")':
-        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX, this.positionY - 1)) return false;
+        for(int i = 1; i <= ((this.positionY - player.positionY).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX, this.positionY - i)) return false;
         }
         break;
       case 'Symbol("down")':
-        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX, this.positionY + 1)) return false;
+        for(int i = 1; i <= ((this.positionY - player.positionY).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX, this.positionY + i)) return false;
         }
         break;
       default: //Spieler ist nicht auf einer selben ebene wie dieser Gegner
         return false;
     }
+
     return true; //Keine Kollision erkannt -> LoS besteht
   }
 
@@ -233,6 +234,7 @@ abstract class Enemy extends DynamicEntity {
 
     if(this.hasLineOfSight()) {
       if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
+
       this.shoot(#basic);
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
