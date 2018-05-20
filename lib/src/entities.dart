@@ -75,7 +75,10 @@ abstract class DynamicEntity extends Entity {
    */
   void destroy() {
     super.destroy();
-    if(ev != null) window.removeEventListener("mDE", this.ev);
+    if(ev != null) {
+      window.removeEventListener("fullspeed", this.ev);
+      window.removeEventListener("halfspeed", this.ev);
+    }
   }
 }
 
@@ -119,7 +122,7 @@ class Projectile extends DynamicEntity {
       case 'Symbol("left")':
         if(!activeField.collisionAt(positionX - 1, positionY)) {
           this.positionX = positionX - 1;
-          window.addEventListener("mDE", ev = (e) => this.move());
+          window.addEventListener("fullspeed", ev = (e) => this.move());
         }
         if(activeField.getEntityAt(positionX - 1, positionY) is DynamicEntity) {
           activeField.getEntityAt(positionX - 1, positionY).damage(dmg);
@@ -128,7 +131,7 @@ class Projectile extends DynamicEntity {
       case 'Symbol("right")':
         if(!activeField.collisionAt(positionX + 1, positionY)) {
           this.positionX = positionX + 1;
-          window.addEventListener("mDE", ev = (e) => this.move());
+          window.addEventListener("fullspeed", ev = (e) => this.move());
         }
         if(activeField.getEntityAt(positionX + 1, positionY) is DynamicEntity) {
           activeField.getEntityAt(positionX + 1, positionY).damage(dmg);
@@ -137,7 +140,7 @@ class Projectile extends DynamicEntity {
       case 'Symbol("up")':
         if(!activeField.collisionAt(positionX, positionY - 1)) {
           this.positionY = positionY - 1;
-          window.addEventListener("mDE", ev = (e) => this.move());
+          window.addEventListener("fullspeed", ev = (e) => this.move());
         }
         if(activeField.getEntityAt(positionX, positionY - 1) is DynamicEntity) {
           activeField.getEntityAt(positionX, positionY - 1).damage(dmg);
@@ -146,7 +149,7 @@ class Projectile extends DynamicEntity {
       case 'Symbol("down")':
         if(!activeField.collisionAt(positionX, positionY + 1)) {
           this.positionY = positionY + 1;
-          window.addEventListener("mDE", ev = (e) => this.move());
+          window.addEventListener("fullspeed", ev = (e) => this.move());
         }
         if(activeField.getEntityAt(positionX, positionY + 1) is DynamicEntity) {
           activeField.getEntityAt(positionX, positionY + 1).damage(dmg);
@@ -182,9 +185,32 @@ abstract class Enemy extends DynamicEntity {
   /**
    * Gibt an ob sich etwas zwischen dem Spieler und dem Gegner befindet
    */
-  bool hasLineOfSight() { //TODO: richtig implementieren
-    if(this.positionX == player.positionX || this.positionY == player.positionY) return true;
-    return false;
+  bool hasLineOfSight() {
+    switch(getDirectionToPlayer().toString()) { //Richtung in die der Spieler ist
+      case 'Symbol("left")':
+        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX - i, this.positionY)) return false;
+        }
+        break;
+      case 'Symbol("right")':
+        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX + i, this.positionY)) return false;
+        }
+        break;
+      case 'Symbol("up")':
+        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX, this.positionY - 1)) return false;
+        }
+        break;
+      case 'Symbol("down")':
+        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
+          if(activeField.collisionAt(this.positionX, this.positionY + 1)) return false;
+        }
+        break;
+      default: //Spieler ist nicht auf einer selben ebene wie dieser Gegner
+        return false;
+    }
+    return true; //Keine Kollision erkannt -> LoS besteht
   }
 
   /**
@@ -203,8 +229,15 @@ abstract class Enemy extends DynamicEntity {
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
   bool move() { //TODO: refactoren
-    if(player == null) return false;
-    int tmp = 0;
+    if(player == null) return false; //Spieler existiert nicht auf dem Spielfeld
+
+    if(this.hasLineOfSight()) {
+      if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
+      this.shoot(#basic);
+      return false; //falls geschossen wurde wird keine bewegung durchgeführt
+    }
+
+    int tmp = xFieldSize*yFieldSize;//Höchster Wert
     Symbol dir;
 
     //vorgemappte path mit niedrigsten wert auswählen
@@ -213,31 +246,55 @@ abstract class Enemy extends DynamicEntity {
       this.orientation = #right;
       dir = #right;
     }
+
     if(!activeField.collisionAt(this.positionX - 1, this.positionY)) {
-      if(activeField.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
+      if(activeField.pathToPlayer[this.positionY][this.positionX - 1] == tmp) { //Wenn zwei werte gleich groß sind einen zufälligen nehmen
+        var rng = new Random();
+        if(rng.nextBool()) {
+          tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
+          this.orientation = #left;
+          dir = #left;
+        }
+      }
+      else if(activeField.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
         this.orientation = #left;
         dir = #left;
       }
     }
+
     if(!activeField.collisionAt(this.positionX, this.positionY + 1)) {
-      if(activeField.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
+      if(activeField.pathToPlayer[this.positionY + 1][this.positionX] == tmp) {
+        var rng = new Random();
+        if(rng.nextBool()) {
+          tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
+          this.orientation = #down;
+          dir = #down;
+        }
+      }
+      else if(activeField.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
         this.orientation = #down;
         dir = #down;
       }
     }
+
     if(!activeField.collisionAt(this.positionX, this.positionY - 1)) {
-      if(activeField.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
+      if(activeField.pathToPlayer[this.positionY - 1][this.positionX] == tmp) {
+        var rng = new Random();
+        if(rng.nextBool()) {
+          tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
+          this.orientation = #up;
+          dir = #up;
+        }
+      }
+      else if(activeField.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
         this.orientation = #up;
         dir = #up;
       }
     }
-    if(this.hasLineOfSight()) {
-      if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
-      this.shoot(#basic);
-    }
+
     return activeField.moveEntityRelative(this.positionX, this.positionY, dir);
   }
   void destroy() {
@@ -252,7 +309,7 @@ class BasicTank extends Enemy {
     baseSprite = "enemyBasic.png";
     hp = 1;
     activeField.setEntity(posX, posY, this);
-    window.addEventListener("mDE", ev = (e) => this.move());
+    window.addEventListener("halfspeed", ev = (e) => this.move());
     enemies.add(this);
   }
 }

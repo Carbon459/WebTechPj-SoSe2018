@@ -21,10 +21,13 @@ class Level{
     return new Level.fromList(json["levelField"]);
   }
 
+  /**
+   * Wie beschrieben in https://en.wikipedia.org/wiki/Pathfinding#Sample_algorithm
+   */
   void mapPathToPlayer() {
     if(enemies.isEmpty || player == null) return;
 
-    Stopwatch stopwatch = new Stopwatch()..start();
+    num time = window.performance.now();
 
     List<PathHelper> queue = new List<PathHelper>();
 
@@ -33,7 +36,11 @@ class Level{
     int curCounter = 0;
 
     queue.add(new PathHelper(curPosX, curPosY, curCounter)); //Ziel
+    List<Enemy> enemiesToMapLeft = new List<Enemy>();
+    enemiesToMapLeft.addAll(enemies);
+    //TODO: curCounter indexoutofrange exception fixxen
     while(!queue.isEmpty) {
+      if(enemiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
       List<PathHelper> temp = new List<PathHelper>(4);
       curPosX = queue.elementAt(curCounter).positionX;
       curPosY = queue.elementAt(curCounter).positionY;
@@ -45,27 +52,28 @@ class Level{
       temp[3] = new PathHelper(curPosX, curPosY - 1, curCounter);
 
       for(int i = 0; i < 4; i++) {
-        if(temp[i] == null) break;
+        if(temp[i] == null || enemiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
         if(collisionAt(temp[i].positionX, temp[i].positionY) || queue.any((ph) {return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) {
           temp[i] = null;
         }
       }
       for(PathHelper x in temp) {
-        if(x != null) queue.add(x);
+        if(x != null && !isOutOfBounds(x.positionX, x.positionY)) queue.add(x);
       }
 
-      //Abbruchbedingung //TODO richtig machen
-      if(curPosX == enemies[0].positionX && curPosY == enemies[0].positionY || curCounter == 140) {
-        break;
+      //Gegnerpfad gemappt? -> aus Liste entfernen
+      for(int i = 0; i < enemiesToMapLeft.length; i++) {
+        if(curPosX == enemiesToMapLeft[i].positionX && curPosY == enemiesToMapLeft[i].positionY) {
+          enemiesToMapLeft.removeAt(i);
+        }
       }
     }
 
-
-    for(PathHelper ph in queue) { //Ergebnisse auf Liste mappen
+    for(PathHelper ph in queue) { //Ergebnisse auf 2D Liste mappen
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }
-    if(debug) print('pathfinding executed in ${stopwatch.elapsedMilliseconds}ms');
-    stopwatch.stop();
+
+    if(debug) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   /**
@@ -100,11 +108,12 @@ class Level{
    */
   bool collisionAt(int atPosX, int atPosY) {
     if(isOutOfBounds(atPosX, atPosY)) { //Wenn Ziel außerhalb des Spielfeldes
-      if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}
+      /*if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}*/
       return true;
     }
     if(getEntityAt(atPosX, atPosY) != null) { //Kollision mit anderen Entitäten
-      if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}
+      /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
+      /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
       return true;
     }
     return false;
@@ -149,7 +158,7 @@ class Level{
    */
   bool moveEntityRelative(int fromPosX, int fromPosY, Symbol direction) {
     DynamicEntity ent = _levelField[fromPosY][fromPosX];
-    if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}
+    /*if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}*/
 
     final int newPosX = getNewPosX(fromPosX, direction);
     final int newPosY = getNewPosY(fromPosY, direction);
@@ -191,11 +200,49 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    new Scenery(5, 5, "wall.png");
+    new Scenery(0, 5, "wall.png");
+    new Scenery(1, 7, "wall.png");
+    new Scenery(2, 5, "wall.png");
+    new Scenery(2, 7, "wall.png");
+    new Scenery(2, 8, "wall.png");
+    new Scenery(3, 0, "wall.png");
+    new Scenery(3, 1, "wall.png");
+    new Scenery(3, 2, "wall.png");
+    new Scenery(3, 4, "wall.png");
+    new Scenery(3, 5, "wall.png");
+    new Scenery(4, 7, "wall.png");
+    new Scenery(4, 8, "wall.png");
+    new Scenery(5, 8, "wall.png");
+    new Scenery(6, 2, "wall.png");
+    new Scenery(6, 3, "wall.png");
     new Scenery(6, 5, "wall.png");
+    new Scenery(6, 8, "wall.png");
     new Scenery(7, 5, "wall.png");
+    new Scenery(7, 8, "wall.png");
     new Scenery(8, 5, "wall.png");
-    new Scenery(8, 4, "wall.png");
-    new BasicTank(9, 6);
+    new Scenery(8, 8, "wall.png");
+    new Scenery(9, 1, "wall.png");
+    new Scenery(9, 2, "wall.png");
+    new Scenery(9, 3, "wall.png");
+    new Scenery(9, 4, "wall.png");
+    new Scenery(9, 5, "wall.png");
+    new Scenery(9, 6, "wall.png");
+    new Scenery(9, 8, "wall.png");
+    new Scenery(9, 9, "wall.png");
+    new Scenery(11, 0, "wall.png");
+    new Scenery(11, 2, "wall.png");
+    new Scenery(11, 3, "wall.png");
+    new Scenery(11, 4, "wall.png");
+    new Scenery(11, 5, "wall.png");
+    new Scenery(11, 6, "wall.png");
+    new Scenery(11, 7, "wall.png");
+    new Scenery(11, 8, "wall.png");
+    new Scenery(13, 5, "wall.png");
+    new Scenery(14, 4, "wall.png");
+    new Scenery(14, 5, "wall.png");
+
+    new BasicTank(14, 2);
+    new BasicTank(14, 7);
+
   }
 }

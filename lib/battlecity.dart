@@ -3,6 +3,7 @@ library battlecity;
 import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 //Model--------------------
 part 'src/level.dart';

@@ -72,9 +72,17 @@ class BattleGameController {
    * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
   void _tickUpdate() {
-    window.dispatchEvent(new CustomEvent("mDE"));
-    if(tickCounter == 5) {
+    window.dispatchEvent(new CustomEvent("fullspeed"));
+    if(tickCounter == 2) {
+      window.dispatchEvent(new CustomEvent("halfspeed"));
       activeField.mapPathToPlayer();
+      if(debug) { //pathing debug
+        for(int y = 0; y < activeField.pathToPlayer.length; y++) {
+          for(int x = 0; x < activeField.pathToPlayer[y].length; x++) {
+            view.setFieldText(x, y, "x${x}y${y}: ${activeField.pathToPlayer[y][x]}");
+          }
+        }
+      }
       tickCounter = 0;
     }
     view.update();

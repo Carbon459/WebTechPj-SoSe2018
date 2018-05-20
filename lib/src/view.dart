@@ -44,4 +44,7 @@ class BattleView {
       }
     }
   }
+  void setFieldText(int x, int y, String txt) {
+    tableFields[y][x].innerHtml = txt;
+  }
 }
