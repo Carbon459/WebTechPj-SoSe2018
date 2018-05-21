@@ -77,7 +77,7 @@ abstract class DynamicEntity extends Entity {
     super.destroy();
     if(ev != null) {
       window.removeEventListener("fullspeed", this.ev);
-      window.removeEventListener("halfspeed", this.ev);
+      window.removeEventListener("slowspeed", this.ev);
     }
   }
 }
@@ -117,6 +117,7 @@ class Projectile extends DynamicEntity {
     this.positionY = positionY;
     this.orientation = orientation;
     this.baseSprite = "bullet.png";
+    this.hp = 1;
 
     switch(orientation.toString()) {
       case 'Symbol("left")':
@@ -311,7 +312,7 @@ class BasicTank extends Enemy {
     baseSprite = "enemyBasic.png";
     hp = 1;
     activeField.setEntity(posX, posY, this);
-    window.addEventListener("halfspeed", ev = (e) => this.move());
+    window.addEventListener("slowspeed", ev = (e) => this.move());
     enemies.add(this);
   }
 }

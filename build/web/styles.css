@@ -17,6 +17,7 @@ td {
     height: 10%;
     min-height: 10px;
     background-image: url("img/grass.png");
+    padding: 0;
 }
 .field {
     width: 64px;

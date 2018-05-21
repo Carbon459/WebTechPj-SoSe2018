@@ -3593,7 +3593,7 @@ y=$.w
 $.j.V(y.a,y.b,y.e)}this.a.al()},"$1","gdk",2,0,14],
 d4:function(){var z,y,x,w,v
 window.dispatchEvent(W.c2("fullspeed",!0,!0,null))
-if(this.d===2){window.dispatchEvent(W.c2("halfspeed",!0,!0,null))
+if(this.d===6){window.dispatchEvent(W.c2("slowspeed",!0,!0,null))
 $.j.bU()
 for(z=this.a.a,y=0;y<$.j.b.length;++y){x=0
 while(!0){w=$.j.b
@@ -3667,7 +3667,6 @@ M.k(9,4,"wall.png")
 M.k(9,5,"wall.png")
 M.k(9,6,"wall.png")
 M.k(9,8,"wall.png")
-M.k(9,9,"wall.png")
 M.k(11,0,"wall.png")
 M.k(11,2,"wall.png")
 M.k(11,3,"wall.png")
@@ -3738,7 +3737,7 @@ if(y){x=window
 if(y)C.h.aQ(x,"fullspeed",z,null)
 z=window
 y=this.f
-if(y!=null)C.h.aQ(z,"halfspeed",y,null)}}]},eZ:{"^":"a5;f,a,b,c,d,e",
+if(y!=null)C.h.aQ(z,"slowspeed",y,null)}}]},eZ:{"^":"a5;f,a,b,c,d,e",
 ad:function(){this.be()
 $.w=null}},f_:{"^":"a5;r,f,a,b,c,d,e",
 a7:function(){var z,y
@@ -3751,6 +3750,7 @@ this.a=a
 this.b=b
 this.e=c
 this.d="bullet.png"
+this.c=1
 switch(J.H(c)){case'Symbol("left")':z=$.j
 if(typeof a!=="number")return a.B()
 y=a-1
@@ -3950,7 +3950,7 @@ $.j.a8(a,b,this)
 z=window
 y=new M.dV(this)
 this.f=y
-C.h.a0(z,"halfspeed",y,null)
+C.h.a0(z,"slowspeed",y,null)
 $.$get$aR().push(this)},
 k:{
 bY:function(a,b){var z=new M.dU(null,null,null,-1,null,null)
@@ -4008,7 +4008,7 @@ w.a=v
 w.b=u-1
 w.c=s
 r[3]=w
-for(q=0;q<4;++q){if(r[q]==null||C.a.ar(t,new M.eL(r,q)))break
+for(q=0;q<4;++q){if(C.a.ar(t,new M.eL(r,q)))break
 w=r[q]
 if(this.C(w.a,w.b)||C.a.ar(x,new M.eM(r,q)))r[q]=null}for(p=0;p<4;++p){o=r[p]
 if(o!=null&&!M.b0(o.a,o.b))x.push(o)}for(q=0;q<t.length;++q){if(v===t[q].gah()){if(q>=t.length)return H.b(t,q)
@@ -4232,7 +4232,7 @@ C.x=new P.fM()
 C.k=new P.h7()
 C.b=new P.hj()
 C.r=new P.aA(0)
-C.z=new P.aA(2e5)
+C.z=new P.aA(12e4)
 C.B=function() {  var toStringFunction = Object.prototype.toString;  function getTag(o) {    var s = toStringFunction.call(o);    return s.substring(8, s.length - 1);  }  function getUnknownTag(object, tag) {    if (/^HTML[A-Z].*Element$/.test(tag)) {      var name = toStringFunction.call(object);      if (name == "[object Object]") return null;      return "HTMLElement";    }  }  function getUnknownTagGenericBrowser(object, tag) {    if (self.HTMLElement && object instanceof HTMLElement) return "HTMLElement";    return getUnknownTag(object, tag);  }  function prototypeForTag(tag) {    if (typeof window == "undefined") return null;    if (typeof window[tag] == "undefined") return null;    var constructor = window[tag];    if (typeof constructor != "function") return null;    return constructor.prototype;  }  function discriminator(tag) { return null; }  var isBrowser = typeof navigator == "object";  return {    getTag: getTag,    getUnknownTag: isBrowser ? getUnknownTagGenericBrowser : getUnknownTag,    prototypeForTag: prototypeForTag,    discriminator: discriminator };}
 C.t=function(hooks) { return hooks; }
 C.C=function(hooks) {  if (typeof dartExperimentalFixupGetTag != "function") return hooks;  hooks.getTag = dartExperimentalFixupGetTag(hooks.getTag);}

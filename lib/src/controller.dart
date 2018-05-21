@@ -1,6 +1,6 @@
 part of battlecity;
 
-const tickSpeed = const Duration(milliseconds: 200);
+const tickSpeed = const Duration(milliseconds: 120);
 
 class BattleGameController {
   final view = new BattleView();
@@ -73,8 +73,8 @@ class BattleGameController {
    */
   void _tickUpdate() {
     window.dispatchEvent(new CustomEvent("fullspeed"));
-    if(tickCounter == 2) {
-      window.dispatchEvent(new CustomEvent("halfspeed"));
+    if(tickCounter == 6) {
+      window.dispatchEvent(new CustomEvent("slowspeed"));
       activeField.mapPathToPlayer();
       if(debug) { //pathing debug
         for(int y = 0; y < activeField.pathToPlayer.length; y++) {

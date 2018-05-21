@@ -52,7 +52,7 @@ class Level{
       temp[3] = new PathHelper(curPosX, curPosY - 1, curCounter);
 
       for(int i = 0; i < 4; i++) {
-        if(temp[i] == null || enemiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
+        if(enemiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
         if(collisionAt(temp[i].positionX, temp[i].positionY) || queue.any((ph) {return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) {
           temp[i] = null;
         }
@@ -228,7 +228,6 @@ class LevelLoader {
     new Scenery(9, 5, "wall.png");
     new Scenery(9, 6, "wall.png");
     new Scenery(9, 8, "wall.png");
-    new Scenery(9, 9, "wall.png");
     new Scenery(11, 0, "wall.png");
     new Scenery(11, 2, "wall.png");
     new Scenery(11, 3, "wall.png");
