@@ -80,6 +80,8 @@ class BattleGameController {
         for(int y = 0; y < activeField.pathToPlayer.length; y++) {
           for(int x = 0; x < activeField.pathToPlayer[y].length; x++) {
             view.setFieldText(x, y, "x${x}y${y}: ${activeField.pathToPlayer[y][x]}");
+            if(activeField.pathToPlayer[y][x] == yFieldSize*xFieldSize) view.setFieldColor(x, y, "black");
+            else view.setFieldColor(x, y, "lightgreen");
           }
         }
       }

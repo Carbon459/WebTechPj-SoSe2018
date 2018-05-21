@@ -69,6 +69,12 @@ class Level{
       }
     }
 
+    for(int y = 0; y < yFieldSize; y++) {//2d Liste leeren
+      for(int x = 0; x < xFieldSize; x++) {
+        pathToPlayer[y][x] = yFieldSize*xFieldSize;
+      }
+    }
+
     for(PathHelper ph in queue) { //Ergebnisse auf 2D Liste mappen
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }

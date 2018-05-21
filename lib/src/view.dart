@@ -47,4 +47,7 @@ class BattleView {
   void setFieldText(int x, int y, String txt) {
     tableFields[y][x].innerHtml = txt;
   }
+  void setFieldColor(int x, int y, String clr) {
+    tableFields[y][x].style.color = clr;
+  }
 }
