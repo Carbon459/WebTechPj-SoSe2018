@@ -9,7 +9,7 @@ abstract class Entity {
         return new Player(json["positionX"],json["positionY"]);
         break;
       case "Scenery":
-        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"], true);
+        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"]);
         break;
       default:
         return null;
@@ -322,12 +322,21 @@ class BasicTank extends Enemy {
 abstract class StaticEntity extends Entity {}
 
 class Scenery extends StaticEntity {
-  Scenery(int posX, int posY, String sprite, bool col) {
+  Scenery(int posX, int posY, String sprite) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
-    collision = col;
+    collision = true;
     activeField.setEntity(posX, posY, this);
+  }
+}
+class Background extends StaticEntity {
+  Background(int posX, int posY, String sprite) {
+    positionX = posX;
+    positionY = posY;
+    baseSprite = sprite;
+    collision = false;
+    activeField.setBackground(posX, posY, this);
   }
 }
 class Powerup extends StaticEntity {}

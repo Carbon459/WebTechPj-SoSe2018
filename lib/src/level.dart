@@ -89,8 +89,7 @@ class Level{
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
    */
   void setEntity(int posX, int posY, Entity ent) {
-    if(ent.collision) _levelField[posY][posX] = ent;
-    else _levelFieldBackground[posY][posX] = ent;
+    _levelField[posY][posX] = ent;
 
     ent.positionX = posX;
     ent.positionY = posY;
@@ -99,11 +98,12 @@ class Level{
   /**
    * Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
    */
-  void removeEntity(int posX, int posY, bool collision) {
-    if(collision) _levelFieldBackground[posY][posX] = null;
-    else _levelField[posY][posX] = null;
+  void removeEntity(int posX, int posY) {
+    _levelField[posY][posX] = null;
   }
-
+  void setBackground(int posX, int posY, Background bck) {
+    _levelFieldBackground[posY][posX] = bck;
+  }
   /**
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
@@ -123,7 +123,7 @@ class Level{
       /*if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}*/
       return true;
     }
-    if(getEntityAt(atPosX, atPosY, true) != null && getEntityAt(atPosX, atPosY , false).collision) { //Kollision mit anderen Entitäten
+    if(getEntityAt(atPosX, atPosY) != null) { //Kollision mit anderen Entitäten
       /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
       /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
       return true;
@@ -135,7 +135,7 @@ class Level{
    * Gibt die Entität an der gegebenen Position zurück.
    * Falls dort keine existiert wird null zurückgegeben.
    */
-  Entity getEntityAt(int atPosX, int atPosY, bool collision) {
+  Entity getEntityAt(int atPosX, int atPosY) {
     if(isOutOfBounds(atPosX, atPosY)) return null;
     return _levelField[atPosY][atPosX];
   }
@@ -214,46 +214,46 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    new Scenery(0, 1, "wall.png", false);
-    new Scenery(0, 5, "wall.png", true);
-    new Scenery(1, 7, "wall.png", true);
-    new Scenery(2, 5, "wall.png", true);
-    new Scenery(2, 7, "wall.png", true);
-    new Scenery(2, 8, "wall.png", true);
-    new Scenery(3, 0, "wall.png", true);
-    new Scenery(3, 1, "wall.png", true);
-    new Scenery(3, 2, "wall.png", true);
-    new Scenery(3, 4, "wall.png", true);
-    new Scenery(3, 5, "wall.png", true);
-    new Scenery(4, 7, "wall.png", true);
-    new Scenery(4, 8, "wall.png", true);
-    new Scenery(5, 8, "wall.png", true);
-    new Scenery(6, 2, "wall.png", true);
-    new Scenery(6, 3, "wall.png", true);
-    new Scenery(6, 5, "wall.png", true);
-    new Scenery(6, 8, "wall.png", true);
-    new Scenery(7, 5, "wall.png", true);
-    new Scenery(7, 8, "wall.png", true);
-    new Scenery(8, 5, "wall.png", true);
-    new Scenery(8, 8, "wall.png", true);
-    new Scenery(9, 1, "wall.png", true);
-    new Scenery(9, 2, "wall.png", true);
-    new Scenery(9, 3, "wall.png", true);
-    new Scenery(9, 4, "wall.png", true);
-    new Scenery(9, 5, "wall.png", true);
-    new Scenery(9, 6, "wall.png", true);
-    new Scenery(9, 8, "wall.png", true);
-    new Scenery(11, 0, "wall.png", true);
-    new Scenery(11, 2, "wall.png", true);
-    new Scenery(11, 3, "wall.png", true);
-    new Scenery(11, 4, "wall.png", true);
-    new Scenery(11, 5, "wall.png", true);
-    new Scenery(11, 6, "wall.png", true);
-    new Scenery(11, 7, "wall.png", true);
-    new Scenery(11, 8, "wall.png", true);
-    new Scenery(13, 5, "wall.png", true);
-    new Scenery(14, 4, "wall.png", true);
-    new Scenery(14, 5, "wall.png", true);
+    new Background(0, 1, "wall.png");
+    new Scenery(0, 5, "wall.png");
+    new Scenery(1, 7, "wall.png");
+    new Scenery(2, 5, "wall.png");
+    new Scenery(2, 7, "wall.png");
+    new Scenery(2, 8, "wall.png");
+    new Scenery(3, 0, "wall.png");
+    new Scenery(3, 1, "wall.png");
+    new Scenery(3, 2, "wall.png");
+    new Scenery(3, 4, "wall.png");
+    new Scenery(3, 5, "wall.png");
+    new Scenery(4, 7, "wall.png");
+    new Scenery(4, 8, "wall.png");
+    new Scenery(5, 8, "wall.png");
+    new Scenery(6, 2, "wall.png");
+    new Scenery(6, 3, "wall.png");
+    new Scenery(6, 5, "wall.png");
+    new Scenery(6, 8, "wall.png");
+    new Scenery(7, 5, "wall.png");
+    new Scenery(7, 8, "wall.png");
+    new Scenery(8, 5, "wall.png");
+    new Scenery(8, 8, "wall.png");
+    new Scenery(9, 1, "wall.png");
+    new Scenery(9, 2, "wall.png");
+    new Scenery(9, 3, "wall.png");
+    new Scenery(9, 4, "wall.png");
+    new Scenery(9, 5, "wall.png");
+    new Scenery(9, 6, "wall.png");
+    new Scenery(9, 8, "wall.png");
+    new Scenery(11, 0, "wall.png");
+    new Scenery(11, 2, "wall.png");
+    new Scenery(11, 3, "wall.png");
+    new Scenery(11, 4, "wall.png");
+    new Scenery(11, 5, "wall.png");
+    new Scenery(11, 6, "wall.png");
+    new Scenery(11, 7, "wall.png");
+    new Scenery(11, 8, "wall.png");
+    new Scenery(13, 5, "wall.png");
+    new Scenery(14, 4, "wall.png");
+    new Scenery(14, 5, "wall.png");
 
     new BasicTank(14, 2);
     new BasicTank(14, 7);

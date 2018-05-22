@@ -12,12 +12,13 @@ table {
     height: 100%;
 }
 td {
-    width: 6.6666%;
     min-width: 7px;
-    height: 10%;
     min-height: 10px;
     background-image: url("img/grass.png");
     padding: 0;
+    width: 6.6666%;
+    height: 10%;
+    background-size: contain;
 }
 .field {
     width: 64px;

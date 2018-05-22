@@ -1,14 +1,16 @@
 part of battlecity;
 
-const tickSpeed = const Duration(milliseconds: 120);
-
 class BattleGameController {
   final view = new BattleView();
 
+  static const tickSpeed = const Duration(milliseconds: 100);
+  static const int tickDividerSlow = 5; ///[tickSpeed]*[tickDividerSlow] = langsame Tickspeed
+
   Timer tick;
+  int tickCounter = 0;
+  Symbol _gamestate = #menu;
 
-  Symbol _gamestate;
-
+  bool get menu => _gamestate == #menu;
   bool get stopped => _gamestate == #stopped;
   bool get running => _gamestate == #running;
   void start() { _gamestate = #running; }
@@ -67,13 +69,13 @@ class BattleGameController {
   }
 
   //TODO bennenen und konstante machen
-  int tickCounter = 0;
+
   /**
    * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
   void _tickUpdate() {
     window.dispatchEvent(new CustomEvent("fullspeed"));
-    if(tickCounter == 6) {
+    if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
       activeField.mapPathToPlayer();
       if(debug) { //pathing debug
@@ -85,9 +87,9 @@ class BattleGameController {
           }
         }
       }
-      tickCounter = 0;
+      tickCounter = tickDividerSlow;
     }
     view.update();
-    tickCounter++;
+    tickCounter--;
   }
 }

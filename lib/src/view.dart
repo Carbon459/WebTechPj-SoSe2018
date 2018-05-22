@@ -8,8 +8,10 @@ class BattleView {
    * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
    */
   void update() {
+    num time = window.performance.now();
     for (int y = 0; y < yFieldSize; y++) {
       for (int x = 0; x < xFieldSize; x++) {
+        //Für Entities
         final tdDiv = tableFields[y][x].querySelector("div");
         final modelField = activeField.levelField[y][x];
         if(modelField != null) {
@@ -18,16 +20,17 @@ class BattleView {
         } else {
           tdDiv.style.backgroundImage = "none";
         }
-
+        //Für Backgrounds
         final td = tableFields[y][x];
         final modelFieldBackground = activeField._levelFieldBackground[y][x];
         if(modelFieldBackground != null) {
-          tdDiv.style.backgroundImage = "url('img/${modelFieldBackground.baseSprite}')";
+          td.style.backgroundImage = "url('img/${modelFieldBackground.baseSprite}')";
         } else {
-          tdDiv.style.backgroundImage = "none";
+          td.style.backgroundImage = "url('img/grass.png')"; //Standardhintergrund
         }
       }
     }
+    if(debug) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   /**
