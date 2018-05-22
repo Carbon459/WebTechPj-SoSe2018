@@ -1,20 +1,34 @@
 part of battlecity;
 
-class PathHelper {
+/**
+ * Hilfsklasse (Wird wie ein struct verwendet)
+ */
+class Coordinates {
   int positionX;
   int positionY;
   int counter;
-  PathHelper(int posX, int posY, int c) {
+
+  Coordinates(int posX, int posY) {
+    positionX = posX;
+    positionY = posY;
+  }
+
+  Coordinates.withCounter(int posX, int posY, int c) {
     positionX = posX;
     positionY = posY;
     counter = c;
   }
 }
 
+/**
+ * Stellt ein Level dar
+ */
 class Level{
   List<List<Entity>> _levelField;
   List<List<Entity>> _levelFieldBackground;
   List<List<int>> pathToPlayer;
+
+  List<Coordinates> changed = new List<Coordinates>();
 
   List<List<Entity>> get levelField => _levelField;
   List<List<Entity>> get levelFieldBackground => _levelFieldBackground;
@@ -32,27 +46,27 @@ class Level{
 
     num time = window.performance.now();
 
-    List<PathHelper> queue = new List<PathHelper>();
+    List<Coordinates> queue = new List<Coordinates>();
 
     int curPosX = player.positionX;
     int curPosY = player.positionY;
     int curCounter = 0;
 
-    queue.add(new PathHelper(curPosX, curPosY, curCounter)); //Ziel
+    queue.add(new Coordinates.withCounter(curPosX, curPosY, curCounter)); //Ziel
     List<Enemy> enemiesToMapLeft = new List<Enemy>();
     enemiesToMapLeft.addAll(enemies);
     //TODO: curCounter indexoutofrange exception fixxen
     while(!queue.isEmpty) {
       if(enemiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
-      List<PathHelper> temp = new List<PathHelper>(4);
+      List<Coordinates> temp = new List<Coordinates>(4);
       curPosX = queue.elementAt(curCounter).positionX;
       curPosY = queue.elementAt(curCounter).positionY;
       curCounter++;
 
-      temp[0] = new PathHelper(curPosX + 1, curPosY, curCounter);
-      temp[1] = new PathHelper(curPosX - 1, curPosY, curCounter);
-      temp[2] = new PathHelper(curPosX, curPosY + 1, curCounter);
-      temp[3] = new PathHelper(curPosX, curPosY - 1, curCounter);
+      temp[0] = new Coordinates.withCounter(curPosX + 1, curPosY, curCounter);
+      temp[1] = new Coordinates.withCounter(curPosX - 1, curPosY, curCounter);
+      temp[2] = new Coordinates.withCounter(curPosX, curPosY + 1, curCounter);
+      temp[3] = new Coordinates.withCounter(curPosX, curPosY - 1, curCounter);
 
       for(int i = 0; i < 4; i++) {
         if(enemiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
@@ -60,7 +74,7 @@ class Level{
           temp[i] = null;
         }
       }
-      for(PathHelper x in temp) {
+      for(Coordinates x in temp) {
         if(x != null && !isOutOfBounds(x.positionX, x.positionY)) queue.add(x);
       }
 
@@ -78,7 +92,7 @@ class Level{
       }
     }
 
-    for(PathHelper ph in queue) { //Ergebnisse auf 2D Liste mappen
+    for(Coordinates ph in queue) { //Ergebnisse auf 2D Liste mappen
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }
 
@@ -90,7 +104,7 @@ class Level{
    */
   void setEntity(int posX, int posY, Entity ent) {
     _levelField[posY][posX] = ent;
-
+    changed.add(new Coordinates(posX, posY));
     ent.positionX = posX;
     ent.positionY = posY;
   }
@@ -99,9 +113,11 @@ class Level{
    * Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
    */
   void removeEntity(int posX, int posY) {
+    changed.add(new Coordinates(posX, posY));
     _levelField[posY][posX] = null;
   }
   void setBackground(int posX, int posY, Background bck) {
+    changed.add(new Coordinates(posX, posY));
     _levelFieldBackground[posY][posX] = bck;
   }
   /**
