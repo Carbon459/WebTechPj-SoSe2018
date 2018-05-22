@@ -10,13 +10,21 @@ class BattleView {
   void update() {
     for (int y = 0; y < yFieldSize; y++) {
       for (int x = 0; x < xFieldSize; x++) {
-        final td = tableFields[y][x];
+        final tdDiv = tableFields[y][x].querySelector("div");
         final modelField = activeField.levelField[y][x];
         if(modelField != null) {
-          td.style.backgroundImage = "url('img/${modelField.baseSprite}')";
-          td.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
+          tdDiv.style.backgroundImage = "url('img/${modelField.baseSprite}')";
+          tdDiv.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
         } else {
-          td.style.backgroundImage = "none";
+          tdDiv.style.backgroundImage = "none";
+        }
+
+        final td = tableFields[y][x];
+        final modelFieldBackground = activeField._levelFieldBackground[y][x];
+        if(modelFieldBackground != null) {
+          tdDiv.style.backgroundImage = "url('img/${modelFieldBackground.baseSprite}')";
+        } else {
+          tdDiv.style.backgroundImage = "none";
         }
       }
     }
@@ -31,7 +39,7 @@ class BattleView {
       table += "<tr>";
       for (int x = 0; x < xFieldSize; x++) {
         final pos = "x${x}y${y}";
-        table += "<td><div id='$pos' class='field'></div></td>";
+        table += "<td id='$pos'><div class='field'></div></td>";
       }
       table += "</tr>";
     }
@@ -45,9 +53,9 @@ class BattleView {
     }
   }
   void setFieldText(int x, int y, String txt) {
-    tableFields[y][x].innerHtml = txt;
+    tableFields[y][x].querySelector("div").innerHtml = txt;
   }
   void setFieldColor(int x, int y, String clr) {
-    tableFields[y][x].style.color = clr;
+    tableFields[y][x].querySelector("div").style.color = clr;
   }
 }

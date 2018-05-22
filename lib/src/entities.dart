@@ -9,7 +9,7 @@ abstract class Entity {
         return new Player(json["positionX"],json["positionY"]);
         break;
       case "Scenery":
-        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"]);
+        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"], true);
         break;
       default:
         return null;
@@ -21,6 +21,7 @@ abstract class Entity {
   int hp = -1;
   String baseSprite;
   Symbol orientation;
+  bool collision = true;
 
   /**
    * Gibt die korrekte Rotation in Grad für dieses [Entity] zurück.
@@ -321,10 +322,11 @@ class BasicTank extends Enemy {
 abstract class StaticEntity extends Entity {}
 
 class Scenery extends StaticEntity {
-  Scenery(int posX, int posY, sprite) {
+  Scenery(int posX, int posY, String sprite, bool col) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
+    collision = col;
     activeField.setEntity(posX, posY, this);
   }
 }
