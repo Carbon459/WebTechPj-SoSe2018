@@ -38,6 +38,7 @@ td {
     transform: translateX(-50%);
     width: 264px;
     height: 175px;
+    opacity: 0.6;
 }
 .dpad {
     width: 88px;
@@ -49,7 +50,7 @@ td {
     left: 50%;
     margin-left: -44px;
     background: url("img/dpadup.png") center center;
-    ackground-size: cover;
+    background-size: cover;
 }
 #down {
     bottom: 0;
