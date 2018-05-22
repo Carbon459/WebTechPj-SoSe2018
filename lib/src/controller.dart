@@ -3,9 +3,6 @@ part of battlecity;
 class BattleGameController {
   final view = new BattleView();
 
-  static const tickSpeed = const Duration(milliseconds: 100);
-  static const int tickDividerSlow = 5; ///[tickSpeed]*[tickDividerSlow] = langsame Tickspeed
-
   Timer tick;
   int tickCounter = 0;
   Symbol _gamestate = #menu;

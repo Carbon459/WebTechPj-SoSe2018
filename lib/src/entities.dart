@@ -84,12 +84,17 @@ abstract class DynamicEntity extends Entity {
 }
 
 class Player extends DynamicEntity {
+
+  Timer shootReset;
+  bool shootPermission = true;
+
   Player(posX, posY) {
     positionX = posX;
     positionY = posY;
     baseSprite = "player.png";
     hp = 3;
     activeField.setEntity(posX, posY, this);
+    shootReset = new Timer.periodic(shootSpeed, (_) => _resetShootPermission());
   }
   void setOrientation(Symbol or) {
     orientation = or;
@@ -100,6 +105,15 @@ class Player extends DynamicEntity {
   void destroy() {
     super.destroy();
     player = null;
+  }
+  void shoot(Symbol projectile) {
+    if(shootPermission) {
+      new Projectile(this.positionX, this.positionY, this.orientation, #basic);
+      shootPermission = false;
+    }
+  }
+  void _resetShootPermission() {
+    shootPermission = true;
   }
 }
 
