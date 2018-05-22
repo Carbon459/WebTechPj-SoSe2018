@@ -38,12 +38,15 @@ td {
     transform: translateX(-50%);
     width: 264px;
     height: 175px;
-    opacity: 0.6;
 }
 .dpad {
     width: 88px;
     height: 88px;
     position: absolute;
+    opacity: 0.6;
+}
+.dpad:active {
+    opacity: 1;
 }
 #up {
     top: 0;
