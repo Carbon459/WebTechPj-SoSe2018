@@ -33,25 +33,40 @@ td {
 #controls {
     visibility: hidden;
     position: fixed;
-    bottom: 1%;
-    left: 1%;
+    left: 150px;
+    bottom: 20px;
+    transform: translateX(-50%);
     width: 264px;
-    height: 264px;
-    display: flex;
+    height: 175px;
 }
 .dpad {
     width: 88px;
     height: 88px;
+    position: absolute;
 }
 #up {
-    background-image: url("img/dpadup.png");
+    top: 0;
+    left: 50%;
+    margin-left: -44px;
+    background: url("img/dpadup.png") center center;
+    ackground-size: cover;
 }
 #down {
-    background-image: url("img/dpaddown.png");
+    bottom: 0;
+    left: 50%;
+    margin-left: -44px;
+    background: url("img/dpaddown.png") center center;
+    background-size: cover;
 }
 #left {
-    background-image: url("img/dpadleft.png");
+    bottom: 0;
+    left: 0;
+    background: url("img/dpadleft.png") center center;
+    background-size: cover;
 }
 #right {
-    background-image: url("img/dpadright.png");
+    bottom: 0;
+    right: 0;
+    background: url("img/dpadright.png") center center;
+    background-size: cover;
 }
