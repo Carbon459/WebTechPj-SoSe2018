@@ -94,7 +94,6 @@ class Player extends DynamicEntity {
     baseSprite = "player.png";
     hp = 3;
     activeField.setEntity(posX, posY, this);
-    shootReset = new Timer.periodic(shootSpeed, (_) => _resetShootPermission());
   }
   void setOrientation(Symbol or) {
     orientation = or;
@@ -110,10 +109,8 @@ class Player extends DynamicEntity {
     if(shootPermission) {
       new Projectile(this.positionX, this.positionY, this.orientation, #basic);
       shootPermission = false;
+      shootReset = new Timer.periodic(shootSpeed, (_) {shootReset.cancel(); shootPermission = true;});
     }
-  }
-  void _resetShootPermission() {
-    shootPermission = true;
   }
 }
 
