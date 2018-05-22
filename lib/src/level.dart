@@ -41,21 +41,21 @@ class Level{
   /**
    * Wie beschrieben in https://en.wikipedia.org/wiki/Pathfinding#Sample_algorithm
    */
-  void mapPathToPlayer() {
-    if(enemies.isEmpty || player == null) return;
+  void mapPathToEntity(Entity mapTo) {
+    if(enemies.isEmpty || mapTo == null) return;
 
     num time = window.performance.now();
 
     List<Coordinates> queue = new List<Coordinates>();
 
-    int curPosX = player.positionX;
-    int curPosY = player.positionY;
+    int curPosX = mapTo.positionX;
+    int curPosY = mapTo.positionY;
     int curCounter = 0;
 
     queue.add(new Coordinates.withCounter(curPosX, curPosY, curCounter)); //Ziel
     List<Enemy> enemiesToMapLeft = new List<Enemy>();
     enemiesToMapLeft.addAll(enemies);
-    //TODO: curCounter indexoutofrange exception fixxen
+
     while(!queue.isEmpty) {
       if(enemiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
       List<Coordinates> temp = new List<Coordinates>(4);
@@ -96,7 +96,7 @@ class Level{
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }
 
-    if(debug) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
+    if(debug && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   /**

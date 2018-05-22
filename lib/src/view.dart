@@ -31,7 +31,7 @@ class BattleView {
     }
     activeField.changed.clear();
 
-    if(debug) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
+    if(debug && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   /**

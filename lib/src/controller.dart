@@ -54,7 +54,7 @@ class BattleGameController {
     }
 
     LevelLoader.testlevel();
-    activeField.mapPathToPlayer();
+    activeField.mapPathToEntity(player);
   }
   void dpadEvent(MouseEvent event) {
     HtmlElement he = event.target;
@@ -74,7 +74,7 @@ class BattleGameController {
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
-      activeField.mapPathToPlayer();
+      activeField.mapPathToEntity(player);
       if(debug) { //pathing debug
         for(int y = 0; y < activeField.pathToPlayer.length; y++) {
           for(int x = 0; x < activeField.pathToPlayer[y].length; x++) {
