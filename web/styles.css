@@ -30,6 +30,25 @@ td {
     width: 90%;
     height: 500px;
     margin: 5% auto 0 auto;
+    visibility: hidden;
+}
+#menu {
+    visibility: visible;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    font-size: 20pt;
+    font-family: Arial;
+}
+#gameover {
+    visibility: hidden;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    font-size: 20pt;
+    font-family: Arial;
+    background-color: white;
+    z-index: 1;
 }
 #controls {
     visibility: hidden;

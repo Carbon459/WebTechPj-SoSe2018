@@ -8,36 +8,35 @@ class BattleGameController {
   Symbol _gamestate = #menu;
 
   bool get menu => _gamestate == #menu;
-  bool get stopped => _gamestate == #stopped;
+  bool get gameover => _gamestate == #gameover;
   bool get running => _gamestate == #running;
-  void start() { _gamestate = #running; }
-  void stop() { _gamestate = #stopped; }
-
-  BattleGameController() {
-    start();
+  void start(int lvl) {
     activeField = new Level(xFieldSize, yFieldSize);
-    player = new Player(0,0);
-
     view.createEmptyField();
+    LevelLoader.testlevel(); //TODO [lvl] auswahl machen
+    _gamestate = #running;
+    view.gameStateChange(_gamestate);
     view.update();
+    activeField.mapPathToEntity(player);
     tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
+
 
     //Tastatursteuerung Events
     window.onKeyDown.listen((KeyboardEvent ev) {
-      if (stopped) return;
+      if (!running) return;
       switch (ev.keyCode) {
-        case KeyCode.LEFT:  if (player != null) { player.setOrientation(#left); player.move(); } break;
-        case KeyCode.RIGHT: if (player != null) { player.setOrientation(#right); player.move(); } break;
-        case KeyCode.UP:    if (player != null) { player.setOrientation(#up); player.move(); } break;
-        case KeyCode.DOWN:  if (player != null) { player.setOrientation(#down); player.move(); } break;
-        case KeyCode.SPACE: if (player != null) { player.shoot(#basic); } break;
-        //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
-        //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
+        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); break;
+        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); break;
+        case KeyCode.UP:    if (player != null) player.moveDir(#up); break;
+        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); break;
+        case KeyCode.SPACE: if (player != null) player.shoot(#basic); break;
+      //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
+      //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
       }
       view.update();
     });
 
-    if(TouchEvent.supported) {
+    if(TouchEvent.supported && running) {
       querySelector("#controls").style.visibility = "visible";
       //Smartphonesteuerung Events
       querySelector("#up").onClick.listen(dpadEvent);
@@ -52,29 +51,38 @@ class BattleGameController {
         view.update();
       });
     }
-
-    LevelLoader.testlevel();
-    activeField.mapPathToEntity(player);
   }
+  void stop() {
+    tick.cancel();
+    _gamestate = #gameover;
+    view.gameStateChange(_gamestate);
+  }
+
+  BattleGameController() {
+    querySelector("#levelStart").onClick.listen((MouseEvent ev) {
+      start(1);
+    });
+  }
+
   void dpadEvent(MouseEvent event) {
     HtmlElement he = event.target;
     if (player != null) {
-      player.setOrientation(new Symbol(he.id));
-      player.move();
+      player.moveDir(new Symbol(he.id));
     }
     view.update();
   }
-
-  //TODO bennenen und konstante machen
 
   /**
    * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
   void _tickUpdate() {
+    if(player == null) stop(); //Spieler tot -> Game over
+
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
       activeField.mapPathToEntity(player);
+
       if(debug) { //pathing debug
         for(int y = 0; y < activeField.pathToPlayer.length; y++) {
           for(int x = 0; x < activeField.pathToPlayer[y].length; x++) {
@@ -86,6 +94,7 @@ class BattleGameController {
       }
       tickCounter = tickDividerSlow;
     }
+
     view.update();
     tickCounter--;
   }

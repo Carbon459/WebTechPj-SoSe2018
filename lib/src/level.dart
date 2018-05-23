@@ -244,6 +244,7 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
+    player = new Player(0,0);
     new Background(0, 1, "wall");
     new Scenery(0, 5, "wall");
     new Scenery(1, 7, "wall");

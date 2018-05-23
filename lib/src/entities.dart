@@ -107,7 +107,10 @@ abstract class DynamicEntity extends Entity {
     setAnimationSprite(#move);
     return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
-
+  bool moveDir(Symbol direction) {
+    this.orientation = direction;
+    return move();
+  }
   /**
    * Entfernt die Entität vom Spielfeld. Entfernt Eventlistener falls vorhanden
    */

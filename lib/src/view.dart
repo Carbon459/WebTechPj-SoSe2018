@@ -4,6 +4,26 @@ class BattleView {
   /// Enthält die Referenzen zu den Tabellenzellen
   List<List<Element>> tableFields = new List(yFieldSize);
 
+  void gameStateChange(Symbol gamestate) {
+    switch(gamestate.toString()) {
+      case 'Symbol("menu")':
+        querySelector("#game").style.visibility = "hidden";
+        querySelector("#menu").style.visibility = "visible";
+        querySelector("#gameover").style.visibility = "hidden";
+        break;
+      case 'Symbol("running")':
+        querySelector("#game").style.visibility = "visible";
+        querySelector("#menu").style.visibility = "hidden";
+        querySelector("#gameover").style.visibility = "hidden";
+        break;
+      case 'Symbol("gameover")':
+        querySelector("#game").style.visibility = "visible";
+        querySelector("#menu").style.visibility = "hidden";
+        querySelector("#gameover").style.visibility = "visible";
+        break;
+    }
+
+  }
   /**
    * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
    */
