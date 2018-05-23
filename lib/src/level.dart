@@ -28,7 +28,7 @@ class Level{
   List<List<Entity>> _levelFieldBackground;
   List<List<int>> pathToPlayer;
 
-  List<Coordinates> changed = new List<Coordinates>();
+  List<Coordinates> _changed = new List<Coordinates>();
 
   List<List<Entity>> get levelField => _levelField;
   List<List<Entity>> get levelFieldBackground => _levelFieldBackground;
@@ -78,7 +78,7 @@ class Level{
         if(x != null && !isOutOfBounds(x.positionX, x.positionY)) queue.add(x);
       }
 
-      //Gegnerpfad gemappt? -> aus Liste entfernen
+      //Am Gegner angekommen? Pfad für diesen gemappt, also abhaken
       for(int i = 0; i < enemiesToMapLeft.length; i++) {
         if(curPosX == enemiesToMapLeft[i].positionX && curPosY == enemiesToMapLeft[i].positionY) {
           enemiesToMapLeft.removeAt(i);
@@ -86,7 +86,7 @@ class Level{
       }
     }
 
-    for(int y = 0; y < yFieldSize; y++) {//2d Liste leeren
+    for(int y = 0; y < yFieldSize; y++) {//2d Liste reinitialisieren
       for(int x = 0; x < xFieldSize; x++) {
         pathToPlayer[y][x] = yFieldSize*xFieldSize;
       }
@@ -100,24 +100,38 @@ class Level{
   }
 
   /**
+   * Eine Änderung/Bewegung des Sprites an der Stelle [atPosX][atPosY] anmelden.
+   * Die View kümmert sich beim nächsten Tick darum diese Änderungen zu rendern.
+   */
+  void reportChange(int atPosX, int atPosY) {
+    this._changed.add(new Coordinates(atPosX, atPosY));
+  }
+
+  /**
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
    */
   void setEntity(int posX, int posY, Entity ent) {
     _levelField[posY][posX] = ent;
-    changed.add(new Coordinates(posX, posY));
+    reportChange(posX, posY);
     ent.positionX = posX;
     ent.positionY = posY;
+  }
+  List<Coordinates> getChanged() {
+    return this._changed;
+  }
+  void clearChanged() {
+    this._changed.clear();
   }
 
   /**
    * Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
    */
   void removeEntity(int posX, int posY) {
-    changed.add(new Coordinates(posX, posY));
+    reportChange(posX, posY);
     _levelField[posY][posX] = null;
   }
   void setBackground(int posX, int posY, Background bck) {
-    changed.add(new Coordinates(posX, posY));
+    reportChange(posX, posY);
     _levelFieldBackground[posY][posX] = bck;
   }
   /**
@@ -230,46 +244,46 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    new Background(0, 1, "wall.png");
-    new Scenery(0, 5, "wall.png");
-    new Scenery(1, 7, "wall.png");
-    new Scenery(2, 5, "wall.png");
-    new Scenery(2, 7, "wall.png");
-    new Scenery(2, 8, "wall.png");
-    new Scenery(3, 0, "wall.png");
-    new Scenery(3, 1, "wall.png");
-    new Scenery(3, 2, "wall.png");
-    new Scenery(3, 4, "wall.png");
-    new Scenery(3, 5, "wall.png");
-    new Scenery(4, 7, "wall.png");
-    new Scenery(4, 8, "wall.png");
-    new Scenery(5, 8, "wall.png");
-    new Scenery(6, 2, "wall.png");
-    new Scenery(6, 3, "wall.png");
-    new Scenery(6, 5, "wall.png");
-    new Scenery(6, 8, "wall.png");
-    new Scenery(7, 5, "wall.png");
-    new Scenery(7, 8, "wall.png");
-    new Scenery(8, 5, "wall.png");
-    new Scenery(8, 8, "wall.png");
-    new Scenery(9, 1, "wall.png");
-    new Scenery(9, 2, "wall.png");
-    new Scenery(9, 3, "wall.png");
-    new Scenery(9, 4, "wall.png");
-    new Scenery(9, 5, "wall.png");
-    new Scenery(9, 6, "wall.png");
-    new Scenery(9, 8, "wall.png");
-    new Scenery(11, 0, "wall.png");
-    new Scenery(11, 2, "wall.png");
-    new Scenery(11, 3, "wall.png");
-    new Scenery(11, 4, "wall.png");
-    new Scenery(11, 5, "wall.png");
-    new Scenery(11, 6, "wall.png");
-    new Scenery(11, 7, "wall.png");
-    new Scenery(11, 8, "wall.png");
-    new Scenery(13, 5, "wall.png");
-    new Scenery(14, 4, "wall.png");
-    new Scenery(14, 5, "wall.png");
+    new Background(0, 1, "wall");
+    new Scenery(0, 5, "wall");
+    new Scenery(1, 7, "wall");
+    new Scenery(2, 5, "wall");
+    new Scenery(2, 7, "wall");
+    new Scenery(2, 8, "wall");
+    new Scenery(3, 0, "wall");
+    new Scenery(3, 1, "wall");
+    new Scenery(3, 2, "wall");
+    new Scenery(3, 4, "wall");
+    new Scenery(3, 5, "wall");
+    new Scenery(4, 7, "wall");
+    new Scenery(4, 8, "wall");
+    new Scenery(5, 8, "wall");
+    new Scenery(6, 2, "wall");
+    new Scenery(6, 3, "wall");
+    new Scenery(6, 5, "wall");
+    new Scenery(6, 8, "wall");
+    new Scenery(7, 5, "wall");
+    new Scenery(7, 8, "wall");
+    new Scenery(8, 5, "wall");
+    new Scenery(8, 8, "wall");
+    new Scenery(9, 1, "wall");
+    new Scenery(9, 2, "wall");
+    new Scenery(9, 3, "wall");
+    new Scenery(9, 4, "wall");
+    new Scenery(9, 5, "wall");
+    new Scenery(9, 6, "wall");
+    new Scenery(9, 8, "wall");
+    new Scenery(11, 0, "wall");
+    new Scenery(11, 2, "wall");
+    new Scenery(11, 3, "wall");
+    new Scenery(11, 4, "wall");
+    new Scenery(11, 5, "wall");
+    new Scenery(11, 6, "wall");
+    new Scenery(11, 7, "wall");
+    new Scenery(11, 8, "wall");
+    new Scenery(13, 5, "wall");
+    new Scenery(14, 4, "wall");
+    new Scenery(14, 5, "wall");
 
     new BasicTank(14, 2);
     new BasicTank(14, 7);

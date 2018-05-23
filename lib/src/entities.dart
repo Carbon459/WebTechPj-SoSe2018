@@ -15,13 +15,47 @@ abstract class Entity {
         return null;
     }
   }
+
   int positionX;
   int positionY;
   ///Lebenspunkte (hp<0 = Unzerstörbar)
   int hp = -1;
   String baseSprite;
+  String sprite;
   Symbol orientation;
   bool collision = true;
+  int moveAnimationFrame = 0;
+
+  String getSprite() {
+    if(debug) print("getSprite: $sprite");
+    if(this.sprite != this.baseSprite) {
+      String tmp = this.sprite;
+      this.sprite = this.baseSprite;
+      activeField.reportChange(positionX, positionY);
+
+      return tmp + ".png";
+    }
+    activeField.reportChange(positionX, positionY);
+    return this.sprite + ".png";
+  }
+
+  void setAnimationSprite(Symbol action) {
+    switch(action.toString()) {
+      case 'Symbol("shoot")':
+        this.sprite = baseSprite + "_shoot";
+        break;
+      case 'Symbol("move")':
+        if(this.moveAnimationFrame == 0) {
+          this.sprite = baseSprite;
+          moveAnimationFrame++;
+        }
+        else {
+          this.sprite = baseSprite + "_move";
+          moveAnimationFrame = 0;
+        }
+        break;
+    }
+  }
 
   /**
    * Gibt die korrekte Rotation in Grad für dieses [Entity] zurück.
@@ -61,6 +95,7 @@ abstract class DynamicEntity extends Entity {
   EventListener ev;
 
   void shoot(Symbol projectile) {
+    activeField.reportChange(positionX, positionY); //Sicherstellen das die Orientierung richtig gerendert ist
     new Projectile(this.positionX, this.positionY, this.orientation, #basic);
   }
 
@@ -69,8 +104,10 @@ abstract class DynamicEntity extends Entity {
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
   bool move() {
+    setAnimationSprite(#move);
     return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
+
   /**
    * Entfernt die Entität vom Spielfeld. Entfernt Eventlistener falls vorhanden
    */
@@ -91,13 +128,16 @@ class Player extends DynamicEntity {
   Player(posX, posY) {
     positionX = posX;
     positionY = posY;
-    baseSprite = "player.png";
+    baseSprite = "player";
+    sprite = baseSprite;
     hp = 3;
     activeField.setEntity(posX, posY, this);
   }
   void setOrientation(Symbol or) {
     orientation = or;
+    activeField.reportChange(positionX, positionY);
   }
+
   /**
    * Entfernt den Spieler vom Spielfeld und die Referenz.
    */
@@ -105,6 +145,7 @@ class Player extends DynamicEntity {
     super.destroy();
     player = null;
   }
+  
   void shoot(Symbol projectile) {
     if(shootPermission) {
       new Projectile(this.positionX, this.positionY, this.orientation, #basic);
@@ -115,6 +156,7 @@ class Player extends DynamicEntity {
 }
 
 class Projectile extends DynamicEntity {
+
   int dmg = 1;
 
   /**
@@ -128,7 +170,8 @@ class Projectile extends DynamicEntity {
     this.positionX = positionX;
     this.positionY = positionY;
     this.orientation = orientation;
-    this.baseSprite = "bullet.png";
+    this.baseSprite = "bullet";
+    setAnimationSprite(#shoot);
     this.hp = 1;
 
     switch(orientation.toString()) {
@@ -196,7 +239,19 @@ class Projectile extends DynamicEntity {
 
 abstract class Enemy extends DynamicEntity {
   /**
-   * Gibt an ob sich etwas zwischen dem Spieler und dem Gegner befindet
+   * Gibt die Richtung zum spieler zurück.
+   * Falls beide Entitys nicht auf einer ebene sind wird null zurückgegeben
+   */
+  Symbol getDirectionToPlayer() {
+    if(this.positionX < player.positionX && this.positionY == player.positionY) return #right;
+    if(this.positionX > player.positionX && this.positionY == player.positionY) return #left;
+    if(this.positionY < player.positionY && this.positionX == player.positionX) return #down;
+    if(this.positionY > player.positionY && this.positionX == player.positionX) return #up;
+    return null;
+  }
+
+  /**
+   * Gibt an ob sich etwas zwischen dem Spieler und diesem Entity befindet
    */
   bool hasLineOfSight() {
     switch(getDirectionToPlayer().toString()) { //Richtung in die der Spieler ist
@@ -220,24 +275,13 @@ abstract class Enemy extends DynamicEntity {
           if(activeField.collisionAt(this.positionX, this.positionY + i)) return false;
         }
         break;
-      default: //Spieler ist nicht auf einer selben ebene wie dieser Gegner
+      default: //Spieler ist nicht auf einer selben ebene wie dieses Entity
         return false;
     }
 
     return true; //Keine Kollision erkannt -> LoS besteht
   }
 
-  /**
-   * Gibt die Richtung zum spieler zurück.
-   * Falls beide Entitys nicht auf einer ebene sind wird null zurückgegeben
-   */
-  Symbol getDirectionToPlayer() {
-    if(this.positionX < player.positionX && this.positionY == player.positionY) return #right;
-    if(this.positionX > player.positionX && this.positionY == player.positionY) return #left;
-    if(this.positionY < player.positionY && this.positionX == player.positionX) return #down;
-    if(this.positionY > player.positionY && this.positionX == player.positionX) return #up;
-    return null;
-  }
   /**
    * Bewegt den Gegner
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
@@ -253,13 +297,11 @@ abstract class Enemy extends DynamicEntity {
     }
 
     int tmp = xFieldSize*yFieldSize;//Höchster Wert
-    Symbol dir;
 
     //vorgemappte path mit niedrigsten wert auswählen
     if(!activeField.collisionAt(this.positionX + 1, this.positionY)) {
       tmp = activeField.pathToPlayer[this.positionY][this.positionX + 1];
       this.orientation = #right;
-      dir = #right;
     }
 
     if(!activeField.collisionAt(this.positionX - 1, this.positionY)) {
@@ -268,13 +310,11 @@ abstract class Enemy extends DynamicEntity {
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
           this.orientation = #left;
-          dir = #left;
         }
       }
       else if(activeField.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
         this.orientation = #left;
-        dir = #left;
       }
     }
 
@@ -284,13 +324,11 @@ abstract class Enemy extends DynamicEntity {
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
           this.orientation = #down;
-          dir = #down;
         }
       }
       else if(activeField.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
         this.orientation = #down;
-        dir = #down;
       }
     }
 
@@ -300,28 +338,27 @@ abstract class Enemy extends DynamicEntity {
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
           this.orientation = #up;
-          dir = #up;
         }
       }
       else if(activeField.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
         tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
         this.orientation = #up;
-        dir = #up;
       }
     }
-
-    return activeField.moveEntityRelative(this.positionX, this.positionY, dir);
+    return super.move();
   }
   void destroy() {
     super.destroy();
     enemies.remove(this);
   }
 }
+
 class BasicTank extends Enemy {
   BasicTank(int posX, int posY) {
     positionX = posX;
     positionY = posY;
-    baseSprite = "enemyBasic.png";
+    baseSprite = "enemyBasic";
+    sprite = baseSprite;
     hp = 1;
     activeField.setEntity(posX, posY, this);
     window.addEventListener("slowspeed", ev = (e) => this.move());
@@ -329,25 +366,26 @@ class BasicTank extends Enemy {
   }
 }
 
-//TODO falls nicht nötig entfernen
-abstract class StaticEntity extends Entity {}
-
-class Scenery extends StaticEntity {
+class Scenery extends Entity {
   Scenery(int posX, int posY, String sprite) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
+    this.sprite = baseSprite;
     collision = true;
     activeField.setEntity(posX, posY, this);
   }
 }
-class Background extends StaticEntity {
+
+class Background extends Entity {
   Background(int posX, int posY, String sprite) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
+    this.sprite = baseSprite;
     collision = false;
     activeField.setBackground(posX, posY, this);
   }
 }
-class Powerup extends StaticEntity {}
+
+class Powerup extends Entity {}

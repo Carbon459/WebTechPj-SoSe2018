@@ -10,12 +10,12 @@ class BattleView {
   void update() {
     num time = window.performance.now();
 
-    for(Coordinates cord in activeField.changed) {
+    for(Coordinates cord in activeField.getChanged().toList()) { //Mit .toList() über Kopie iterieren, sonst gibt es concurrentModification exeption TODO:???
       //Für Entities
       final tdDiv = tableFields[cord.positionY][cord.positionX].querySelector("div");
       final modelField = activeField.levelField[cord.positionY][cord.positionX];
       if(modelField != null) {
-        tdDiv.style.backgroundImage = "url('img/${modelField.baseSprite}')";
+        tdDiv.style.backgroundImage = "url('img/${modelField.getSprite()}')";
         tdDiv.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
       } else {
         tdDiv.style.backgroundImage = "none";
@@ -24,12 +24,12 @@ class BattleView {
       final td = tableFields[cord.positionY][cord.positionX];
       final modelFieldBackground = activeField._levelFieldBackground[cord.positionY][cord.positionX];
       if(modelFieldBackground != null) {
-        td.style.backgroundImage = "url('img/${modelFieldBackground.baseSprite}')";
+        td.style.backgroundImage = "url('img/${modelFieldBackground.getSprite()}')";
       } else {
         td.style.backgroundImage = "url('img/grass.png')"; //Standardhintergrund
       }
     }
-    activeField.changed.clear();
+    activeField.clearChanged();
 
     if(debug && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
