@@ -30,7 +30,7 @@ class BattleView {
   void update() {
     num time = window.performance.now();
 
-    for(Coordinates cord in activeField.getChanged().toList()) { //Mit .toList() über Kopie iterieren, sonst gibt es concurrentModification exeption TODO:???
+    for(Coordinates cord in activeField.getChanged()) {
       //Für Entities
       final tdDiv = tableFields[cord.positionY][cord.positionX].querySelector("div");
       final modelField = activeField.levelField[cord.positionY][cord.positionX];

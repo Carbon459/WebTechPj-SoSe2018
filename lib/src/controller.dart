@@ -17,7 +17,7 @@ class BattleGameController {
     _gamestate = #running;
     view.gameStateChange(_gamestate);
     view.update();
-    activeField.mapPathToEntity(player);
+    activeField.mapPathToEntity(enemies, player);
     tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
 
 
@@ -25,10 +25,10 @@ class BattleGameController {
     window.onKeyDown.listen((KeyboardEvent ev) {
       if (!running) return;
       switch (ev.keyCode) {
-        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); break;
-        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); break;
-        case KeyCode.UP:    if (player != null) player.moveDir(#up); break;
-        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); break;
+        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); activeField.mapPathToEntity(enemies, player); break;
+        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); activeField.mapPathToEntity(enemies, player); break;
+        case KeyCode.UP:    if (player != null) player.moveDir(#up); activeField.mapPathToEntity(enemies, player); break;
+        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); activeField.mapPathToEntity(enemies, player); break;
         case KeyCode.SPACE: if (player != null) player.shoot(#basic); break;
       //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
       //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
@@ -65,11 +65,11 @@ class BattleGameController {
   }
 
   void dpadEvent(MouseEvent event) {
-    HtmlElement he = event.target;
     if (player != null) {
+      HtmlElement he = event.target;
       player.moveDir(new Symbol(he.id));
+      view.update();
     }
-    view.update();
   }
 
   /**
@@ -81,7 +81,6 @@ class BattleGameController {
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
-      activeField.mapPathToEntity(player);
 
       if(debug) { //pathing debug
         for(int y = 0; y < activeField.pathToPlayer.length; y++) {

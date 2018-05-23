@@ -47,7 +47,7 @@ td {
     top: 50%;
     font-size: 20pt;
     font-family: Arial;
-    background-color: white;
+    background-color: red;
     z-index: 1;
 }
 #controls {

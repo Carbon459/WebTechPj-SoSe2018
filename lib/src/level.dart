@@ -26,8 +26,9 @@ class Coordinates {
 class Level{
   List<List<Entity>> _levelField;
   List<List<Entity>> _levelFieldBackground;
+  ///Enthält das Ergebnis des Pathfindings
   List<List<int>> pathToPlayer;
-
+  ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen
   List<Coordinates> _changed = new List<Coordinates>();
 
   List<List<Entity>> get levelField => _levelField;
@@ -39,10 +40,11 @@ class Level{
   }
 
   /**
+   * ManyToOne Pathfinding
    * Wie beschrieben in https://en.wikipedia.org/wiki/Pathfinding#Sample_algorithm
    */
-  void mapPathToEntity(Entity mapTo) {
-    if(enemies.isEmpty || mapTo == null) return;
+  void mapPathToEntity(List<Entity> mapFrom, Entity mapTo) {
+    if(mapFrom.isEmpty || mapTo == null) return;
 
     num time = window.performance.now();
 
@@ -53,11 +55,11 @@ class Level{
     int curCounter = 0;
 
     queue.add(new Coordinates.withCounter(curPosX, curPosY, curCounter)); //Ziel
-    List<Enemy> enemiesToMapLeft = new List<Enemy>();
-    enemiesToMapLeft.addAll(enemies);
+    List<Entity> entitiesToMapLeft = new List<Entity>();
+    entitiesToMapLeft.addAll(mapFrom);
 
     while(!queue.isEmpty) {
-      if(enemiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
+      if(entitiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
       List<Coordinates> temp = new List<Coordinates>(4);
       curPosX = queue.elementAt(curCounter).positionX;
       curPosY = queue.elementAt(curCounter).positionY;
@@ -69,19 +71,19 @@ class Level{
       temp[3] = new Coordinates.withCounter(curPosX, curPosY - 1, curCounter);
 
       for(int i = 0; i < 4; i++) {
-        if(enemiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
+        if(entitiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
         if(collisionAt(temp[i].positionX, temp[i].positionY) || queue.any((ph) {return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) {
           temp[i] = null;
         }
       }
       for(Coordinates x in temp) {
-        if(x != null && !isOutOfBounds(x.positionX, x.positionY)) queue.add(x);
+        if(x != null && !isInvalid(x.positionX, x.positionY)) queue.add(x);
       }
 
       //Am Gegner angekommen? Pfad für diesen gemappt, also abhaken
-      for(int i = 0; i < enemiesToMapLeft.length; i++) {
-        if(curPosX == enemiesToMapLeft[i].positionX && curPosY == enemiesToMapLeft[i].positionY) {
-          enemiesToMapLeft.removeAt(i);
+      for(int i = 0; i < entitiesToMapLeft.length; i++) {
+        if(curPosX == entitiesToMapLeft[i].positionX && curPosY == entitiesToMapLeft[i].positionY) {
+          entitiesToMapLeft.removeAt(i);
         }
       }
     }
@@ -137,7 +139,7 @@ class Level{
   /**
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
-  static bool isOutOfBounds(int atPosX, int atPosY) {
+  static bool isInvalid(int atPosX, int atPosY) {
     if(atPosX < 0 || atPosX >= xFieldSize || atPosY < 0 || atPosY >= yFieldSize) {
       return true;
     }
@@ -149,13 +151,13 @@ class Level{
    * true: Kollision!
    */
   bool collisionAt(int atPosX, int atPosY) {
-    if(isOutOfBounds(atPosX, atPosY)) { //Wenn Ziel außerhalb des Spielfeldes
-      /*if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}*/
+    if(isInvalid(atPosX, atPosY)) { //Wenn Ziel außerhalb des Spielfeldes
+      //if(debug) {print("Pos($atPosX|$atPosY) out of bounds!");}
       return true;
     }
     if(getEntityAt(atPosX, atPosY) != null) { //Kollision mit anderen Entitäten
-      /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
-      /*if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}*/
+      //if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}
+      //if(debug) {print("Pos($atPosX|$atPosY) collision with ${getEntityAt(atPosX, atPosY)}!");}
       return true;
     }
     return false;
@@ -166,7 +168,7 @@ class Level{
    * Falls dort keine existiert wird null zurückgegeben.
    */
   Entity getEntityAt(int atPosX, int atPosY) {
-    if(isOutOfBounds(atPosX, atPosY)) return null;
+    if(isInvalid(atPosX, atPosY)) return null;
     return _levelField[atPosY][atPosX];
   }
   static int getNewPosX(int posX, Symbol direction) {
@@ -200,7 +202,7 @@ class Level{
    */
   bool moveEntityRelative(int fromPosX, int fromPosY, Symbol direction) {
     DynamicEntity ent = _levelField[fromPosY][fromPosX];
-    /*if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}*/
+    //if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}
 
     final int newPosX = getNewPosX(fromPosX, direction);
     final int newPosY = getNewPosY(fromPosY, direction);
@@ -209,9 +211,8 @@ class Level{
       this.removeEntity(fromPosX, fromPosY);
       this.setEntity(newPosX, newPosY, ent);
       return true;
-    } else if(!Level.isOutOfBounds(newPosX, newPosY)) { //Kollision mit Entity
-      return false;
-    } else { //OutofBounds
+    } else { //Kollision mit Entity oder OutofBounds
+      this.reportChange(fromPosX, fromPosY);
       return false;
     }
   }
