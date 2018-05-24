@@ -138,7 +138,10 @@ class Player extends DynamicEntity {
     orientation = or;
     activeField.reportChange(positionX, positionY);
   }
-
+  bool moveDir(Symbol direction) {
+    activeField.mapPathToEntity(enemies, player);
+    return super.move();
+  }
   /**
    * Entfernt den Spieler vom Spielfeld und die Referenz.
    */

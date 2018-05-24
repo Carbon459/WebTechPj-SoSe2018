@@ -25,10 +25,10 @@ class BattleGameController {
     window.onKeyDown.listen((KeyboardEvent ev) {
       if (!running) return;
       switch (ev.keyCode) {
-        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); activeField.mapPathToEntity(enemies, player); break;
-        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); activeField.mapPathToEntity(enemies, player); break;
-        case KeyCode.UP:    if (player != null) player.moveDir(#up); activeField.mapPathToEntity(enemies, player); break;
-        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); activeField.mapPathToEntity(enemies, player); break;
+        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); break;
+        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); break;
+        case KeyCode.UP:    if (player != null) player.moveDir(#up); break;
+        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); break;
         case KeyCode.SPACE: if (player != null) player.shoot(#basic); break;
       //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
       //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
