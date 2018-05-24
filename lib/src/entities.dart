@@ -140,7 +140,7 @@ class Player extends DynamicEntity {
   }
   bool moveDir(Symbol direction) {
     activeField.mapPathToEntity(enemies, player);
-    return super.moveDir();
+    return super.moveDir(direction);
   }
   /**
    * Entfernt den Spieler vom Spielfeld und die Referenz.
