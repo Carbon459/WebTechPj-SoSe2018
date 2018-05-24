@@ -22,7 +22,6 @@ abstract class Entity {
   int hp = -1;
   String baseSprite;
   String sprite;
-  int moveAnimationFrame = 0;
   Symbol orientation;
   bool collision = true;
 
@@ -40,16 +39,6 @@ abstract class Entity {
     switch(action.toString()) {
       case 'Symbol("shoot")':
         sprite = baseSprite + "_shoot";
-        break;
-      case 'Symbol("move")':
-        if(this.moveAnimationFrame == 0) {
-          sprite = baseSprite;
-          moveAnimationFrame++;
-        }
-        else {
-          sprite = baseSprite + "_move";
-          moveAnimationFrame = 0;
-        }
         break;
     }
   }
@@ -101,7 +90,6 @@ abstract class DynamicEntity extends Entity {
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
   bool move() {
-    setAnimationSprite(#move);
     return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
   bool moveDir(Symbol direction) {
@@ -139,8 +127,9 @@ class Player extends DynamicEntity {
     activeField.reportChange(positionX, positionY);
   }
   bool moveDir(Symbol direction) {
+    bool tmp = super.moveDir(direction);
     activeField.mapPathToEntity(enemies, player);
-    return super.moveDir(direction);
+    return tmp;
   }
   /**
    * Entfernt den Spieler vom Spielfeld und die Referenz.
