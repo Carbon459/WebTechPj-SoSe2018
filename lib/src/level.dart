@@ -25,14 +25,14 @@ class Coordinates {
  */
 class Level{
   List<List<Entity>> _levelField;
-  List<List<Entity>> _levelFieldBackground;
+  List<List<Background>> _levelFieldBackground;
   ///Enthält das Ergebnis des Pathfindings
   List<List<int>> pathToPlayer;
   ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen
   List<Coordinates> _changed = new List<Coordinates>();
 
   List<List<Entity>> get levelField => _levelField;
-  List<List<Entity>> get levelFieldBackground => _levelFieldBackground;
+  List<List<Background>> get levelFieldBackground => _levelFieldBackground;
 
   Map toJson() => {"levelField":_levelField};
   Level fromJson(Map json) {
@@ -247,7 +247,7 @@ class LevelLoader {
   }
   static void testlevel() {
     player = new Player(0,0);
-    new Background(0, 1, "wall");
+    new Background(0, 1, "wall", 46);
     new Scenery(0, 5, "wall");
     new Scenery(1, 7, "wall");
     new Scenery(2, 5, "wall");

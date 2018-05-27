@@ -345,12 +345,14 @@ class Scenery extends Entity {
 }
 
 class Background extends Entity {
-  Background(int posX, int posY, String sprite) {
+  int fixedRotation = 0;
+  Background(int posX, int posY, String sprite, int rot) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
     this.sprite = baseSprite;
     collision = false;
+    fixedRotation = rot;
     activeField.setBackground(posX, posY, this);
   }
 }
