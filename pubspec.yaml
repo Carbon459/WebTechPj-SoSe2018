@@ -1,7 +1,7 @@
 name: battlecity
 description: A BattleCity Clone written in Dart.
 version: 0.0.1
-author: Friedrich Hudinjan and Konstatin Wacker
+author: Friedrich Hudinjan and Konstantin Wacker
 homepage: https://carbon459.github.io/WebTechPj-SoSe2018/web/
 
 environment:
