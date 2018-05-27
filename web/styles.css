@@ -11,6 +11,7 @@ table {
     width: 100%;
 }
 td {
+    padding: 0px;
     min-width: 7px;
     min-height: 10px;
     background-image: url("img/grass.png");
