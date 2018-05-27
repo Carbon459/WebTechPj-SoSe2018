@@ -98,7 +98,7 @@ class Level{
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }
 
-    if(debug && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
+    if(debug && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
   }
 
   /**
@@ -107,6 +107,12 @@ class Level{
    */
   void reportChange(int atPosX, int atPosY) {
     this._changed.add(new Coordinates(atPosX, atPosY));
+  }
+  List<Coordinates> getChanged() {
+    return this._changed;
+  }
+  void clearChanged() {
+    this._changed.clear();
   }
 
   /**
@@ -117,12 +123,6 @@ class Level{
     reportChange(posX, posY);
     ent.positionX = posX;
     ent.positionY = posY;
-  }
-  List<Coordinates> getChanged() {
-    return this._changed;
-  }
-  void clearChanged() {
-    this._changed.clear();
   }
 
   /**
@@ -136,6 +136,7 @@ class Level{
     reportChange(posX, posY);
     _levelFieldBackground[posY][posX] = bck;
   }
+
   /**
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
