@@ -38,7 +38,7 @@ class BattleGameController {
 
     if(TouchEvent.supported && running) {
       var rng = new Random();
-      if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
+      if(true) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
         int touchdifX, touchdifY;
         window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
         window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
@@ -70,15 +70,17 @@ class BattleGameController {
     });
   }
   void swipeEvent(int touchdifX, int touchdifY) {
-    if (player == null) { return; }
-    if(touchdifX < touchdifY) { //Horizontal mehr geswiped als vertikal
+    print("$touchdifX $touchdifY");
+    if (player == null) return;
+
+    if(touchdifX.abs() > touchdifY.abs()) { //Horizontal mehr geswiped als vertikal
       if(touchdifX > 0) {
         player.moveDir(new Symbol("left"));
       } else if (touchdifX < 0) {
         player.moveDir(new Symbol("right"));
       }
     }
-    else if(touchdifX > touchdifY) { //Horizontal weniger geswiped als vertikal
+    else if(touchdifX.abs() < touchdifY.abs()) { //Horizontal weniger geswiped als vertikal
       if(touchdifY > 0) {
         player.moveDir(new Symbol("up"));
       } else if (touchdifY < 0) {
