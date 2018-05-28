@@ -37,11 +37,11 @@ class BattleGameController {
     });
 
     if(TouchEvent.supported && running) {
-      var rng = new Random(new DateTime.now().millisecondsSinceEpoch);
+      var rng = new Random();
       if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
-        int touchstartX, touchstartY, touchendX, touchendY;
-        window.onTouchStart.listen((TouchEvent te) {touchstartX = te.changedTouches[0].screen.x; touchstartY = te.changedTouches[0].screen.y;});
-        window.onTouchEnd.listen((TouchEvent te) {touchendX = te.changedTouches[0].screen.x; touchendY = te.changedTouches[0].screen.y; swipeEvent(touchstartX, touchstartY, touchendX, touchendY); view.update();});
+        int touchdifX, touchdifY;
+        window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
+        window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
       } else {
         querySelector("#controls").style.visibility = "visible";
         querySelector("#up").onClick.listen(dpadEvent);
@@ -69,21 +69,23 @@ class BattleGameController {
       start(1);
     });
   }
-  void swipeEvent(int touchstartX, int touchstartY, int touchendX, int touchendY) {
+  void swipeEvent(int touchdifX, int touchdifY) {
     if (player == null) { return; }
-    if (touchendX <= touchstartX) {
-      player.moveDir(new Symbol("left"));
+    if(touchdifX < touchdifY) { //Horizontal mehr geswiped als vertikal
+      if(touchdifX > 0) {
+        player.moveDir(new Symbol("left"));
+      } else if (touchdifX < 0) {
+        player.moveDir(new Symbol("right"));
+      }
     }
-    else if (touchendX >= touchstartX) {
-      player.moveDir(new Symbol("right"));
+    else if(touchdifX > touchdifY) { //Horizontal weniger geswiped als vertikal
+      if(touchdifY > 0) {
+        player.moveDir(new Symbol("up"));
+      } else if (touchdifY < 0) {
+        player.moveDir(new Symbol("down"));
+      }
     }
-    else if (touchendY <= touchstartY) {
-      player.moveDir(new Symbol("up"));
-    }
-    else if (touchendY >= touchstartY) {
-      player.moveDir(new Symbol("down"));
-    }
-    else if (touchendY == touchstartY) {
+    else if (touchdifX == 0 && touchdifY == 0) {
       player.shoot(#basic);
     }
   }

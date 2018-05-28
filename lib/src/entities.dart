@@ -272,7 +272,7 @@ abstract class Enemy extends DynamicEntity {
 
     if(!activeField.collisionAt(this.positionX - 1, this.positionY)) {
       if(activeField.pathToPlayer[this.positionY][this.positionX - 1] == tmp) { //Wenn zwei werte gleich groß sind einen zufälligen nehmen
-        var rng = new Random(new DateTime.now().millisecondsSinceEpoch);
+        var rng = new Random();
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
           this.orientation = #left;
@@ -286,7 +286,7 @@ abstract class Enemy extends DynamicEntity {
 
     if(!activeField.collisionAt(this.positionX, this.positionY + 1)) {
       if(activeField.pathToPlayer[this.positionY + 1][this.positionX] == tmp) {
-        var rng = new Random(new DateTime.now().millisecondsSinceEpoch);
+        var rng = new Random();
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
           this.orientation = #down;
@@ -300,7 +300,7 @@ abstract class Enemy extends DynamicEntity {
 
     if(!activeField.collisionAt(this.positionX, this.positionY - 1)) {
       if(activeField.pathToPlayer[this.positionY - 1][this.positionX] == tmp) {
-        var rng = new Random(new DateTime.now().millisecondsSinceEpoch);
+        var rng = new Random();
         if(rng.nextBool()) {
           tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
           this.orientation = #up;
