@@ -38,7 +38,7 @@ class BattleGameController {
 
     if(TouchEvent.supported && running) {
       var rng = new Random();
-      if(true) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
+      if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
         int touchdifX, touchdifY;
         window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
         window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
@@ -70,7 +70,6 @@ class BattleGameController {
     });
   }
   void swipeEvent(int touchdifX, int touchdifY) {
-    print("$touchdifX $touchdifY");
     if (player == null) return;
 
     if(touchdifX.abs() > touchdifY.abs()) { //Horizontal mehr geswiped als vertikal

@@ -345,7 +345,7 @@ class Scenery extends Entity {
 }
 
 class Background extends Entity {
-  Background(int posX, int posY, String sprite, int rot) {
+  Background(int posX, int posY, String sprite) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;

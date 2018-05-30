@@ -45,7 +45,6 @@ class BattleView {
       final modelFieldBackground = activeField._levelFieldBackground[cord.positionY][cord.positionX];
       if(modelFieldBackground != null) {
         td.style.backgroundImage = "url('img/${modelFieldBackground.getSprite()}')";
-        td.style.setProperty( "transform", "rotate(${modelFieldBackground}deg)");
       } else {
         td.style.backgroundImage = "url('img/grass.png')"; //Standardhintergrund
       }
