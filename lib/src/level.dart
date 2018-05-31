@@ -34,9 +34,22 @@ class Level{
   List<List<Entity>> get levelField => _levelField;
   List<List<Background>> get levelFieldBackground => _levelFieldBackground;
 
-  Map toJson() => {"levelField":_levelField};
-  Level fromJson(Map json) {
-    return new Level.fromList(json["levelField"]);
+  Map toJson() {
+    Map<String, dynamic> map = new Map();
+    int i = 0;
+    for(int y = 0; y < yFieldSize; y++) {
+      for(int x = 0; x < xFieldSize; x++) {
+        if(levelField[y][x] != null) {
+          map.putIfAbsent("$i", () => levelField[y][x]);
+          i++;
+        }
+        if(levelFieldBackground[y][x] != null) {
+          map.putIfAbsent("$i", () => levelFieldBackground[y][x]);
+          i++;
+        }
+      }
+    }
+    return map;
   }
 
   /**
@@ -231,22 +244,46 @@ class Level{
       pathToPlayer[i] = new List(xSize);
     }
   }
-  Level.fromList(List<List<Entity>> l) {
-    _levelField = l;
-  }
+
 }
 
 class LevelLoader {
-  //TODO json level loader implementieren
-  static Future<Level> getLevelFromJson (String url) async {
+  static Future<int> getLevelFromJson (String url) async {
     String s = await HttpRequest.getString(url);
-    return JSON.decode(s);
+    Map<String, dynamic> jsonMap = JSON.decode(s);
+
+    for(Map<String, dynamic> x in jsonMap.values) {
+      if(x != null) {
+        Symbol orientation = null;
+        if(x["orientation"] != "null") {
+          orientation = new Symbol(x["orientation"]);
+        }
+        switch(x["type"]) {
+          case "Player":
+            new Player(x["positionX"],x["positionY"], orientation);
+            break;
+            case "Scenery":
+              new Scenery(x["positionX"],x["positionY"], x["baseSprite"]);
+              break;
+            case "Background":
+              new Background(x["positionX"],x["positionY"], x["baseSprite"]);
+              break;
+            case "BasicTank":
+              new BasicTank(x["positionX"],x["positionY"], orientation);
+              break;
+            default:
+              if(debug) print("LevelLoader from Json: Invalid Type");
+              break;
+        }
+      }
+    }
+    return 0;
   }
   static void printLevelAsJson(Level lvl) {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    player = new Player(0,0);
+    new Player(0,0, #right);
     new Scenery(0, 5, "wall");
     new Scenery(1, 7, "wall");
     new Scenery(2, 5, "wall");
@@ -287,8 +324,8 @@ class LevelLoader {
     new Scenery(14, 4, "wall");
     new Scenery(14, 5, "wall");
 
-    new BasicTank(14, 2);
-    new BasicTank(14, 7);
+    new BasicTank(14, 2, #left);
+    new BasicTank(14, 7, #left);
 
   }
 }

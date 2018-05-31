@@ -1,20 +1,13 @@
 part of battlecity;
 
 abstract class Entity {
-  Map toJson() => {"type":this.runtimeType.toString(),"positionX":positionX,"positionY":positionY, "baseSprite":baseSprite};
-  Entity fromJson(Map json) {
-    //this.orientation = MirrorSystem.getSymbol(json["orientation"]);
-    switch(json["type"]) {
-      case "Player":
-        return new Player(json["positionX"],json["positionY"]);
-        break;
-      case "Scenery":
-        return new Scenery(json["positionX"],json["positionY"], json["baseSprite"]);
-        break;
-      default:
-        return null;
-    }
-  }
+  Map toJson() => {
+    "type":this.runtimeType.toString(),
+    "positionX":positionX,
+    "positionY":positionY,
+    "baseSprite":baseSprite,
+    "orientation":this.getOrientation()
+  };
 
   int positionX;
   int positionY;
@@ -25,6 +18,11 @@ abstract class Entity {
   Symbol orientation;
   bool collision = true;
 
+  String getOrientation() {
+    if(this.orientation == null) return "null";
+    RegExp exp = new RegExp("(left|right|up|down)");
+    return exp.firstMatch(this.orientation.toString()).group(0);
+  }
   String getSprite() {
     if(debug) print("getSprite: $sprite.png");
     if(sprite != baseSprite) {
@@ -114,13 +112,15 @@ class Player extends DynamicEntity {
   Timer shootReset;
   bool shootPermission = true;
 
-  Player(posX, posY) {
+  Player(posX, posY, Symbol or) {
     this.positionX = posX;
     positionY = posY;
     baseSprite = "player";
     sprite = baseSprite;
     hp = 3;
+    orientation = or;
     activeField.setEntity(posX, posY, this);
+    player = this;
   }
   void setOrientation(Symbol or) {
     orientation = or;
@@ -321,12 +321,13 @@ abstract class Enemy extends DynamicEntity {
 }
 
 class BasicTank extends Enemy {
-  BasicTank(int posX, int posY) {
+  BasicTank(int posX, int posY, Symbol or) {
     positionX = posX;
     positionY = posY;
     baseSprite = "enemyBasic";
     sprite = baseSprite;
     hp = 1;
+    orientation = or;
     activeField.setEntity(posX, posY, this);
     window.addEventListener("slowspeed", ev = (e) => this.move());
     enemies.add(this);

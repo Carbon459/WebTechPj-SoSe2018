@@ -10,53 +10,55 @@ class BattleGameController {
   bool get menu => _gamestate == #menu;
   bool get gameover => _gamestate == #gameover;
   bool get running => _gamestate == #running;
+
   void start(int lvl) {
     activeField = new Level(xFieldSize, yFieldSize);
     view.createEmptyField();
-    LevelLoader.testlevel(); //TODO [lvl] auswahl machen
-    _gamestate = #running;
-    view.gameStateChange(_gamestate);
-    view.update();
-    activeField.mapPathToEntity(enemies, player);
-    tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
-
-
-    //Tastatursteuerung Events
-    window.onKeyDown.listen((KeyboardEvent ev) {
-      if (!running) return;
-      switch (ev.keyCode) {
-        case KeyCode.LEFT:  if (player != null) player.moveDir(#left); break;
-        case KeyCode.RIGHT: if (player != null) player.moveDir(#right); break;
-        case KeyCode.UP:    if (player != null) player.moveDir(#up); break;
-        case KeyCode.DOWN:  if (player != null) player.moveDir(#down); break;
-        case KeyCode.SPACE: if (player != null) player.shoot(#basic); break;
-      //case KeyCode.P: LevelLoader.printLevelAsJson(activeField); break;
-      //case KeyCode.L: LevelLoader.getLevelFromJson("lvl/1.json").then((x) => activeField = x); break;
-      }
+    LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
+      if(debug) print("LevelLoader: done");
+      activeField.mapPathToEntity(enemies, player);
+      _gamestate = #running;
+      view.gameStateChange(_gamestate);
       view.update();
+      tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
+
+      //Tastatursteuerung Events
+      window.onKeyDown.listen((KeyboardEvent ev) {
+        if (!running) return;
+        switch (ev.keyCode) {
+          case KeyCode.LEFT:  if (player != null) player.moveDir(#left); break;
+          case KeyCode.RIGHT: if (player != null) player.moveDir(#right); break;
+          case KeyCode.UP:    if (player != null) player.moveDir(#up); break;
+          case KeyCode.DOWN:  if (player != null) player.moveDir(#down); break;
+          case KeyCode.SPACE: if (player != null) player.shoot(#basic); break;
+          case KeyCode.P: if(debug) LevelLoader.printLevelAsJson(activeField); break;
+        }
+        view.update();
+      });
+
+      if(TouchEvent.supported && running) {
+        var rng = new Random();
+        if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
+          int touchdifX, touchdifY;
+          window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
+          window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
+        } else {
+          querySelector("#controls").style.visibility = "visible";
+          querySelector("#up").onClick.listen(dpadEvent);
+          querySelector("#down").onClick.listen(dpadEvent);
+          querySelector("#right").onClick.listen(dpadEvent);
+          querySelector("#left").onClick.listen(dpadEvent);
+
+          querySelector("#gameTable").onClick.listen((MouseEvent event) {
+            if (player != null) {
+              player.shoot(#basic);
+            }
+            view.update();
+          });
+        }
+      }
     });
 
-    if(TouchEvent.supported && running) {
-      var rng = new Random();
-      if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
-        int touchdifX, touchdifY;
-        window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
-        window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
-      } else {
-        querySelector("#controls").style.visibility = "visible";
-        querySelector("#up").onClick.listen(dpadEvent);
-        querySelector("#down").onClick.listen(dpadEvent);
-        querySelector("#right").onClick.listen(dpadEvent);
-        querySelector("#left").onClick.listen(dpadEvent);
-
-        querySelector("#gameTable").onClick.listen((MouseEvent event) {
-          if (player != null) {
-            player.shoot(#basic);
-          }
-          view.update();
-        });
-      }
-    }
   }
   void stop() {
     tick.cancel();
