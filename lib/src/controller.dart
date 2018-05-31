@@ -21,7 +21,6 @@ class BattleGameController {
       view.gameStateChange(_gamestate);
       view.update();
       tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
-
       //Tastatursteuerung Events
       window.onKeyDown.listen((KeyboardEvent ev) {
         if (!running) return;
@@ -40,8 +39,18 @@ class BattleGameController {
         var rng = new Random();
         if(rng.nextBool()) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
           int touchdifX, touchdifY;
-          window.onTouchStart.listen((TouchEvent te) {touchdifX = te.changedTouches[0].screen.x; touchdifY = te.changedTouches[0].screen.y;});
-          window.onTouchEnd.listen((TouchEvent te) {touchdifX -= te.changedTouches[0].screen.x; touchdifY -= te.changedTouches[0].screen.y;  swipeEvent(touchdifX, touchdifY); view.update();});
+          window.onTouchStart.listen((TouchEvent te) {
+            te.preventDefault();
+            touchdifX = te.changedTouches[0].screen.x;
+            touchdifY = te.changedTouches[0].screen.y;
+          });
+          window.onTouchEnd.listen((TouchEvent te) {
+            te.preventDefault();
+            touchdifX -= te.changedTouches[0].screen.x;
+            touchdifY -= te.changedTouches[0].screen.y;
+            swipeEvent(touchdifX, touchdifY);
+            view.update();
+          });
         } else {
           querySelector("#controls").style.visibility = "visible";
           querySelector("#up").onClick.listen(dpadEvent);
