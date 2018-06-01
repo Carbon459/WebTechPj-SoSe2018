@@ -6,6 +6,7 @@ class BattleGameController {
   Timer tick;
   int tickCounter = 0;
   Symbol gamestate = #menu;
+  int lastUnlockedLevel = 1;
   List<dynamic> eventSubscriptions = new List<dynamic>();
 
   bool get menu => gamestate == #menu;
@@ -13,10 +14,10 @@ class BattleGameController {
   bool get running => gamestate == #running;
 
   void start(int lvl) {
-    Level.active = new Level(xFieldSize, yFieldSize);
+    Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
     view.createEmptyField();
     LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
-      if(debug) print("LevelLoader: done");
+      if(DEBUG) print("LevelLoader: done");
 
       Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
       gamestate = #running;
@@ -53,7 +54,7 @@ class BattleGameController {
             }
             break;
           case KeyCode.SPACE: if (Player.isAlive()) Player.active.shoot(#basic); break;
-          case KeyCode.P: if(debug) LevelLoader.printLevelAsJson(Level.active); break;
+          case KeyCode.P: if(DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
         }
         view.update();
       }));
@@ -110,9 +111,13 @@ class BattleGameController {
   }
 
   BattleGameController() {
-    querySelector("#levelStart").onClick.listen((MouseEvent ev) {
+    syncSaveData();
+    view.unlockMenu(lastUnlockedLevel);
+
+    querySelector("#level1").onClick.listen((MouseEvent ev) {
       start(1);
-    });
+    }); //TODO: mehr level
+
     querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
       var e = new JsObject.fromBrowserObject(document.body);
       e.callMethod("webkitRequestFullScreen", []);
@@ -120,6 +125,16 @@ class BattleGameController {
     querySelector("#menuButton").onClick.listen((MouseEvent ev) {
       view.gameStateChange(#menu);
     });
+  }
+
+  void syncSaveData() {
+    if(!window.localStorage.containsKey("lastUnlockedLevel")) {
+      window.localStorage["lastUnlockedLevel"] = lastUnlockedLevel.toString();
+    } else {
+      final int localStorage = int.parse(window.localStorage["lastUnlockedLevel"]);
+      if(lastUnlockedLevel > localStorage) window.localStorage["lastUnlockedLevel"] = lastUnlockedLevel.toString();
+      else lastUnlockedLevel = localStorage;
+    }
   }
 
   void swipeEvent(int touchdifX, int touchdifY) {
@@ -155,17 +170,25 @@ class BattleGameController {
    * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
   void _tickUpdate() {
-    if(!Player.isAlive() || Level.activeEnemies.isEmpty) stop(); //Spieler tot/Gegner tot -> Game over
+    if(!Player.isAlive())
+      stop(); //Spieler tot -> Game over
+    if(Level.activeEnemies.isEmpty) {
+      if(lastUnlockedLevel != MAXLEVEL) {
+        lastUnlockedLevel++;
+        syncSaveData();
+      }
+      stop();
+    }
 
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
 
-      if(debug) { //pathing debug
+      if(DEBUG) { //pathing debug
         for(int y = 0; y < Level.active.pathToPlayer.length; y++) {
           for(int x = 0; x < Level.active.pathToPlayer[y].length; x++) {
             view.setFieldText(x, y, "x${x}y${y}:<br> ${Level.active.pathToPlayer[y][x]}");
-            if(Level.active.pathToPlayer[y][x] == yFieldSize*xFieldSize) view.setFieldColor(x, y, "black");
+            if(Level.active.pathToPlayer[y][x] == YFIELDSIZE*XFIELDSIZE) view.setFieldColor(x, y, "black");
             else view.setFieldColor(x, y, "lightgreen");
           }
         }

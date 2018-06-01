@@ -24,7 +24,7 @@ abstract class Entity {
     return exp.firstMatch(this.orientation.toString()).group(0);
   }
   String getSprite() {
-    if(debug) print("getSprite: $sprite.png");
+    if(DEBUG) print("getSprite: $sprite.png");
     if(sprite != baseSprite) {
       String tmp = sprite;
       sprite = baseSprite;
@@ -60,7 +60,7 @@ abstract class Entity {
    */
   void destroy() {
     Level.active.removeEntity(positionX, positionY);
-    if(debug) {print("${this} destroyed");}
+    if(DEBUG) {print("${this} destroyed");}
   }
 
   /**
@@ -276,7 +276,7 @@ abstract class Enemy extends DynamicEntity {
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
 
-    int tmp = xFieldSize*yFieldSize;//Höchster Wert
+    int tmp = XFIELDSIZE*YFIELDSIZE;//Höchster Wert
 
     //vorgemappte path mit niedrigsten wert auswählen TODO: Vereinfachen
     if(!Level.active.collisionAt(this.positionX + 1, this.positionY)) {

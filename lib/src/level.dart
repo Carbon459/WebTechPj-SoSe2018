@@ -37,8 +37,8 @@ class Level{
   Map toJson() {
     Map<String, dynamic> map = new Map();
     int i = 0;
-    for(int y = 0; y < yFieldSize; y++) {
-      for(int x = 0; x < xFieldSize; x++) {
+    for(int y = 0; y < YFIELDSIZE; y++) {
+      for(int x = 0; x < XFIELDSIZE; x++) {
         if(levelField[y][x] != null) {
           map.putIfAbsent("$i", () => levelField[y][x]);
           i++;
@@ -105,9 +105,9 @@ class Level{
       return; //Fortschritte beim Pathing verwerfen
     }
 
-    for(int y = 0; y < yFieldSize; y++) {//2d Liste reinitialisieren
-      for(int x = 0; x < xFieldSize; x++) {
-        pathToPlayer[y][x] = yFieldSize*xFieldSize;
+    for(int y = 0; y < YFIELDSIZE; y++) {//2d Liste reinitialisieren
+      for(int x = 0; x < XFIELDSIZE; x++) {
+        pathToPlayer[y][x] = YFIELDSIZE*XFIELDSIZE;
       }
     }
 
@@ -115,7 +115,7 @@ class Level{
       pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
     }
 
-    if(debug && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
+    if(DEBUG && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
   }
 
   /**
@@ -158,7 +158,7 @@ class Level{
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
   static bool isInvalid(int atPosX, int atPosY) {
-    if(atPosX < 0 || atPosX >= xFieldSize || atPosY < 0 || atPosY >= yFieldSize) {
+    if(atPosX < 0 || atPosX >= XFIELDSIZE || atPosY < 0 || atPosY >= YFIELDSIZE) {
       return true;
     }
     return false;
@@ -276,7 +276,7 @@ class LevelLoader {
               new BasicTank(x["positionX"],x["positionY"], orientation);
               break;
             default:
-              if(debug) print("LevelLoader from Json: Invalid Type");
+              if(DEBUG) print("LevelLoader from Json: Invalid Type");
               break;
         }
       }

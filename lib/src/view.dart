@@ -2,7 +2,7 @@ part of battlecity;
 
 class BattleView {
   /// Enthält die Referenzen zu den Tabellenzellen
-  List<List<Element>> tableFields = new List(yFieldSize);
+  List<List<Element>> tableFields = new List(YFIELDSIZE);
 
   void gameStateChange(Symbol gamestate) {
     switch(gamestate.toString()) {
@@ -51,7 +51,7 @@ class BattleView {
     }
     Level.active.clearChanged();
 
-    if(debug && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
+    if(DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   /**
@@ -59,9 +59,9 @@ class BattleView {
    */
   void createEmptyField() {
     String table = "";
-    for (int y = 0; y < yFieldSize; y++) {
+    for (int y = 0; y < YFIELDSIZE; y++) {
       table += "<tr>";
-      for (int x = 0; x < xFieldSize; x++) {
+      for (int x = 0; x < XFIELDSIZE; x++) {
         final pos = "x${x}y${y}";
         table += "<td id='$pos'><div class='field'></div></td>";
       }
@@ -69,9 +69,9 @@ class BattleView {
     }
     querySelector('#gameTable').innerHtml = table;
 
-    for (int y = 0; y < yFieldSize; y++) {
-      tableFields[y] = new List<Element>(xFieldSize);
-      for (int x = 0; x < xFieldSize; x++) {
+    for (int y = 0; y < YFIELDSIZE; y++) {
+      tableFields[y] = new List<Element>(XFIELDSIZE);
+      for (int x = 0; x < XFIELDSIZE; x++) {
         tableFields[y][x] = querySelector("#x${x}y${y}");
       }
     }
@@ -81,5 +81,10 @@ class BattleView {
   }
   void setFieldColor(int x, int y, String clr) {
     tableFields[y][x].querySelector("div").style.color = clr;
+  }
+  void unlockMenu(int lastUnlockedLevel) {
+    for(int i = 1; i <= lastUnlockedLevel; i++) {
+      querySelector("#level$i").attributes.remove("disabled");
+    }
   }
 }
