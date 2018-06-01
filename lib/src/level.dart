@@ -27,15 +27,12 @@ class Level{
   static Level active;
   static List<Enemy> activeEnemies = new List<Enemy>();
 
-  List<List<Entity>> _levelField;
-  List<List<Background>> _levelFieldBackground;
+  List<List<Entity>> levelField;
+  List<List<Background>> levelFieldBackground;
   ///Enthält das Ergebnis des Pathfindings
   List<List<int>> pathToPlayer;
   ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen
-  List<Coordinates> _changed = new List<Coordinates>();
-
-  List<List<Entity>> get levelField => _levelField;
-  List<List<Background>> get levelFieldBackground => _levelFieldBackground;
+  List<Coordinates> changed = new List<Coordinates>();
 
   Map toJson() {
     Map<String, dynamic> map = new Map();
@@ -73,7 +70,7 @@ class Level{
     queue.add(new Coordinates.withCounter(curPosX, curPosY, curCounter)); //Ziel
     List<Entity> entitiesToMapLeft = new List<Entity>();
     entitiesToMapLeft.addAll(mapFrom);
-
+    try {
     while(!queue.isEmpty) {
       if(entitiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
       List<Coordinates> temp = new List<Coordinates>(4);
@@ -103,6 +100,10 @@ class Level{
         }
       }
     }
+    } catch(e) {
+      print(e);
+      return; //Fortschritte beim Pathing verwerfen
+    }
 
     for(int y = 0; y < yFieldSize; y++) {//2d Liste reinitialisieren
       for(int x = 0; x < xFieldSize; x++) {
@@ -122,20 +123,20 @@ class Level{
    * Die View kümmert sich beim nächsten Tick darum diese Änderungen zu rendern.
    */
   void reportChange(int atPosX, int atPosY) {
-    this._changed.add(new Coordinates(atPosX, atPosY));
+    this.changed.add(new Coordinates(atPosX, atPosY));
   }
   List<Coordinates> getChanged() {
-    return this._changed;
+    return this.changed;
   }
   void clearChanged() {
-    this._changed.clear();
+    this.changed.clear();
   }
 
   /**
    * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
    */
   void setEntity(int posX, int posY, Entity ent) {
-    _levelField[posY][posX] = ent;
+    levelField[posY][posX] = ent;
     reportChange(posX, posY);
     ent.positionX = posX;
     ent.positionY = posY;
@@ -146,11 +147,11 @@ class Level{
    */
   void removeEntity(int posX, int posY) {
     reportChange(posX, posY);
-    _levelField[posY][posX] = null;
+    levelField[posY][posX] = null;
   }
   void setBackground(int posX, int posY, Background bck) {
     reportChange(posX, posY);
-    _levelFieldBackground[posY][posX] = bck;
+    levelFieldBackground[posY][posX] = bck;
   }
 
   /**
@@ -186,7 +187,7 @@ class Level{
    */
   Entity getEntityAt(int atPosX, int atPosY) {
     if(isInvalid(atPosX, atPosY)) return null;
-    return _levelField[atPosY][atPosX];
+    return levelField[atPosY][atPosX];
   }
   static int getNewPosX(int posX, Symbol direction) {
     int newPosX = posX;
@@ -218,7 +219,7 @@ class Level{
    * Gibt true zurück, falls bewegt wurde. Bei Kolission false
    */
   bool moveEntityRelative(int fromPosX, int fromPosY, Symbol direction) {
-    DynamicEntity ent = _levelField[fromPosY][fromPosX];
+    DynamicEntity ent = levelField[fromPosY][fromPosX];
     //if(debug) {print("moveEntityFrom:($fromPosX|$fromPosY)$direction $ent");}
 
     final int newPosX = getNewPosX(fromPosX, direction);
@@ -238,12 +239,12 @@ class Level{
    * Konstruktor für ein komplett leeres Level
    */
   Level(int xSize, int ySize) {
-    _levelField = new List(ySize);
-    _levelFieldBackground = new List(ySize);
+    levelField = new List(ySize);
+    levelFieldBackground = new List(ySize);
     pathToPlayer = new List(ySize);
     for(int i = 0; i < ySize; i++) {
-      _levelField[i] = new List(xSize);
-      _levelFieldBackground[i] = new List(xSize);
+      levelField[i] = new List(xSize);
+      levelFieldBackground[i] = new List(xSize);
       pathToPlayer[i] = new List(xSize);
     }
   }

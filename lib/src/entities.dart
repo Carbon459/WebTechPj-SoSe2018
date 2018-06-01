@@ -95,15 +95,19 @@ abstract class DynamicEntity extends Entity {
     return move();
   }
 
+  void removeEventListener() {
+    if(ev != null) {
+      window.removeEventListener("fullspeed", this.ev);
+      window.removeEventListener("slowspeed", this.ev);
+    }
+  }
+
   /**
    * Entfernt die Entität vom Spielfeld. Entfernt Eventlistener falls vorhanden
    */
   void destroy() {
     super.destroy();
-    if(ev != null) {
-      window.removeEventListener("fullspeed", this.ev);
-      window.removeEventListener("slowspeed", this.ev);
-    }
+    this.removeEventListener();
   }
 }
 
@@ -157,6 +161,8 @@ class Projectile extends DynamicEntity {
   ///Schaden den das Projektil anrichtet
   int dmg = 1;
 
+  static List<Projectile> active = new List<Projectile>();
+
   /**
    * Der Konstruktor erzeugt das Projektilelement und setzt es direkt in die Spielwelt falls möglich.
    * @positionX, positionY X und Y Koordinate vom Schützen
@@ -187,6 +193,7 @@ class Projectile extends DynamicEntity {
     //Projektil ins modellFeld setzen falls in die gewünschte Richtung überhaupt Platz ist(Kein Platz = eventListener leer).
     if(this.ev != null) {
       Level.active.setEntity(this.positionX, this.positionY, this);
+      active.add(this);
     }
   }
 
@@ -198,6 +205,7 @@ class Projectile extends DynamicEntity {
     final bool output = Level.active.moveEntityRelative(this.positionX, this.positionY, this.orientation);
     if(!output) { //Wenn OutofBounds oder Kolission
       this.destroy(); //Projektil zerstören
+      active.remove(this);
       final Entity hitEntity = Level.active.getEntityAt(Level.getNewPosX(this.positionX, this.orientation), Level.getNewPosY(this.positionY, this.orientation));
       if(hitEntity != null) {
         hitEntity.damage(this.dmg);

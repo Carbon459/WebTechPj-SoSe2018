@@ -42,7 +42,7 @@ class BattleView {
       }
       //Für Backgrounds
       final td = tableFields[cord.positionY][cord.positionX];
-      final modelFieldBackground = Level.active._levelFieldBackground[cord.positionY][cord.positionX];
+      final modelFieldBackground = Level.active.levelFieldBackground[cord.positionY][cord.positionX];
       if(modelFieldBackground != null) {
         td.style.backgroundImage = "url('img/${modelFieldBackground.getSprite()}')";
       } else {

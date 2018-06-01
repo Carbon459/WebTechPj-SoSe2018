@@ -4,6 +4,7 @@ import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'dart:js';
 
 //Model--------------------
 part 'src/level.dart';
