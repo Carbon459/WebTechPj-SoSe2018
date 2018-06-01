@@ -24,6 +24,9 @@ class Coordinates {
  * Stellt ein Level dar
  */
 class Level{
+  static Level active;
+  static List<Enemy> activeEnemies = new List<Enemy>();
+
   List<List<Entity>> _levelField;
   List<List<Background>> _levelFieldBackground;
   ///Enthält das Ergebnis des Pathfindings
@@ -84,7 +87,7 @@ class Level{
       temp[3] = new Coordinates.withCounter(curPosX, curPosY - 1, curCounter);
 
       for(int i = 0; i < 4; i++) {
-        if(entitiesToMapLeft.any((f) {return activeField.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
+        if(entitiesToMapLeft.any((f) {return active.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
         if(collisionAt(temp[i].positionX, temp[i].positionY) || queue.any((ph) {return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) {
           temp[i] = null;
         }
@@ -221,7 +224,7 @@ class Level{
     final int newPosX = getNewPosX(fromPosX, direction);
     final int newPosY = getNewPosY(fromPosY, direction);
 
-    if(!activeField.collisionAt(newPosX, newPosY)) {
+    if(!active.collisionAt(newPosX, newPosY)) {
       this.removeEntity(fromPosX, fromPosY);
       this.setEntity(newPosX, newPosY, ent);
       return true;

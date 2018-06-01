@@ -16,12 +16,7 @@ part 'src/controller.dart';
 
 const xFieldSize = 15;
 const yFieldSize = 10;
-const bool debug = false;
+const bool debug = true;
 const tickSpeed = const Duration(milliseconds: 100);
 const shootSpeed = const Duration(milliseconds: 500); ///Ein Schuss alle [shotSpeed] ms erlaubt
 const int tickDividerSlow = 5; ///[tickSpeed]*[tickDividerSlow] = langsame Tickspeed für z.B. pathfinding
-
-/// Das momentan aktive Modellspielfeld
-Level activeField;
-Player player;
-List<Enemy> enemies = new List<Enemy>();

@@ -1,3 +1,7 @@
+.preLoadTimeCriticalSprites {
+    background-image: url("img/bullet.png");
+    background-image: url("img/bullet_shoot.png");
+}
 body {
     margin: 0 auto;
     background-image: url("img/funky-lines.png");

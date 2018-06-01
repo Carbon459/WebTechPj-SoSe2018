@@ -47,10 +47,10 @@ abstract class Entity {
   int getSpriteRotation() {
     if(orientation == null) return 0;//Falls es keine orientierung gibt:
     switch(orientation.toString()) {
-      case 'Symbol("left")': return 270; break;
-      case 'Symbol("right")': return 90; break;
-      case 'Symbol("up")': return 0; break;
-      case 'Symbol("down")': return 180; break;
+      case 'Symbol("left")': return 270;
+      case 'Symbol("right")': return 90;
+      case 'Symbol("up")': return 0;
+      case 'Symbol("down")': return 180;
     }
     return 0; //Falls keine orientierung vorhanden ist, vorallem bei statischen Sprites verwendet:
   }
@@ -59,7 +59,7 @@ abstract class Entity {
    * Entfernt eine Entität aus dem Modellfeld.
    */
   void destroy() {
-    activeField.removeEntity(positionX, positionY);
+    Level.active.removeEntity(positionX, positionY);
     if(debug) {print("${this} destroyed");}
   }
 
@@ -79,7 +79,7 @@ abstract class DynamicEntity extends Entity {
   EventListener ev;
 
   void shoot(Symbol projectile) {
-    activeField.reportChange(positionX, positionY); //Sicherstellen das die Orientierung richtig gerendert ist
+    Level.active.reportChange(positionX, positionY); //Sicherstellen das die Orientierung richtig gerendert ist
     new Projectile(this.positionX, this.positionY, this.orientation, #basic);
   }
 
@@ -88,7 +88,7 @@ abstract class DynamicEntity extends Entity {
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
   bool move() {
-    return activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
+    return Level.active.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
   bool moveDir(Symbol direction) {
     this.orientation = direction;
@@ -109,6 +109,12 @@ abstract class DynamicEntity extends Entity {
 
 class Player extends DynamicEntity {
 
+  static Player active;
+
+  static bool isAlive() {
+    return Player.active != null;
+  }
+
   Timer shootReset;
   bool shootPermission = true;
 
@@ -119,16 +125,15 @@ class Player extends DynamicEntity {
     sprite = baseSprite;
     hp = 3;
     orientation = or;
-    activeField.setEntity(posX, posY, this);
-    player = this;
+    Level.active.setEntity(posX, posY, this);
+    Player.active = this;
   }
   void setOrientation(Symbol or) {
     orientation = or;
-    activeField.reportChange(positionX, positionY);
+    Level.active.reportChange(positionX, positionY);
   }
   bool moveDir(Symbol direction) {
     bool tmp = super.moveDir(direction);
-    activeField.mapPathToEntity(enemies, player);
     return tmp;
   }
   /**
@@ -136,7 +141,7 @@ class Player extends DynamicEntity {
    */
   void destroy() {
     super.destroy();
-    player = null;
+    Player.active = null;
   }
   
   void shoot(Symbol projectile) {
@@ -170,18 +175,18 @@ class Projectile extends DynamicEntity {
     final int startPosX = Level.getNewPosX(positionX, orientation);
     final int startPosY = Level.getNewPosY(positionY, orientation);
 
-    if(!activeField.collisionAt(startPosX, startPosY)) {
+    if(!Level.active.collisionAt(startPosX, startPosY)) {
       this.positionX = startPosX;
       this.positionY = startPosY;
       window.addEventListener("fullspeed", ev = (e) => this.move());
     }
-    if(activeField.getEntityAt(startPosX, startPosY) is DynamicEntity) { //falls jemand direkt am angrenzenden Feld war -> Schaden verteilen (Projektil wurde oben nicht erzeugt)
-      activeField.getEntityAt(startPosX, startPosY).damage(dmg);
+    if(Level.active.getEntityAt(startPosX, startPosY) is DynamicEntity) { //falls jemand direkt am angrenzenden Feld war -> Schaden verteilen (Projektil wurde oben nicht erzeugt)
+      Level.active.getEntityAt(startPosX, startPosY).damage(dmg);
     }
 
     //Projektil ins modellFeld setzen falls in die gewünschte Richtung überhaupt Platz ist(Kein Platz = eventListener leer).
     if(this.ev != null) {
-      activeField.setEntity(this.positionX, this.positionY, this);
+      Level.active.setEntity(this.positionX, this.positionY, this);
     }
   }
 
@@ -190,10 +195,10 @@ class Projectile extends DynamicEntity {
    * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
    */
   bool move() {
-    final bool output = activeField.moveEntityRelative(this.positionX, this.positionY, this.orientation);
+    final bool output = Level.active.moveEntityRelative(this.positionX, this.positionY, this.orientation);
     if(!output) { //Wenn OutofBounds oder Kolission
       this.destroy(); //Projektil zerstören
-      final Entity hitEntity = activeField.getEntityAt(Level.getNewPosX(this.positionX, this.orientation), Level.getNewPosY(this.positionY, this.orientation));
+      final Entity hitEntity = Level.active.getEntityAt(Level.getNewPosX(this.positionX, this.orientation), Level.getNewPosY(this.positionY, this.orientation));
       if(hitEntity != null) {
         hitEntity.damage(this.dmg);
       }
@@ -204,15 +209,16 @@ class Projectile extends DynamicEntity {
 }
 
 abstract class Enemy extends DynamicEntity {
+
   /**
    * Gibt die Richtung zum spieler zurück.
    * Falls beide Entitys nicht auf einer ebene sind wird null zurückgegeben
    */
   Symbol getDirectionToPlayer() {
-    if(this.positionX < player.positionX && this.positionY == player.positionY) return #right;
-    if(this.positionX > player.positionX && this.positionY == player.positionY) return #left;
-    if(this.positionY < player.positionY && this.positionX == player.positionX) return #down;
-    if(this.positionY > player.positionY && this.positionX == player.positionX) return #up;
+    if(this.positionX < Player.active.positionX && this.positionY == Player.active.positionY) return #right;
+    if(this.positionX > Player.active.positionX && this.positionY == Player.active.positionY) return #left;
+    if(this.positionY < Player.active.positionY && this.positionX == Player.active.positionX) return #down;
+    if(this.positionY > Player.active.positionY && this.positionX == Player.active.positionX) return #up;
     return null;
   }
 
@@ -222,23 +228,23 @@ abstract class Enemy extends DynamicEntity {
   bool hasLineOfSight() {
     switch(getDirectionToPlayer().toString()) { //Richtung in die der Spieler ist
       case 'Symbol("left")':
-        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX - i, this.positionY)) return false;
+        for(int i = 1; i <= ((this.positionX - Player.active.positionX).abs() - 1); i++) {
+          if(Level.active.collisionAt(this.positionX - i, this.positionY)) return false;
         }
         break;
       case 'Symbol("right")':
-        for(int i = 1; i <= ((this.positionX - player.positionX).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX + i, this.positionY)) return false;
+        for(int i = 1; i <= ((this.positionX - Player.active.positionX).abs() - 1); i++) {
+          if(Level.active.collisionAt(this.positionX + i, this.positionY)) return false;
         }
         break;
       case 'Symbol("up")':
-        for(int i = 1; i <= ((this.positionY - player.positionY).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX, this.positionY - i)) return false;
+        for(int i = 1; i <= ((this.positionY - Player.active.positionY).abs() - 1); i++) {
+          if(Level.active.collisionAt(this.positionX, this.positionY - i)) return false;
         }
         break;
       case 'Symbol("down")':
-        for(int i = 1; i <= ((this.positionY - player.positionY).abs() - 1); i++) {
-          if(activeField.collisionAt(this.positionX, this.positionY + i)) return false;
+        for(int i = 1; i <= ((this.positionY - Player.active.positionY).abs() - 1); i++) {
+          if(Level.active.collisionAt(this.positionX, this.positionY + i)) return false;
         }
         break;
       default: //Spieler ist nicht auf einer selben ebene wie dieses Entity
@@ -253,7 +259,7 @@ abstract class Enemy extends DynamicEntity {
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
   bool move() {
-    if(player == null) return false; //Spieler existiert nicht auf dem Spielfeld
+    if(!Player.isAlive()) return false; //Spieler existiert nicht auf dem Spielfeld
 
     if(this.hasLineOfSight()) {
       if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
@@ -265,49 +271,49 @@ abstract class Enemy extends DynamicEntity {
     int tmp = xFieldSize*yFieldSize;//Höchster Wert
 
     //vorgemappte path mit niedrigsten wert auswählen TODO: Vereinfachen
-    if(!activeField.collisionAt(this.positionX + 1, this.positionY)) {
-      tmp = activeField.pathToPlayer[this.positionY][this.positionX + 1];
+    if(!Level.active.collisionAt(this.positionX + 1, this.positionY)) {
+      tmp = Level.active.pathToPlayer[this.positionY][this.positionX + 1];
       this.orientation = #right;
     }
 
-    if(!activeField.collisionAt(this.positionX - 1, this.positionY)) {
-      if(activeField.pathToPlayer[this.positionY][this.positionX - 1] == tmp) { //Wenn zwei werte gleich groß sind einen zufälligen nehmen
+    if(!Level.active.collisionAt(this.positionX - 1, this.positionY)) {
+      if(Level.active.pathToPlayer[this.positionY][this.positionX - 1] == tmp) { //Wenn zwei werte gleich groß sind einen zufälligen nehmen
         var rng = new Random();
         if(rng.nextBool()) {
-          tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
+          tmp = Level.active.pathToPlayer[this.positionY][this.positionX - 1];
           this.orientation = #left;
         }
       }
-      else if(activeField.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
-        tmp = activeField.pathToPlayer[this.positionY][this.positionX - 1];
+      else if(Level.active.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
+        tmp = Level.active.pathToPlayer[this.positionY][this.positionX - 1];
         this.orientation = #left;
       }
     }
 
-    if(!activeField.collisionAt(this.positionX, this.positionY + 1)) {
-      if(activeField.pathToPlayer[this.positionY + 1][this.positionX] == tmp) {
+    if(!Level.active.collisionAt(this.positionX, this.positionY + 1)) {
+      if(Level.active.pathToPlayer[this.positionY + 1][this.positionX] == tmp) {
         var rng = new Random();
         if(rng.nextBool()) {
-          tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
+          tmp = Level.active.pathToPlayer[this.positionY + 1][this.positionX];
           this.orientation = #down;
         }
       }
-      else if(activeField.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
-        tmp = activeField.pathToPlayer[this.positionY + 1][this.positionX];
+      else if(Level.active.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
+        tmp = Level.active.pathToPlayer[this.positionY + 1][this.positionX];
         this.orientation = #down;
       }
     }
 
-    if(!activeField.collisionAt(this.positionX, this.positionY - 1)) {
-      if(activeField.pathToPlayer[this.positionY - 1][this.positionX] == tmp) {
+    if(!Level.active.collisionAt(this.positionX, this.positionY - 1)) {
+      if(Level.active.pathToPlayer[this.positionY - 1][this.positionX] == tmp) {
         var rng = new Random();
         if(rng.nextBool()) {
-          tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
+          tmp = Level.active.pathToPlayer[this.positionY - 1][this.positionX];
           this.orientation = #up;
         }
       }
-      else if(activeField.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
-        tmp = activeField.pathToPlayer[this.positionY - 1][this.positionX];
+      else if(Level.active.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
+        tmp = Level.active.pathToPlayer[this.positionY - 1][this.positionX];
         this.orientation = #up;
       }
     }
@@ -316,7 +322,7 @@ abstract class Enemy extends DynamicEntity {
 
   void destroy() {
     super.destroy();
-    enemies.remove(this);
+    Level.activeEnemies.remove(this);
   }
 }
 
@@ -328,9 +334,9 @@ class BasicTank extends Enemy {
     sprite = baseSprite;
     hp = 1;
     orientation = or;
-    activeField.setEntity(posX, posY, this);
+    Level.active.setEntity(posX, posY, this);
     window.addEventListener("slowspeed", ev = (e) => this.move());
-    enemies.add(this);
+    Level.activeEnemies.add(this);
   }
 }
 
@@ -341,7 +347,7 @@ class Scenery extends Entity {
     baseSprite = sprite;
     this.sprite = baseSprite;
     collision = true;
-    activeField.setEntity(posX, posY, this);
+    Level.active.setEntity(posX, posY, this);
   }
 }
 
@@ -352,7 +358,7 @@ class Background extends Entity {
     baseSprite = sprite;
     this.sprite = baseSprite;
     collision = false;
-    activeField.setBackground(posX, posY, this);
+    Level.active.setBackground(posX, posY, this);
   }
 }
 
