@@ -7,7 +7,7 @@ class BattleGameController {
   int tickCounter = 0;
   Symbol gamestate = #menu;
   int lastUnlockedLevel = 1;
-  List<dynamic> eventSubscriptions = new List<dynamic>();
+  List<StreamSubscription> eventSubscriptions = new List<StreamSubscription>();
 
   bool get menu => gamestate == #menu;
   bool get gameover => gamestate == #gameover;
@@ -94,17 +94,17 @@ class BattleGameController {
   void stop() {
     gamestate = #gameover;
     tick.cancel();
-    for(var x in eventSubscriptions) { //Alle Inputevents (außer menübuttons) canceln
+    for(var x in eventSubscriptions) { //Alle Inputevents (außer Menübuttons!) canceln
       x.cancel();
     }
     for(Enemy x in Level.activeEnemies) { //Gegnerevents canceln
       x.removeEventListener();
     }
-    for(Projectile x in Projectile.active) { //Projektilevent canceln (könnten noch welche in der luft sein)
+    for(Projectile x in Level.activeProjectiles) { //Projektilevent canceln (könnten noch welche in der luft sein)
       x.removeEventListener();
     }
     Level.activeEnemies.clear();
-    Projectile.active.clear();
+    Level.activeProjectiles.clear();
     Player.active = null;
     eventSubscriptions.clear();
     view.gameStateChange(gamestate);

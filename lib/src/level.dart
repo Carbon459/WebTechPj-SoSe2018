@@ -1,7 +1,7 @@
 part of battlecity;
 
 /**
- * Hilfsklasse (Wird wie ein struct verwendet)
+ * Hilfsklasse
  */
 class Coordinates {
   int positionX;
@@ -25,7 +25,9 @@ class Coordinates {
  */
 class Level{
   static Level active;
+
   static List<Enemy> activeEnemies = new List<Enemy>();
+  static List<Projectile> activeProjectiles = new List<Projectile>();
 
   List<List<Entity>> levelField;
   List<List<Background>> levelFieldBackground;
