@@ -34,17 +34,24 @@ class BattleView {
       //Für Entities
       final tdDiv = tableFields[cord.positionY][cord.positionX].querySelector("div");
       final modelField = modelLvl.levelField[cord.positionY][cord.positionX];
-      if(modelField != null) {
-        tdDiv.style.backgroundImage = "url('img/${modelField.getSprite()}')";
-        tdDiv.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
-      } else {
-        tdDiv.style.backgroundImage = "none";
-      }
+
       //Für Backgrounds
       final td = tableFields[cord.positionY][cord.positionX];
       final modelFieldBackground = modelLvl.levelFieldBackground[cord.positionY][cord.positionX];
+
+      final int backgroundRotation = modelFieldBackground?.getSpriteRotation() ?? 0;
+      final int foregroundRotation = modelField?.getSpriteRotation() ?? 0;
+
+      if(modelField != null) {
+        tdDiv.style.backgroundImage = "url('img/${modelField.getSprite()}')";
+        tdDiv.style.setProperty( "transform", "rotate(${foregroundRotation - backgroundRotation}deg)");
+      } else {
+        tdDiv.style.backgroundImage = "none";
+      }
+
       if(modelFieldBackground != null) {
         td.style.backgroundImage = "url('img/${modelFieldBackground.getSprite()}')";
+        td.style.setProperty( "transform", "rotate(${backgroundRotation}deg)");
       } else {
         td.style.backgroundImage = "url('img/grass.png')"; //Standardhintergrund
       }

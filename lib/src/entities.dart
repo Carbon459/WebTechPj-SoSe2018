@@ -366,11 +366,12 @@ class Scenery extends Entity {
 }
 
 class Background extends Entity {
-  Background(int posX, int posY, String sprite) {
+  Background(int posX, int posY, String sprite, Symbol or) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
     this.sprite = baseSprite;
+    this.orientation = or;
     collision = false;
     Level.active.setBackground(posX, posY, this);
   }

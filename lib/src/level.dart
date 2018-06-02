@@ -272,7 +272,7 @@ class LevelLoader {
               new Scenery(x["positionX"],x["positionY"], x["baseSprite"]);
               break;
             case "Background":
-              new Background(x["positionX"],x["positionY"], x["baseSprite"]);
+              new Background(x["positionX"],x["positionY"], x["baseSprite"], orientation);
               break;
             case "BasicTank":
               new BasicTank(x["positionX"],x["positionY"], orientation);
