@@ -4798,10 +4798,10 @@ this.e=this.d
 return J.z(z,".png")}return J.z(this.e,".png")},
 bD:function(){var z=this.f
 if(z==null)return 0
-switch(z.j(0)){case'Symbol("left")':return 270
+switch(z.j(0)){case'Symbol("up")':return 0
 case'Symbol("right")':return 90
-case'Symbol("up")':return 0
-case'Symbol("down")':return 180}return 0},
+case'Symbol("down")':return 180
+case'Symbol("left")':return 270}return 0},
 av:["dh",function(){var z,y,x,w,v
 z=$.j
 y=this.a
@@ -5332,7 +5332,7 @@ if(typeof z!=="number")return H.D(z)
 P.a9("model to view mapping executed in "+C.d.cW(y-z,2)+"ms")}},
 ep:function(){var z,y,x,w,v,u
 for(z="",y=0;y<10;++y){z+="<tr>"
-for(x=0;x<15;++x)z+="<td id='"+("x"+x+"y"+y)+"'><div class='field'></div></td>"
+for(x=0;x<15;++x)z+="<td class='background' id='"+("x"+x+"y"+y)+"'><div class='foreground'></div></td>"
 z+="</tr>"}w=document
 J.cI(w.querySelector("#gameTable"),z)
 for(v=this.a,u=[W.ak],y=0;y<10;++y){v[y]=H.t(new Array(15),u)

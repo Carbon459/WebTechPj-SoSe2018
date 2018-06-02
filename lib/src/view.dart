@@ -70,7 +70,7 @@ class BattleView {
       table += "<tr>";
       for (int x = 0; x < XFIELDSIZE; x++) {
         final pos = "x${x}y${y}";
-        table += "<td id='$pos'><div class='field'></div></td>";
+        table += "<td class='background' id='$pos'><div class='foreground'></div></td>";
       }
       table += "</tr>";
     }
@@ -83,12 +83,15 @@ class BattleView {
       }
     }
   }
+
   void setFieldText(int x, int y, String txt) {
     tableFields[y][x].querySelector("div").innerHtml = txt;
   }
+
   void setFieldColor(int x, int y, String clr) {
     tableFields[y][x].querySelector("div").style.color = clr;
   }
+
   void unlockMenu(int lastUnlockedLevel) {
     for(int i = 1; i <= lastUnlockedLevel; i++) {
       querySelector("#level$i").attributes.remove("disabled");

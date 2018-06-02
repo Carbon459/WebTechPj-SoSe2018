@@ -73,35 +73,36 @@ class Level{
     List<Entity> entitiesToMapLeft = new List<Entity>();
     entitiesToMapLeft.addAll(mapFrom);
     try {
-    while(!queue.isEmpty) {
-      if(entitiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
-      List<Coordinates> temp = new List<Coordinates>(4);
-      curPosX = queue.elementAt(curCounter).positionX;
-      curPosY = queue.elementAt(curCounter).positionY;
-      curCounter++;
+      while(!queue.isEmpty) {
+        if(entitiesToMapLeft.isEmpty) break; //Bis Queue leer oder Pfade von allen Gegnern zum Spieler gemappt
+        List<Coordinates> temp = new List<Coordinates>(4);
+        curPosX = queue.elementAt(curCounter).positionX;
+        curPosY = queue.elementAt(curCounter).positionY;
+        curCounter++;
 
-      temp[0] = new Coordinates.withCounter(curPosX + 1, curPosY, curCounter);
-      temp[1] = new Coordinates.withCounter(curPosX - 1, curPosY, curCounter);
-      temp[2] = new Coordinates.withCounter(curPosX, curPosY + 1, curCounter);
-      temp[3] = new Coordinates.withCounter(curPosX, curPosY - 1, curCounter);
+        temp[0] = new Coordinates.withCounter(curPosX + 1, curPosY, curCounter);
+        temp[1] = new Coordinates.withCounter(curPosX - 1, curPosY, curCounter);
+        temp[2] = new Coordinates.withCounter(curPosX, curPosY + 1, curCounter);
+        temp[3] = new Coordinates.withCounter(curPosX, curPosY - 1, curCounter);
 
-      for(int i = 0; i < 4; i++) {
-        if(entitiesToMapLeft.any((f) {return active.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break;
-        if(collisionAt(temp[i].positionX, temp[i].positionY) || queue.any((ph) {return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) {
-          temp[i] = null;
+        for(int i = 0; i < 4; i++) {
+          if(entitiesToMapLeft.any((f) { return active.getEntityAt(temp[i].positionX, temp[i].positionY) == f;})) break; //Falls alle Entities gemappt sind -> fertig
+          if(collisionAt(temp[i].positionX, temp[i].positionY) //Entfernt position aus liste wenn kollision vorhanden
+              || queue.any((ph) { return temp[i].positionX == ph.positionX && temp[i].positionY == ph.positionY && ph.counter <= temp[i].counter;})) { //oder schon gemappt wurde mit niedrigeren counter
+            temp[i] = null;
+          }
+        }
+        for(Coordinates x in temp) {
+          if(x != null && !isInvalid(x.positionX, x.positionY)) queue.add(x);
+        }
+
+        //Am Gegner angekommen? Pfad für diesen gemappt, also abhaken
+        for(int i = 0; i < entitiesToMapLeft.length; i++) {
+          if(curPosX == entitiesToMapLeft[i].positionX && curPosY == entitiesToMapLeft[i].positionY) {
+            entitiesToMapLeft.removeAt(i);
+          }
         }
       }
-      for(Coordinates x in temp) {
-        if(x != null && !isInvalid(x.positionX, x.positionY)) queue.add(x);
-      }
-
-      //Am Gegner angekommen? Pfad für diesen gemappt, also abhaken
-      for(int i = 0; i < entitiesToMapLeft.length; i++) {
-        if(curPosX == entitiesToMapLeft[i].positionX && curPosY == entitiesToMapLeft[i].positionY) {
-          entitiesToMapLeft.removeAt(i);
-        }
-      }
-    }
     } catch(e) {
       print(e);
       return; //Fortschritte beim Pathing verwerfen

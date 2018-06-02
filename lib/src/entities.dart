@@ -47,12 +47,12 @@ abstract class Entity {
   int getSpriteRotation() {
     if(orientation == null) return 0;//Falls es keine orientierung gibt:
     switch(orientation.toString()) {
-      case 'Symbol("left")': return 270;
-      case 'Symbol("right")': return 90;
       case 'Symbol("up")': return 0;
+      case 'Symbol("right")': return 90;
       case 'Symbol("down")': return 180;
+      case 'Symbol("left")': return 270;
     }
-    return 0; //Falls keine orientierung vorhanden ist, vorallem bei statischen Sprites verwendet:
+    return 0; //Bei ungültigem Symbol keine Rotation
   }
 
   /**

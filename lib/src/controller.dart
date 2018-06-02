@@ -118,7 +118,7 @@ class BattleGameController {
   }
 
   void swipeEvent(int touchdifX, int touchdifY) {
-    if (Player.active == null) return;
+    if (!Player.isAlive()) return;
 
     if(touchdifX.abs() > touchdifY.abs()) { //Horizontal mehr geswiped als vertikal
       if(touchdifX > 0) {
