@@ -167,8 +167,8 @@ class BattleGameController {
       if(DEBUG) { //pathing debug
         for(int y = 0; y < Level.active.pathToPlayer.length; y++) {
           for(int x = 0; x < Level.active.pathToPlayer[y].length; x++) {
-            view.setFieldText(x, y, "x${x}y${y}:<br> ${Level.active.pathToPlayer[y][x]}");
-            if(Level.active.pathToPlayer[y][x] == YFIELDSIZE*XFIELDSIZE) view.setFieldColor(x, y, "black");
+            view.setFieldText(x, y, "x${x}y${y}:<br> ${Level.active.pathToPlayer[y][x].counter}");
+            if(Level.active.pathToPlayer[y][x].counter == YFIELDSIZE*XFIELDSIZE) view.setFieldColor(x, y, "black");
             else view.setFieldColor(x, y, "lightgreen");
           }
         }

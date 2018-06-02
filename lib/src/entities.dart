@@ -223,24 +223,11 @@ class Projectile extends DynamicEntity {
 }
 
 abstract class Enemy extends DynamicEntity {
-
-  /**
-   * Gibt die Richtung zum spieler zurück.
-   * Falls beide Entitys nicht auf einer ebene sind wird null zurückgegeben
-   */
-  Symbol getDirectionToPlayer() {
-    if(this.positionX < Player.active.positionX && this.positionY == Player.active.positionY) return #right;
-    if(this.positionX > Player.active.positionX && this.positionY == Player.active.positionY) return #left;
-    if(this.positionY < Player.active.positionY && this.positionX == Player.active.positionX) return #down;
-    if(this.positionY > Player.active.positionY && this.positionX == Player.active.positionX) return #up;
-    return null;
-  }
-
   /**
    * Gibt an ob sich etwas zwischen dem Spieler und diesem Entity befindet
    */
   bool hasLineOfSight() {
-    switch(getDirectionToPlayer().toString()) { //Richtung in die der Spieler ist
+    switch(Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY).toString()) { //Richtung in die der Spieler ist
       case 'Symbol("left")':
         for(int i = 1; i <= ((this.positionX - Player.active.positionX).abs() - 1); i++) {
           if(Level.active.collisionAt(this.positionX - i, this.positionY)) return false;
@@ -269,68 +256,42 @@ abstract class Enemy extends DynamicEntity {
   }
 
   /**
-   * Bewegt den Gegner
+   * Bewegt den Gegner (und schießt wenn möglich)
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
   bool move() {
     if(!Player.isAlive()) return false; //Spieler existiert nicht auf dem Spielfeld
 
     if(this.hasLineOfSight()) {
-      if(getDirectionToPlayer() != null) this.orientation = getDirectionToPlayer();
+      final Symbol dirToPlayer = Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY);
+      if(dirToPlayer != null) this.orientation = dirToPlayer;
 
       this.shoot(#basic);
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
 
-    int tmp = XFIELDSIZE*YFIELDSIZE;//Höchster Wert
+    int tmp = XFIELDSIZE*YFIELDSIZE; //Höchster Wert
 
-    //vorgemappte path mit niedrigsten wert auswählen TODO: Vereinfachen
-    if(!Level.active.collisionAt(this.positionX + 1, this.positionY)) {
-      tmp = Level.active.pathToPlayer[this.positionY][this.positionX + 1];
-      this.orientation = #right;
-    }
+    //vorgemappte path mit niedrigsten wert auswählen
+    List<Coordinates> list = new List();
+    if(!Level.active.collisionAt(this.positionX + 1, this.positionY)) list.add(Level.active.pathToPlayer[this.positionY][this.positionX + 1]); //right
+    if(!Level.active.collisionAt(this.positionX - 1, this.positionY)) list.add(Level.active.pathToPlayer[this.positionY][this.positionX - 1]); //left
+    if(!Level.active.collisionAt(this.positionX, this.positionY + 1)) list.add(Level.active.pathToPlayer[this.positionY + 1][this.positionX]); //down
+    if(!Level.active.collisionAt(this.positionX, this.positionY - 1)) list.add(Level.active.pathToPlayer[this.positionY - 1][this.positionX]); //up
 
-    if(!Level.active.collisionAt(this.positionX - 1, this.positionY)) {
-      if(Level.active.pathToPlayer[this.positionY][this.positionX - 1] == tmp) { //Wenn zwei werte gleich groß sind einen zufälligen nehmen
+    for(Coordinates cord in list) {
+      if(cord.counter == tmp) {
         var rng = new Random();
         if(rng.nextBool()) {
-          tmp = Level.active.pathToPlayer[this.positionY][this.positionX - 1];
-          this.orientation = #left;
+          tmp = cord.counter;
+          this.orientation = Level.getDirection(this.positionX, this.positionY, cord.positionX, cord.positionY);
         }
-      }
-      else if(Level.active.pathToPlayer[this.positionY][this.positionX - 1] < tmp) {
-        tmp = Level.active.pathToPlayer[this.positionY][this.positionX - 1];
-        this.orientation = #left;
+      } else if(cord.counter < tmp) {
+        tmp = cord.counter;
+        this.orientation = Level.getDirection(this.positionX, this.positionY, cord.positionX, cord.positionY);
       }
     }
 
-    if(!Level.active.collisionAt(this.positionX, this.positionY + 1)) {
-      if(Level.active.pathToPlayer[this.positionY + 1][this.positionX] == tmp) {
-        var rng = new Random();
-        if(rng.nextBool()) {
-          tmp = Level.active.pathToPlayer[this.positionY + 1][this.positionX];
-          this.orientation = #down;
-        }
-      }
-      else if(Level.active.pathToPlayer[this.positionY + 1][this.positionX] < tmp) {
-        tmp = Level.active.pathToPlayer[this.positionY + 1][this.positionX];
-        this.orientation = #down;
-      }
-    }
-
-    if(!Level.active.collisionAt(this.positionX, this.positionY - 1)) {
-      if(Level.active.pathToPlayer[this.positionY - 1][this.positionX] == tmp) {
-        var rng = new Random();
-        if(rng.nextBool()) {
-          tmp = Level.active.pathToPlayer[this.positionY - 1][this.positionX];
-          this.orientation = #up;
-        }
-      }
-      else if(Level.active.pathToPlayer[this.positionY - 1][this.positionX] < tmp) {
-        tmp = Level.active.pathToPlayer[this.positionY - 1][this.positionX];
-        this.orientation = #up;
-      }
-    }
     return super.move();
   }
 

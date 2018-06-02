@@ -32,7 +32,7 @@ class Level{
   List<List<Entity>> levelField;
   List<List<Background>> levelFieldBackground;
   ///Enthält das Ergebnis des Pathfindings
-  List<List<int>> pathToPlayer;
+  List<List<Coordinates>> pathToPlayer;
   ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen
   List<Coordinates> changed = new List<Coordinates>();
 
@@ -110,12 +110,12 @@ class Level{
 
     for(int y = 0; y < YFIELDSIZE; y++) {//2d Liste reinitialisieren
       for(int x = 0; x < XFIELDSIZE; x++) {
-        pathToPlayer[y][x] = YFIELDSIZE*XFIELDSIZE;
+        pathToPlayer[y][x] = new Coordinates.withCounter(x, y, XFIELDSIZE*YFIELDSIZE);
       }
     }
 
     for(Coordinates ph in queue) { //Ergebnisse auf 2D Liste mappen
-      pathToPlayer[ph.positionY][ph.positionX] = ph.counter;
+      pathToPlayer[ph.positionY][ph.positionX] = ph;
     }
 
     if(DEBUG && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
@@ -216,6 +216,15 @@ class Level{
     }
     return newPosY;
   }
+
+  static Symbol getDirection(int fromPosX, int fromPosY, int toPosX, int toPosY) {
+    if(fromPosX < toPosX && fromPosY == toPosY) return #right;
+    if(fromPosX > toPosX && fromPosY == toPosY) return #left;
+    if(fromPosY < toPosY && fromPosX == toPosX) return #down;
+    if(fromPosY > toPosY && fromPosX == toPosX) return #up;
+    return null;
+  }
+
   /**
    * Bewegt im Level der aktuellen Instanz eine Entität um eine Einheit in die gewünschte Richtung.
    * Mögliche Richtungen: #left, #right, #up, #down
