@@ -157,11 +157,13 @@ class BattleGameController {
     else if (touchdifX == 0 && touchdifY == 0) {
       Player.active.shoot(#basic);
     }
+    Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
   }
   void dpadEvent(MouseEvent event) {
     if (Player.isAlive()) {
       HtmlElement he = event.target;
       Player.active.moveDir(new Symbol(he.id));
+      Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
       view.update();
     }
   }
