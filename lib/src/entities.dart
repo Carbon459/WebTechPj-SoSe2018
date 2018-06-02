@@ -95,6 +95,9 @@ abstract class DynamicEntity extends Entity {
     return move();
   }
 
+  void addEventListener(String type) {
+    window.addEventListener(type, this.ev = (e) => this.move());
+  }
   void removeEventListener() {
     if(ev != null) {
       window.removeEventListener("fullspeed", this.ev);
@@ -138,6 +141,7 @@ class Player extends DynamicEntity {
   }
   bool moveDir(Symbol direction) {
     bool tmp = super.moveDir(direction);
+    Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
     return tmp;
   }
   /**
@@ -183,7 +187,7 @@ class Projectile extends DynamicEntity {
     if(!Level.active.collisionAt(startPosX, startPosY)) {
       this.positionX = startPosX;
       this.positionY = startPosY;
-      window.addEventListener("fullspeed", ev = (e) => this.move());
+      this.addEventListener("fullspeed");
     }
     if(Level.active.getEntityAt(startPosX, startPosY) is DynamicEntity) { //falls jemand direkt am angrenzenden Feld war -> Schaden verteilen (Projektil wurde oben nicht erzeugt)
       Level.active.getEntityAt(startPosX, startPosY).damage(dmg);
@@ -345,7 +349,7 @@ class BasicTank extends Enemy {
     hp = 1;
     orientation = or;
     Level.active.setEntity(posX, posY, this);
-    window.addEventListener("slowspeed", ev = (e) => this.move());
+    this.addEventListener("slowspeed");
     Level.activeEnemies.add(this);
   }
 }

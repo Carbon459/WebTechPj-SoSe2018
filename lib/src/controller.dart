@@ -20,43 +20,24 @@ class BattleGameController {
       if(DEBUG) print("LevelLoader: done");
 
       Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-      gamestate = #running;
-      view.gameStateChange(gamestate);
-      view.update();
+      view.gameStateChange(gamestate = #running);
+      view.update(Level.active);
       tick = new Timer.periodic(tickSpeed, (_) => _tickUpdate());
+
+      eventSubscriptions.add(window.onKeyUp.listen((KeyboardEvent ev) {if(ev.keyCode == KeyCode.SPACE) ev.preventDefault();})); //Workaround für Firefox, da sonst mit Leertaste Click Events auf den Level Startbuttons augelöst werden.
 
       //Tastatursteuerung Events
       eventSubscriptions.add(window.onKeyDown.listen((KeyboardEvent ev) {
         if (!running) return;
         switch (ev.keyCode) {
-          case KeyCode.LEFT:
-            if (Player.isAlive()) {
-              Player.active.moveDir(#left);
-              Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-            }
-            break;
-          case KeyCode.RIGHT:
-            if (Player.isAlive()) {
-              Player.active.moveDir(#right);
-              Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-            }
-            break;
-          case KeyCode.UP:
-            if (Player.isAlive()) {
-              Player.active.moveDir(#up);
-              Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-            }
-            break;
-          case KeyCode.DOWN:
-            if (Player.isAlive()) {
-              Player.active.moveDir(#down);
-              Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-            }
-            break;
+          case KeyCode.LEFT:  if (Player.isAlive()) Player.active.moveDir(#left); break;
+          case KeyCode.RIGHT: if (Player.isAlive()) Player.active.moveDir(#right); break;
+          case KeyCode.UP:    if (Player.isAlive()) Player.active.moveDir(#up); break;
+          case KeyCode.DOWN:  if (Player.isAlive()) Player.active.moveDir(#down); break;
           case KeyCode.SPACE: if (Player.isAlive()) Player.active.shoot(#basic); break;
-          case KeyCode.P: if(DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
+          case KeyCode.P:     if(DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
         }
-        view.update();
+        view.update(Level.active);
       }));
 
       if(TouchEvent.supported && running) {
@@ -71,7 +52,7 @@ class BattleGameController {
             touchdifX -= te.changedTouches[0].screen.x;
             touchdifY -= te.changedTouches[0].screen.y;
             swipeEvent(touchdifX, touchdifY);
-            view.update();
+            view.update(Level.active);
           }));
         } else {
           querySelector("#controls").style.visibility = "visible";
@@ -84,7 +65,7 @@ class BattleGameController {
             if (Player.isAlive()) {
               Player.active.shoot(#basic);
             }
-            view.update();
+            view.update(Level.active);
           }));
         }
       }
@@ -92,7 +73,6 @@ class BattleGameController {
 
   }
   void stop() {
-    gamestate = #gameover;
     tick.cancel();
     for(var x in eventSubscriptions) { //Alle Inputevents (außer Menübuttons!) canceln
       x.cancel();
@@ -107,7 +87,7 @@ class BattleGameController {
     Level.activeProjectiles.clear();
     Player.active = null;
     eventSubscriptions.clear();
-    view.gameStateChange(gamestate);
+    view.gameStateChange(gamestate = #gameover);
   }
 
   BattleGameController() {
@@ -123,7 +103,7 @@ class BattleGameController {
       e.callMethod("webkitRequestFullScreen", []);
     });
     querySelector("#menuButton").onClick.listen((MouseEvent ev) {
-      view.gameStateChange(#menu);
+      view.gameStateChange(gamestate = #menu);
     });
   }
 
@@ -157,14 +137,12 @@ class BattleGameController {
     else if (touchdifX == 0 && touchdifY == 0) {
       Player.active.shoot(#basic);
     }
-    Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
   }
   void dpadEvent(MouseEvent event) {
     if (Player.isAlive()) {
       HtmlElement he = event.target;
       Player.active.moveDir(new Symbol(he.id));
-      Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
-      view.update();
+      view.update(Level.active);
     }
   }
 
@@ -174,8 +152,8 @@ class BattleGameController {
   void _tickUpdate() {
     if(!Player.isAlive())
       stop(); //Spieler tot -> Game over
-    if(Level.activeEnemies.isEmpty) {
-      if(lastUnlockedLevel != MAXLEVEL) {
+    if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
+      if(lastUnlockedLevel != MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
         lastUnlockedLevel++;
         syncSaveData();
       }
@@ -198,7 +176,7 @@ class BattleGameController {
       tickCounter = tickDividerSlow;
     }
 
-    view.update();
+    view.update(Level.active);
     tickCounter--;
   }
 }

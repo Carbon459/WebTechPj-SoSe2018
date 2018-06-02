@@ -27,13 +27,13 @@ class BattleView {
   /**
    * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
    */
-  void update() {
+  void update(Level modelLvl) {
     num time = window.performance.now();
 
-    for(Coordinates cord in Level.active.getChanged()) {
+    for(Coordinates cord in modelLvl.getChanged()) {
       //Für Entities
       final tdDiv = tableFields[cord.positionY][cord.positionX].querySelector("div");
-      final modelField = Level.active.levelField[cord.positionY][cord.positionX];
+      final modelField = modelLvl.levelField[cord.positionY][cord.positionX];
       if(modelField != null) {
         tdDiv.style.backgroundImage = "url('img/${modelField.getSprite()}')";
         tdDiv.style.setProperty( "transform", "rotate(${modelField.getSpriteRotation()}deg)");
@@ -42,14 +42,14 @@ class BattleView {
       }
       //Für Backgrounds
       final td = tableFields[cord.positionY][cord.positionX];
-      final modelFieldBackground = Level.active.levelFieldBackground[cord.positionY][cord.positionX];
+      final modelFieldBackground = modelLvl.levelFieldBackground[cord.positionY][cord.positionX];
       if(modelFieldBackground != null) {
         td.style.backgroundImage = "url('img/${modelFieldBackground.getSprite()}')";
       } else {
         td.style.backgroundImage = "url('img/grass.png')"; //Standardhintergrund
       }
     }
-    Level.active.clearChanged();
+    modelLvl.clearChanged();
 
     if(DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
