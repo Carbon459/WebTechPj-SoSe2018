@@ -1,4 +1,7 @@
 .preLoadTimeCriticalSprites {
+    width: 0px;
+    height: 0px;
+    display: inline;
     background-image: url("img/bullet.png");
     background-image: url("img/bullet_shoot.png");
 }

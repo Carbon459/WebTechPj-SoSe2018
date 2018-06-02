@@ -263,9 +263,9 @@ class LevelLoader {
           orientation = new Symbol(x["orientation"]);
         }
         switch(x["type"]) {
-          case "Player":
-            new Player(x["positionX"],x["positionY"], orientation);
-            break;
+            case "Player":
+              new Player(x["positionX"],x["positionY"], orientation);
+              break;
             case "Scenery":
               new Scenery(x["positionX"],x["positionY"], x["baseSprite"]);
               break;
