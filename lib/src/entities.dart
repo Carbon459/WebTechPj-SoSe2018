@@ -141,6 +141,14 @@ class Player extends DynamicEntity {
   }
   bool moveDir(Symbol direction) {
     bool tmp = super.moveDir(direction);
+    /*bool tmp = false;
+    switch(direction.toString()) {
+      case 'Symbol("up")': if(this.orientation == #up) tmp = super.moveDir(direction); else this.orientation = #up; break;
+      case 'Symbol("right")': if(this.orientation == #right) tmp = super.moveDir(direction); else this.orientation = #right; break;
+      case 'Symbol("down")': if(this.orientation == #down) tmp = super.moveDir(direction); else this.orientation = #down; break;
+      case 'Symbol("left")': if(this.orientation == #left) tmp = super.moveDir(direction); else this.orientation = #left; break;
+    }
+    Level.active.reportChange(this.positionX, this.positionY);*/
     Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
     return tmp;
   }
