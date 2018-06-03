@@ -92,11 +92,14 @@ class BattleGameController {
 
   BattleGameController() {
     syncSaveData();
+    view.drawMenu(MAXLEVEL);
     view.unlockMenu(lastUnlockedLevel);
 
-    querySelector("#level1").onClick.listen((MouseEvent ev) {
-      start(1);
-    }); //TODO: mehr level
+    for(int i = 1; i <= MAXLEVEL; i++) {
+      querySelector("#level$i").onClick.listen((MouseEvent ev) {
+        start(i);
+      });
+    }
 
     querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
       var e = new JsObject.fromBrowserObject(document.body);
@@ -150,6 +153,8 @@ class BattleGameController {
    * Wird alle [tickSpeed] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
   void _tickUpdate() {
+    view.updatePlayerHP(Player.active?.hp ?? 0);
+
     if(!Player.isAlive())
       stop(); //Spieler tot -> Game over
     if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
@@ -159,6 +164,7 @@ class BattleGameController {
       }
       stop();
     }
+
 
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {

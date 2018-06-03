@@ -61,6 +61,10 @@ class BattleView {
     if(DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
+  void updatePlayerHP(int hp) {
+    querySelector("#playerhp").innerHtml = "Player HP: $hp";
+  }
+
   /**
    * Erzeugt eine leere Tabelle und initialisiert die [tableFields] Liste.
    */
@@ -96,5 +100,14 @@ class BattleView {
     for(int i = 1; i <= lastUnlockedLevel; i++) {
       querySelector("#level$i").attributes.remove("disabled");
     }
+  }
+
+  void drawMenu(int levelCount) {
+    String html = "Hauptmenü<br>";
+    for(int i = 1; i <= levelCount; i++) {
+      html += '<button id="level$i" type="button" disabled>Start Level $i</button><br>';
+    }
+    html += '<button id="toggleFS" type="button">Enable Fullscreen</button>';
+    querySelector("#menu").innerHtml = html;
   }
 }

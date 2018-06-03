@@ -270,6 +270,15 @@ abstract class Enemy extends DynamicEntity {
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
 
+    pickOrientation();
+    return super.move();
+  }
+
+  /**
+   * Wählt aus dem im aktiven Level vorhandenen Pathmapping den kürzesten nächsten Schritt
+   * und setzt die Orientierun dieses Entitys entsprechend
+   */
+  void pickOrientation() {
     int tmp = XFIELDSIZE*YFIELDSIZE; //Höchster Wert
 
     //vorgemappte path mit niedrigsten wert auswählen
@@ -291,8 +300,6 @@ abstract class Enemy extends DynamicEntity {
         this.orientation = Level.getDirection(this.positionX, this.positionY, cord.positionX, cord.positionY);
       }
     }
-
-    return super.move();
   }
 
   void destroy() {

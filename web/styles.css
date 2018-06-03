@@ -59,6 +59,14 @@ td {
     background-color: red;
     z-index: 1;
 }
+#playerhp {
+    background-color: white;
+    position: fixed;
+    z-index: 1;
+    left: 1%;
+    top: 1%;
+    opacity: 0.6;
+}
 #controls {
     visibility: hidden;
     position: fixed;
