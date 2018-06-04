@@ -331,11 +331,12 @@ class BasicTank extends Enemy {
 }
 
 class Scenery extends Entity {
-  Scenery(int posX, int posY, String sprite) {
+  Scenery(int posX, int posY, String sprite, Symbol or) {
     positionX = posX;
     positionY = posY;
     baseSprite = sprite;
     this.sprite = baseSprite;
+    this.orientation = or;
     collision = true;
     Level.active.setEntity(posX, posY, this);
   }

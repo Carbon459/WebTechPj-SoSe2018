@@ -38,16 +38,13 @@ class Level{
 
   Map toJson() {
     Map<String, dynamic> map = new Map();
-    int i = 0;
     for(int y = 0; y < YFIELDSIZE; y++) {
       for(int x = 0; x < XFIELDSIZE; x++) {
         if(levelField[y][x] != null) {
-          map.putIfAbsent("$i", () => levelField[y][x]);
-          i++;
+          map.putIfAbsent("($x|$y)f", () => levelField[y][x]);
         }
         if(levelFieldBackground[y][x] != null) {
-          map.putIfAbsent("$i", () => levelFieldBackground[y][x]);
-          i++;
+          map.putIfAbsent("($x|$y)b", () => levelFieldBackground[y][x]);
         }
       }
     }
@@ -279,7 +276,7 @@ class LevelLoader {
               new Player(x["positionX"],x["positionY"], orientation);
               break;
             case "Scenery":
-              new Scenery(x["positionX"],x["positionY"], x["baseSprite"]);
+              new Scenery(x["positionX"],x["positionY"], x["baseSprite"], orientation);
               break;
             case "Background":
               new Background(x["positionX"],x["positionY"], x["baseSprite"], orientation);
@@ -299,49 +296,71 @@ class LevelLoader {
     print(JSON.encode(lvl));
   }
   static void testlevel() {
-    new Player(0,0, #right);
-    new Scenery(0, 5, "wall");
-    new Scenery(1, 7, "wall");
-    new Scenery(2, 5, "wall");
-    new Scenery(2, 7, "wall");
-    new Scenery(2, 8, "wall");
-    new Scenery(3, 0, "wall");
-    new Scenery(3, 1, "wall");
-    new Scenery(3, 2, "wall");
-    new Scenery(3, 4, "wall");
-    new Scenery(3, 5, "wall");
-    new Scenery(4, 7, "wall");
-    new Scenery(4, 8, "wall");
-    new Scenery(5, 8, "wall");
-    new Scenery(6, 2, "wall");
-    new Scenery(6, 3, "wall");
-    new Scenery(6, 5, "wall");
-    new Scenery(6, 8, "wall");
-    new Scenery(7, 5, "wall");
-    new Scenery(7, 8, "wall");
-    new Scenery(8, 5, "wall");
-    new Scenery(8, 8, "wall");
-    new Scenery(9, 1, "wall");
-    new Scenery(9, 2, "wall");
-    new Scenery(9, 3, "wall");
-    new Scenery(9, 4, "wall");
-    new Scenery(9, 5, "wall");
-    new Scenery(9, 6, "wall");
-    new Scenery(9, 8, "wall");
-    new Scenery(11, 0, "wall");
-    new Scenery(11, 2, "wall");
-    new Scenery(11, 3, "wall");
-    new Scenery(11, 4, "wall");
-    new Scenery(11, 5, "wall");
-    new Scenery(11, 6, "wall");
-    new Scenery(11, 7, "wall");
-    new Scenery(11, 8, "wall");
-    new Scenery(13, 5, "wall");
-    new Scenery(14, 4, "wall");
-    new Scenery(14, 5, "wall");
+    new Player(1,7, #right);
+    new Background(14,4,"road_basic",#right);
+    new Background(13,4,"road_basic",#right);
+    new Background(12,4,"road_basic",#right);
+    new Background(11,4,"road_T",#up);
+    new Background(11,3,"road_basic",#up);
+    new Background(11,2,"road_basic",#up);
+    new Background(11,1,"road_L",#right);
+    new Background(12,1,"road_basic",#right);
+    new Background(13,1,"road_basic",#right);
+    new Background(14,1,"road_basic",#right);
+    new Background(10,4,"road_basic",#right);
+    new Background(9,4,"road_basic",#right);
+    new Background(8,4,"road_basic",#right);
+    new Background(7,4,"road_intersection",#up);
+    new Background(6,4,"road_basic",#right);
+    new Background(5,4,"road_basic",#right);
+    new Background(4,4,"road_basic",#right);
+    new Background(3,4,"road_intersection",#down);
+    new Background(3,3,"road_basic",#down);
+    new Background(3,2,"road_basic",#down);
+    new Background(3,1,"road_basic",#down);
+    new Background(3,0,"road_basic",#down);
+    new Background(3,5,"road_basic",#down);
+    new Background(3,6,"road_basic",#down);
+    new Background(3,7,"road_L",#left);
+    new Background(2,7,"road_basic",#left);
+    new Background(1,7,"road_end",#right);
+    new Background(2,4,"road_basic",#right);
+    new Scenery(2,6,"house", #down);
+    new Scenery(6,3,"house", #down);
+    new Scenery(5,3,"house", #down);
+    new Scenery(4,3,"house", #down);
+    new Scenery(8,3,"house", #down);
+    new Scenery(9,3,"house", #down);
+    new Scenery(10,3,"house", #down);
+    new Scenery(2,5,"house", #up);
+    new Scenery(6,5,"house", #up);
+    new Scenery(5,5,"house", #up);
+    new Scenery(4,5,"house", #up);
+    new Scenery(4,6,"house", #left);
+    new Scenery(8,5,"house", #up);
+    new Scenery(9,5,"house", #up);
+    new Scenery(10,5,"house", #up);
+    new Scenery(4,7,"house", #left);
+    new Scenery(4,7,"house", #left);
+    new Background(1,4,"road_basic",#right);
+    new Background(0,4,"road_basic",#right);
+    new Background(7,3,"road_basic",#up);
+    new Background(7,2,"road_basic",#up);
+    new Background(7,1,"road_basic",#up);
+    new Background(7,0,"road_basic",#up);
+    new Background(7,5,"road_basic",#up);
+    new Background(7,6,"road_basic",#up);
+    new Background(7,7,"road_T",#right);
+    new Background(8,7,"road_basic",#right);
+    new Background(9,7,"road_basic",#right);
+    new Background(10,7,"road_basic",#right);
+    new Background(11,7,"road_end",#left);
+    new Background(7,8,"road_basic",#up);
+    new Background(7,9,"road_basic",#up);
 
-    new BasicTank(14, 2, #left);
-    new BasicTank(14, 7, #left);
 
+    new BasicTank(14, 4, #left);
+
+    printLevelAsJson(Level.active);
   }
 }

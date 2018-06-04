@@ -2296,7 +2296,7 @@ P.ax(this,y)}},
 N:[function(a,b){var z=this.ae()
 this.a=8
 this.c=new P.bj(a,b)
-P.ax(this,z)},function(a){return this.N(a,null)},"f5","$2","$1","gaE",2,2,5,0,3,4],
+P.ax(this,z)},function(a){return this.N(a,null)},"f6","$2","$1","gaE",2,2,5,0,3,4],
 dA:function(a){var z
 if(H.bg(a,"$isY",this.$ti,"$asY")){this.dC(a)
 return}this.a=1
@@ -2687,9 +2687,9 @@ z.cK()},"$0","gc4",0,0,2],
 c1:function(){var z=this.y
 if(z!=null){this.y=null
 return z.X()}return},
-f6:[function(a){this.x.bY(a,this)},"$1","gdK",2,0,function(){return H.bF(function(a,b){return{func:1,v:true,args:[a]}},this.$receiver,"dZ")},11],
-f8:[function(a,b){this.x.bZ(a,b,this)},"$2","gdM",4,0,18,3,4],
-f7:[function(){this.dz()},"$0","gdL",0,0,2],
+f7:[function(a){this.x.bY(a,this)},"$1","gdK",2,0,function(){return H.bF(function(a,b){return{func:1,v:true,args:[a]}},this.$receiver,"dZ")},11],
+f9:[function(a,b){this.x.bZ(a,b,this)},"$2","gdM",4,0,18,3,4],
+f8:[function(){this.dz()},"$0","gdL",0,0,2],
 ds:function(a,b,c,d,e,f,g){this.y=this.x.a.cz(this.gdK(),this.gdL(),this.gdM())},
 $asbA:function(a,b){return[b]},
 m:{
@@ -3275,7 +3275,7 @@ u=P.aZ(H.hC(this))
 t=P.fp(H.hz(this))
 if(this.b)return z+"-"+y+"-"+x+" "+w+":"+v+":"+u+"."+t+"Z"
 else return z+"-"+y+"-"+x+" "+w+":"+v+":"+u+"."+t},
-w:function(a,b){return P.fn(C.d.G(this.a,b.gfb()),this.b)},
+w:function(a,b){return P.fn(C.d.G(this.a,b.gfc()),this.b)},
 geN:function(){return this.a},
 bJ:function(a,b){var z
 if(!(Math.abs(this.a)>864e13))z=!1
@@ -3630,7 +3630,7 @@ for(;z=w.firstChild,z!=null;)v.appendChild(z)}z=$.aa.body
 if(w==null?z!=null:w!==z)J.eR(w)
 c.bA(v)
 document.adoptNode(v)
-return v},function(a,b,c){return this.O(a,b,c,null)},"ef",null,null,"gf9",2,5,null,0,0],
+return v},function(a,b,c){return this.O(a,b,c,null)},"ef",null,null,"gfa",2,5,null,0,0],
 scv:function(a,b){this.aQ(a,b)},
 aR:function(a,b,c,d){a.textContent=null
 a.appendChild(this.O(a,b,c,d))},
@@ -3661,7 +3661,7 @@ cZ:{"^":"aX;",$iscZ:1,"%":"File"},
 kY:{"^":"o;i:length=,D:name=,a0:target=","%":"HTMLFormElement"},
 kZ:{"^":"ab;aj:id=","%":"GeofencingEvent"},
 b1:{"^":"fz;eZ:responseText=",
-fc:function(a,b,c,d,e,f){return a.open(b,c,!0,f,e)},
+fd:function(a,b,c,d,e,f){return a.open(b,c,!0,f,e)},
 eR:function(a,b,c,d){return a.open(b,c,d)},
 aC:function(a,b){return a.send(b)},
 $isb1:1,
@@ -3700,7 +3700,7 @@ ld:{"^":"I;aj:id=","%":"MediaStream"},
 le:{"^":"o;D:name=","%":"HTMLMetaElement"},
 lf:{"^":"o;K:value=","%":"HTMLMeterElement"},
 lg:{"^":"hm;",
-f4:function(a,b,c){return a.send(b,c)},
+f5:function(a,b,c){return a.send(b,c)},
 aC:function(a,b){return a.send(b)},
 "%":"MIDIOutput"},
 hm:{"^":"I;aj:id=","%":"MIDIInput;MIDIPort"},
@@ -4408,6 +4408,7 @@ q.a=s
 q.b=r
 q.d=u
 q.e=u
+q.f=t
 u=$.m
 p=u.a
 if(r>>>0!==r||r>=p.length){x=H.c(p,r)
@@ -4501,19 +4502,20 @@ bI:function(){if(window.localStorage.getItem("lastUnlockedLevel")==null)window.l
 else{var z=H.hE(window.localStorage.getItem("lastUnlockedLevel"),null,null)
 if(J.cz(this.e,z))window.localStorage.setItem("lastUnlockedLevel",J.O(this.e))
 else this.e=z}},
-fa:[function(a){var z
+fb:[function(a){var z
 if($.y!=null){z=J.eN(a)
 $.y.ak(new H.S(H.dB(J.eH(z))))
 this.a.aB($.m)}},"$1","geq",2,0,22],
-e3:function(){var z=$.y
-z=z==null?z:z.c
-if(z==null)z=0
-J.bQ(document.querySelector("#playerhp"),"Player HP: "+H.e(z))
+e3:function(){var z,y
+z=this.a
+y=$.y
+y=y==null?y:y.c
+z.f3(y==null?0:y)
 if($.y==null)this.bF(0)
 if($.$get$aj().length===0){if(!J.A(this.e,1)){this.e=J.z(this.e,1)
 this.bI()}this.bF(0)}window.dispatchEvent(W.cO("fullspeed",!0,!0,null))
 if(this.c===0){window.dispatchEvent(W.cO("slowspeed",!0,!0,null))
-this.c=5}this.a.aB($.m);--this.c},
+this.c=5}z.aB($.m);--this.c},
 di:function(){var z,y,x
 this.bI()
 z=this.a
@@ -4965,7 +4967,7 @@ y=this.b
 if(y>=4)return H.c(z,y)
 if(J.A(z[y].a,a.gZ()))if(J.A(z[y].b,a.ga_())){x=a.gat()
 y=z[y].c
-if(typeof x!=="number")return x.f3()
+if(typeof x!=="number")return x.f4()
 if(typeof y!=="number")return H.R(y)
 y=x<=y
 z=y}else z=!1
@@ -5045,6 +5047,9 @@ l="rotate("+H.e(n)+"deg)"
 t=(u&&C.o).bN(u,"transform")
 u.setProperty(t,l,"")}else{u=p.style
 u.backgroundImage="url('img/grass.png')"}}C.a.si(z,0)},
+f3:function(a){var z,y
+for(z="",y=0;y<a;++y)z+="<img src='img/heart.png'>"
+J.bQ(document.querySelector("#playerhp"),z)},
 ee:function(){var z,y,x,w,v,u
 for(z="",y=0;y<10;++y){z+="<tr>"
 for(x=0;x<15;++x)z+="<td class='background' id='"+("x"+x+"y"+y)+"'><div class='foreground'></div></td>"

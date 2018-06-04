@@ -62,7 +62,11 @@ class BattleView {
   }
 
   void updatePlayerHP(int hp) {
-    querySelector("#playerhp").innerHtml = "Player HP: $hp";
+    String hpdiv = "";
+    for(int i = 0; i < hp; i++) {
+      hpdiv += "<img src='img/heart.png'>";
+    }
+    querySelector("#playerhp").innerHtml = hpdiv;
   }
 
   /**
