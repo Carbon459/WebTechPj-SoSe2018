@@ -5047,8 +5047,9 @@ l="rotate("+H.e(n)+"deg)"
 t=(u&&C.o).bN(u,"transform")
 u.setProperty(t,l,"")}else{u=p.style
 u.backgroundImage="url('img/grass.png')"}}C.a.si(z,0)},
-f3:function(a){var z,y
-for(z="",y=0;y<a;++y)z+="<img src='img/heart.png'>"
+f3:function(a){var z,y,x
+for(z="",y=0;y<a;++y)z+="<img src='img/heart_full.png'>"
+for(x=3-a,y=0;y<x;++y)z+="<img src='img/heart_empty.png'>"
 J.bQ(document.querySelector("#playerhp"),z)},
 ee:function(){var z,y,x,w,v,u
 for(z="",y=0;y<10;++y){z+="<tr>"

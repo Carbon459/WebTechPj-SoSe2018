@@ -64,7 +64,10 @@ class BattleView {
   void updatePlayerHP(int hp) {
     String hpdiv = "";
     for(int i = 0; i < hp; i++) {
-      hpdiv += "<img src='img/heart.png'>";
+      hpdiv += "<img src='img/heart_full.png'>";
+    }
+    for(int i = 0; i < (MAXPLAYERHP-hp); i++) {
+      hpdiv += "<img src='img/heart_empty.png'>";
     }
     querySelector("#playerhp").innerHtml = hpdiv;
   }

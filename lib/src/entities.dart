@@ -130,7 +130,7 @@ class Player extends DynamicEntity {
     positionY = posY;
     baseSprite = "player";
     sprite = baseSprite;
-    hp = 3;
+    hp = MAXPLAYERHP;
     orientation = or;
     Level.active.setEntity(posX, posY, this);
     Player.active = this;
