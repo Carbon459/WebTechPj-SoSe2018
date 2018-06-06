@@ -164,7 +164,7 @@ class Player extends DynamicEntity {
     if(shootPermission) {
       new Projectile(this.positionX, this.positionY, this.orientation, #basic);
       shootPermission = false;
-      shootReset = new Timer.periodic(shootSpeed, (_) {shootReset.cancel(); shootPermission = true;});
+      shootReset = new Timer.periodic(SHOOTSPEED, (_) {shootReset.cancel(); shootPermission = true;});
     }
   }
 }

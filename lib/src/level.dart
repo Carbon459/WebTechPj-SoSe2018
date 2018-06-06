@@ -149,6 +149,26 @@ class Level{
     reportChange(posX, posY);
     levelField[posY][posX] = null;
   }
+  void rotateEntityClockWise(int posX, int posY) {
+    if(getEntityAt(posX, posY) == null) return;
+    switch(getEntityAt(posX, posY).orientation.toString()) {
+      case 'Symbol("up")': getEntityAt(posX, posY).orientation = #right; break;
+      case 'Symbol("right")': getEntityAt(posX, posY).orientation = #down; break;
+      case 'Symbol("down")': getEntityAt(posX, posY).orientation = #left; break;
+      case 'Symbol("left")': getEntityAt(posX, posY).orientation = #up; break;
+    }
+    reportChange(posX, posY);
+  }
+  void rotateBackgroundClockWise(int posX, int posY) {
+    if(getBackgroundAt(posX, posY) == null) return;
+    switch(getBackgroundAt(posX, posY).orientation.toString()) {
+      case 'Symbol("up")': getBackgroundAt(posX, posY).orientation = #right; break;
+      case 'Symbol("right")': getBackgroundAt(posX, posY).orientation = #down; break;
+      case 'Symbol("down")': getBackgroundAt(posX, posY).orientation = #left; break;
+      case 'Symbol("left")': getBackgroundAt(posX, posY).orientation = #up; break;
+    }
+    reportChange(posX, posY);
+  }
   void setBackground(int posX, int posY, Background bck) {
     reportChange(posX, posY);
     levelFieldBackground[posY][posX] = bck;
@@ -188,6 +208,10 @@ class Level{
   Entity getEntityAt(int atPosX, int atPosY) {
     if(isInvalid(atPosX, atPosY)) return null;
     return levelField[atPosY][atPosX];
+  }
+  Background getBackgroundAt(int atPosX, int atPosY) {
+    if(isInvalid(atPosX, atPosY)) return null;
+    return levelFieldBackground[atPosY][atPosX];
   }
   static int getNewPosX(int posX, Symbol direction) {
     int newPosX = posX;

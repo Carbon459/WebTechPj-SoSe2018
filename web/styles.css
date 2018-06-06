@@ -85,7 +85,7 @@ td {
     width: 88px;
     height: 88px;
     position: absolute;
-    opacity: 0.6;
+    opacity: 0.4;
 }
 .dpad:active {
     opacity: 1;
@@ -115,4 +115,13 @@ td {
     right: 0;
     background: url("img/dpadright.png") center center;
     background-size: cover;
+}
+#levelBuilderControls {
+    position: fixed;
+    visibility: hidden;
+    background-color: slategrey;
+    bottom: 10%;
+    left: 10%;
+    opacity: 0.5;
+   padding: 5px;
 }

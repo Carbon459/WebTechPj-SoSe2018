@@ -10,16 +10,25 @@ class BattleView {
         querySelector("#game").style.visibility = "hidden";
         querySelector("#menu").style.visibility = "visible";
         querySelector("#gameover").style.visibility = "hidden";
+        querySelector("#levelBuilderControls").style.visibility = "hidden";
         break;
       case 'Symbol("running")':
         querySelector("#game").style.visibility = "visible";
         querySelector("#menu").style.visibility = "hidden";
         querySelector("#gameover").style.visibility = "hidden";
+        querySelector("#levelBuilderControls").style.visibility = "hidden";
         break;
       case 'Symbol("gameover")':
         querySelector("#game").style.visibility = "visible";
         querySelector("#menu").style.visibility = "hidden";
         querySelector("#gameover").style.visibility = "visible";
+        querySelector("#levelBuilderControls").style.visibility = "hidden";
+        break;
+      case 'Symbol("levelbuilder")':
+        querySelector("#game").style.visibility = "visible";
+        querySelector("#menu").style.visibility = "hidden";
+        querySelector("#gameover").style.visibility = "hidden";
+        querySelector("#levelBuilderControls").style.visibility = "visible";
         break;
     }
 
@@ -114,7 +123,17 @@ class BattleView {
     for(int i = 1; i <= levelCount; i++) {
       html += '<button id="level$i" type="button" disabled>Start Level $i</button><br>';
     }
+    html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
     html += '<button id="toggleFS" type="button">Enable Fullscreen</button>';
     querySelector("#menu").innerHtml = html;
+  }
+
+  void drawBuildingBlocks() {
+    String html = '<button id="printLevel" type="button">Print Level JSON to Console</button><br>';
+    html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';
+    for(String x in LEVELBUILDINGBLOCKS.keys) {
+      html += "<img id='$x' src='img/$x.png'>";
+    }
+    querySelector("#levelBuilderControls").innerHtml = html;
   }
 }
