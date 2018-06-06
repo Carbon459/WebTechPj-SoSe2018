@@ -86,7 +86,7 @@ class BattleGameController {
 
     querySelector("#levelBuilderControls").onClick.listen((Event e) {
       HtmlElement he = e.target;
-      if(he.id != "printLevel" && spriteSelection == "") {
+      if(he.id != "printLevel") {
         spriteSelection = he.id;
         print("Current Selection: $spriteSelection");
       }
@@ -105,7 +105,6 @@ class BattleGameController {
             break;
         }
         print("Placed Selection: $spriteSelection");
-        spriteSelection = "";
       }
       view.update(Level.active);
     });

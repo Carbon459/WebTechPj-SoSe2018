@@ -5179,7 +5179,7 @@ ft:{"^":"d:10;a",
 $1:function(a){var z,y,x
 z=J.bt(a)
 y=J.q(z)
-if(y.ga5(z)!=="printLevel"&&this.a.a===""){x=y.ga5(z)
+if(y.ga5(z)!=="printLevel"){x=y.ga5(z)
 this.a.a=x
 P.aN("Current Selection: "+H.e(x))}}},
 fu:{"^":"d:10;a,b",
@@ -5197,8 +5197,7 @@ x=y.a
 if(x!==""){switch(C.p.h(0,x)){case"Background":M.fl(w,v,y.a,C.e)
 break
 case"Scenery":M.it(w,v,y.a,C.e)
-break}P.aN("Placed Selection: "+H.e(y.a))
-y.a=""}this.b.a.a8($.k)},null,null,2,0,null,1,"call"]},
+break}P.aN("Placed Selection: "+H.e(y.a))}this.b.a.a8($.k)},null,null,2,0,null,1,"call"]},
 fv:{"^":"d:4;a",
 $1:function(a){var z,y,x
 z=J.bt(a)
