@@ -32,8 +32,11 @@ const SHOOTSPEED = const Duration(milliseconds: 500);
 const int TICKDIVIDERSLOW = 5;
 ///Map aller Objekte die im LevelBuilder verfügbar sind
 const Map<String, String> LEVELBUILDINGBLOCKS = const { "house":            "Scenery",
+                                                          "player":           "Player",
+                                                          "enemyBasic":       "BasicTank",
                                                           "road_basic":       "Background",
                                                           "road_end":         "Background",
                                                           "road_intersection":"Background",
                                                           "road_L":           "Background",
-                                                          "road_T":           "Background"};
+                                                          "road_T":           "Background",
+                                                          "grass":            "Background"};

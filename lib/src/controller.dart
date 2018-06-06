@@ -71,7 +71,7 @@ class BattleGameController {
 
     querySelector("#levelBuilderControls").onClick.listen((Event e) {
       HtmlElement he = e.target;
-      if(he.id != "printLevel") {
+      if(!he.id.contains("printLevel") && !he.id.contains("rotateSwitch")  && !he.id.contains("levelBuilderControls")) {
         spriteSelection = he.id;
         print("Current Selection: $spriteSelection");
       }
@@ -80,13 +80,19 @@ class BattleGameController {
       HtmlElement he = e.target;
       final int x = int.parse(he.innerHtml.split(" ")[0]);
       final int y = int.parse(he.innerHtml.split(" ")[1]);
-      if(spriteSelection != "") {
+      if(spriteSelection.isNotEmpty) {
         switch(LEVELBUILDINGBLOCKS[spriteSelection]) {
           case "Background":
             new Background(x, y, spriteSelection, #left);
             break;
           case "Scenery":
-            new Scenery(x, y, spriteSelection, #left);
+            new Scenery(x, y, spriteSelection, #up);
+            break;
+          case "BasicTank":
+            new BasicTank(x, y, #up);
+            break;
+          case "Player":
+            new Player(x, y, #up);
             break;
         }
         print("Placed Selection: $spriteSelection");
