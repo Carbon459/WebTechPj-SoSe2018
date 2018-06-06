@@ -9,6 +9,7 @@ import 'dart:js';
 //Model--------------------
 part 'src/level.dart';
 part 'src/entities.dart';
+part 'src/abstractentities.dart';
 //View---------------------
 part 'src/view.dart';
 //Controller---------------

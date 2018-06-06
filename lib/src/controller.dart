@@ -42,33 +42,18 @@ class BattleGameController {
       }));
 
       if(TouchEvent.supported && running) {
-        var rng = new Random();
-        if(false) { //Zufallsauswahl zwischen virtualdpad und swipe steuerung
-          int touchdifX, touchdifY;
-          eventSubscriptions.add(window.onTouchStart.listen((TouchEvent te) {
-            touchdifX = te.changedTouches[0].screen.x;
-            touchdifY = te.changedTouches[0].screen.y;
-          }));
-          eventSubscriptions.add(window.onTouchEnd.listen((TouchEvent te) {
-            touchdifX -= te.changedTouches[0].screen.x;
-            touchdifY -= te.changedTouches[0].screen.y;
-            swipeEvent(touchdifX, touchdifY);
-            view.update(Level.active);
-          }));
-        } else {
-          querySelector("#controls").style.visibility = "visible";
-          eventSubscriptions.add(querySelector("#up").onClick.listen(dpadEvent));
-          eventSubscriptions.add(querySelector("#down").onClick.listen(dpadEvent));
-          eventSubscriptions.add(querySelector("#right").onClick.listen(dpadEvent));
-          eventSubscriptions.add(querySelector("#left").onClick.listen(dpadEvent));
+        querySelector("#controls").style.visibility = "visible";
+        eventSubscriptions.add(querySelector("#up").onClick.listen(dpadEvent));
+        eventSubscriptions.add(querySelector("#down").onClick.listen(dpadEvent));
+        eventSubscriptions.add(querySelector("#right").onClick.listen(dpadEvent));
+        eventSubscriptions.add(querySelector("#left").onClick.listen(dpadEvent));
 
-          eventSubscriptions.add(querySelector("#gameTable").onClick.listen((MouseEvent event) {
-            if (Player.isAlive()) {
-              Player.active.shoot(#basic);
-            }
-            view.update(Level.active);
-          }));
-        }
+        eventSubscriptions.add(querySelector("#gameTable").onClick.listen((MouseEvent event) {
+          if (Player.isAlive()) {
+            Player.active.shoot(#basic);
+          }
+          view.update(Level.active);
+        }));
       }
     });
 
@@ -187,27 +172,6 @@ class BattleGameController {
     }
   }
 
-  void swipeEvent(int touchdifX, int touchdifY) {
-    if (!Player.isAlive()) return;
-
-    if(touchdifX.abs() > touchdifY.abs()) { //Horizontal mehr geswiped als vertikal
-      if(touchdifX > 0) {
-        Player.active.moveDir(new Symbol("left"));
-      } else if (touchdifX < 0) {
-        Player.active.moveDir(new Symbol("right"));
-      }
-    }
-    else if(touchdifX.abs() < touchdifY.abs()) { //Horizontal weniger geswiped als vertikal
-      if(touchdifY > 0) {
-        Player.active.moveDir(new Symbol("up"));
-      } else if (touchdifY < 0) {
-        Player.active.moveDir(new Symbol("down"));
-      }
-    }
-    else if (touchdifX == 0 && touchdifY == 0) {
-      Player.active.shoot(#basic);
-    }
-  }
   void dpadEvent(MouseEvent event) {
     if (Player.isAlive()) {
       HtmlElement he = event.target;
