@@ -5063,7 +5063,7 @@ if(x>>>0!==x||x>=y.length)return H.a(y,x)
 x=y[x]
 y=this.a
 if(y>>>0!==y||y>=x.length)return H.a(x,y)
-z.push(x[y])}for(y=z.length,w=150,v=0;v<z.length;z.length===y||(0,H.ah)(z),++v){u=z[v]
+z.push(x[y])}for(y=z.length,w=180,v=0;v<z.length;z.length===y||(0,H.ah)(z),++v){u=z[v]
 x=u.gad()
 if(x==null?w==null:x===w){if(C.G.fH()){w=u.gad()
 this.f=M.bF(this.a,this.b,u.ga5(),u.ga6())}}else{x=u.gad()
@@ -5074,12 +5074,12 @@ this.f=M.bF(this.a,this.b,u.ga5(),u.ga6())}}}},
 aG:function(){this.aS()
 var z=$.$get$ap();(z&&C.a).a_(z,this)}},
 fp:{"^":"c;a,b,c,d,e,f",
-dC:function(a,b){$.j=M.ds(15,10)
+dC:function(a,b){$.j=M.ds(18,10)
 this.a.cT()
 M.bE("lvl/"+b+".json").bV(new M.fE(this))},
 dD:function(){var z,y,x
 z={}
-$.j=M.ds(15,10)
+$.j=M.ds(18,10)
 y=this.a
 y.cT()
 this.d=C.C
@@ -5131,19 +5131,19 @@ v=w+H.e(v[x].gad())
 if(y>=10)return H.a(z,y)
 w=z[y]
 w.length
-if(x>=15)return H.a(w,x)
+if(x>=18)return H.a(w,x)
 J.aP(w[x].querySelector("div"),v)
 w=$.j.c
 if(y>=w.length)return H.a(w,y)
 w=w[y]
 if(x>=w.length)return H.a(w,x)
-if(w[x].gad()===150){w=z[y][x].querySelector("div").style
+if(w[x].gad()===180){w=z[y][x].querySelector("div").style
 w.color="black"}else{w=z[y][x].querySelector("div").style
 w.color="lightgreen"}}else{w=""+x+" "+y
 if(y>=10)return H.a(z,y)
 v=z[y]
 v.length
-if(x>=15)return H.a(v,x)
+if(x>=18)return H.a(v,x)
 J.aP(v[x].querySelector("div"),w)}++x}}},
 dV:function(){var z,y,x
 this.c7()
@@ -5425,7 +5425,7 @@ G:{"^":"c;a5:a<,a6:b<,ad:c<"},
 hT:{"^":"c;a,b,c,d",
 dh:function(){var z,y,x,w
 z=new H.a4(0,null,null,null,null,null,0,[null,null])
-for(y=0;y<10;++y)for(x=0;x<15;++x){w=this.a
+for(y=0;y<10;++y)for(x=0;x<18;++x){w=this.a
 if(y>=w.length)return H.a(w,y)
 w=w[y]
 if(x>=w.length)return H.a(w,x)
@@ -5500,13 +5500,13 @@ m=J.a1(n)
 if(m.N(n,0)||m.ak(n,J.Z(o)))H.u(P.aW(n,null,null))
 o.splice(n,1)[0]}}}catch(j){q=H.x(j)
 P.aM(q)
-return}for(i=0;i<10;++i)for(s=0;s<15;++s){p=this.c
+return}for(i=0;i<10;++i)for(s=0;s<18;++s){p=this.c
 if(i>=p.length)return H.a(p,i)
 p=p[i]
 o=new M.G(null,null,null)
 o.a=s
 o.b=i
-o.c=150
+o.c=180
 if(s>=p.length)return H.a(p,s)
 p[s]=o}for(p=z,o=p.length,k=0;k<p.length;p.length===o||(0,H.ah)(p),++k){h=p[k]
 n=this.c
@@ -5612,7 +5612,7 @@ if(w>=b)return H.a(x,w)
 x[w]=v}},
 n:{
 bG:function(a,b){var z=J.a1(a)
-if(!z.N(a,0))if(!z.ak(a,15)){z=J.a1(b)
+if(!z.N(a,0))if(!z.ak(a,18)){z=J.a1(b)
 z=z.N(b,0)||z.ak(b,10)}else z=!0
 else z=!0
 if(z)return!0
@@ -5730,7 +5730,7 @@ if(u>>>0!==u||u>=10)return H.a(x,u)
 u=x[u]
 t=v.a
 u.length
-if(t>>>0!==t||t>=15)return H.a(u,t)
+if(t>>>0!==t||t>=18)return H.a(u,t)
 s=u[t].querySelector("div")
 t=a.a
 u=v.b
@@ -5742,7 +5742,7 @@ q=t[r]
 if(u>=10)return H.a(x,u)
 t=x[u]
 t.length
-if(r>=15)return H.a(t,r)
+if(r>=18)return H.a(t,r)
 p=t[r]
 t=a.b
 if(u>=t.length)return H.a(t,u)
@@ -5776,11 +5776,11 @@ for(x=3-a,y=0;y<x;++y)z+="<img src='img/heart_empty.png'>"
 J.aP(document.querySelector("#playerhp"),z)},
 cT:function(){var z,y,x,w,v,u
 for(z="",y=0;y<10;++y){z+="<tr>"
-for(x=0;x<15;++x)z+="<td class='background' id='"+("x"+x+"y"+y)+"'><div class='foreground'></div></td>"
+for(x=0;x<18;++x)z+="<td class='background' id='"+("x"+x+"y"+y)+"'><div class='foreground'></div></td>"
 z+="</tr>"}w=document
 J.aP(w.querySelector("#gameTable"),z)
-for(v=this.a,u=[W.H],y=0;y<10;++y){v[y]=H.w(new Array(15),u)
-for(x=0;x<15;++x)v[y][x]=w.querySelector("#x"+x+"y"+y)}},
+for(v=this.a,u=[W.H],y=0;y<10;++y){v[y]=H.w(new Array(18),u)
+for(x=0;x<18;++x)v[y][x]=w.querySelector("#x"+x+"y"+y)}},
 fZ:function(a){var z,y
 if(typeof a!=="number")return H.R(a)
 z=1

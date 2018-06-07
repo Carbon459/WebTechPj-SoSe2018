@@ -16,7 +16,7 @@ part 'src/view.dart';
 part 'src/controller.dart';
 
 ///Levelgröße
-const XFIELDSIZE = 15;
+const XFIELDSIZE = 18;
 const YFIELDSIZE = 10;
 ///Anzahl der Level
 const MAXLEVEL = 1;
