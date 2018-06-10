@@ -15,7 +15,6 @@ class Player extends DynamicEntity {
     this.positionX = posX;
     positionY = posY;
     baseSprite = "player";
-    sprite = baseSprite;
     hp = MAXPLAYERHP;
     orientation = or;
     Level.active.setEntity(posX, posY, this);
@@ -86,7 +85,7 @@ class Projectile extends DynamicEntity {
     this.positionY = positionY;
     this.orientation = orientation;
     this.baseSprite = "bullet";
-    setAnimationSprite(#shoot);
+    setAnimationSprite("shoot");
     this.hp = 1;
 
     final int startPosX = Level.getNewPosX(positionX, orientation);
@@ -124,8 +123,9 @@ class Projectile extends DynamicEntity {
     return output;
   }
 
-  void destroy() {
-    super.destroy();
+  void destroy() { //kein super.destroy() da das Projektil sonst auch eine explosionsanimation abspielt
+    Level.active.removeEntity(positionX, positionY);
+    this.removeEventListener();
     Level.activeProjectiles.remove(this);
   }
 
@@ -136,7 +136,6 @@ class BasicTank extends Enemy {
     this.positionX = posX;
     this.positionY = posY;
     this.baseSprite = "enemyBasic";
-    this.sprite = baseSprite;
     this.hp = 1;
     this.orientation = or;
     Level.active.setEntity(posX, posY, this);
@@ -150,7 +149,6 @@ class Scenery extends Entity {
     this.positionX = posX;
     this.positionY = posY;
     this.baseSprite = sprite;
-    this.sprite = baseSprite;
     this.orientation = or;
     this.collision = true;
     Level.active.setEntity(posX, posY, this);
@@ -162,7 +160,6 @@ class Background extends Entity {
     this.positionX = posX;
     this.positionY = posY;
     this.baseSprite = sprite;
-    this.sprite = baseSprite;
     this.orientation = or;
     this.collision = false;
     Level.active.setBackground(posX, posY, this);
@@ -174,7 +171,6 @@ class PowerupHeal extends Powerup {
     this.positionX = posX;
     this.positionY = posY;
     this.baseSprite = "heart_full";
-    this.sprite = baseSprite;
     Level.active.setEntity(posX, posY, this);
   }
 

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:js';
+import 'dart:collection';
 
 //Model--------------------
 part 'src/level.dart';
@@ -28,6 +29,8 @@ const bool DEBUG = false;
 const TICKSPEED = const Duration(milliseconds: 100);
 ///Ein Schuss alle [shotSpeed] ms erlaubt
 const SHOOTSPEED = const Duration(milliseconds: 500);
+///Animationsdauer Explosion
+const EXPLOSIONDUR = const Duration(milliseconds: 200);
 ///[TICKSPEED]*[TICKDIVIDERSLOW] = langsame Tickspeed für z.B. pathfinding
 const int TICKDIVIDERSLOW = 5;
 ///Map aller Objekte die im LevelBuilder verfügbar sind

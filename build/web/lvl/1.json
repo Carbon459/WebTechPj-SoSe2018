@@ -244,6 +244,13 @@
     "baseSprite":"enemyBasic",
     "orientation":"left"
   },
+  "(13|4)f":{
+    "type":"BasicTank",
+    "positionX":13,
+    "positionY":4,
+    "baseSprite":"enemyBasic",
+    "orientation":"left"
+  },
   "(14|4)b":{
     "type":"Background",
     "positionX":14,

@@ -6,7 +6,7 @@ abstract class Entity {
     "positionX":positionX,
     "positionY":positionY,
     "baseSprite":baseSprite,
-    "orientation":this.getOrientation()
+    "orientation":this.getOrientationAsString()
   };
 
   int positionX;
@@ -14,29 +14,38 @@ abstract class Entity {
   ///Lebenspunkte (hp<0 = Unzerstörbar)
   int hp = -1;
   String baseSprite;
-  String sprite;
   Symbol orientation;
   bool collision = true;
+  ///Queue für in den nächsten Ticks zu anzeigende Sprites (für Animationen)
+  Queue<String> currentAnimation = new Queue<String>();
 
-  String getOrientation() {
+  String getOrientationAsString() {
     if(this.orientation == null) return "null";
     RegExp exp = new RegExp("(left|right|up|down)");
     return exp.firstMatch(this.orientation.toString()).group(0);
   }
+
   String getSprite() {
-    if(DEBUG) print("getSprite: $sprite.png");
-    if(sprite != baseSprite) {
-      String tmp = sprite;
-      sprite = baseSprite;
+    if(currentAnimation.isNotEmpty) {
+      String tmp = currentAnimation.first;
+      currentAnimation.removeFirst();
+      if(DEBUG) print("Sprite: $tmp.png");
       return tmp + ".png";
+    } else {
+      if(DEBUG) print("BaseSprite: $baseSprite.png");
+      return baseSprite + ".png";
     }
-    return sprite + ".png";
   }
 
-  void setAnimationSprite(Symbol action) {
-    switch(action.toString()) {
-      case 'Symbol("shoot")':
-        sprite = baseSprite + "_shoot";
+  void setAnimationSprite(String action) {
+    currentAnimation.clear(); //Vorhandene Animation abbrechen.
+
+    switch(action) {
+      case 'shoot':
+        currentAnimation.add(baseSprite + "_shoot");
+        break;
+      case 'explode':
+        currentAnimation.add("explosion");
         break;
     }
   }
@@ -59,7 +68,9 @@ abstract class Entity {
    * Entfernt eine Entität aus dem Modellfeld.
    */
   void destroy() {
-    Level.active.removeEntity(positionX, positionY);
+    setAnimationSprite("explode");
+    Level.active.reportChange(this.positionX, this.positionY);
+    new Timer(EXPLOSIONDUR, () => Level.active.removeEntity(positionX, positionY));
     if(DEBUG) {print("${this} destroyed");}
   }
 
