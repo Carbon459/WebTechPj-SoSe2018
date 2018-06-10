@@ -287,7 +287,12 @@ class Level{
 class LevelLoader {
   static Future<int> getLevelFromJson (String url) async {
     String s = await HttpRequest.getString(url);
-    Map<String, dynamic> jsonMap = JSON.decode(s);
+    getLevelfromString(s);
+    return 0;
+  }
+
+  static void getLevelfromString(String json) {
+    Map<String, dynamic> jsonMap = JSON.decode(json);
 
     for(Map<String, dynamic> x in jsonMap.values) {
       if(x != null) {
@@ -295,30 +300,33 @@ class LevelLoader {
         if(x["orientation"] != "null") {
           orientation = new Symbol(x["orientation"]);
         }
-        switch(x["type"]) {
-            case "Player":
-              new Player(x["positionX"],x["positionY"], orientation);
-              break;
-            case "Scenery":
-              new Scenery(x["positionX"],x["positionY"], x["baseSprite"], orientation);
-              break;
-            case "Background":
-              new Background(x["positionX"],x["positionY"], x["baseSprite"], orientation);
-              break;
-            case "BasicTank":
-              new BasicTank(x["positionX"],x["positionY"], orientation);
-              break;
-            case "PowerupHeal":
-              new PowerupHeal(x["positionX"],x["positionY"]);
-              break;
-            default:
-              if(DEBUG) print("LevelLoader from Json: Invalid Type");
-              break;
-        }
+        instantiateEntity(x["type"], x["positionX"], x["positionY"], baseSprite: x["baseSprite"], orientation: orientation);
       }
     }
-    return 0;
   }
+  static void instantiateEntity(String type, int posX, int posY, {String baseSprite, Symbol orientation}) {
+    switch(type) {
+      case "Player":
+        new Player(posX,posY, orientation);
+        break;
+      case "Scenery":
+        new Scenery(posX,posY, baseSprite, orientation);
+        break;
+      case "Background":
+        new Background(posX,posY, baseSprite, orientation);
+        break;
+      case "BasicTank":
+        new BasicTank(posX,posY, orientation);
+        break;
+      case "PowerupHeal":
+        new PowerupHeal(posX,posY);
+        break;
+      default:
+        if(DEBUG) print("LevelLoader from Json: Invalid Type");
+        break;
+    }
+  }
+
   static void printLevelAsJson(Level lvl) {
     print(JSON.encode(lvl));
   }

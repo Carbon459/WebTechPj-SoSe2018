@@ -25,7 +25,7 @@ class BattleGameController {
         start(i);
       });
     }
-
+    
     querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
       var e = new JsObject.fromBrowserObject(document.body);
       e.callMethod("webkitRequestFullScreen", []);
@@ -165,6 +165,9 @@ class BattleGameController {
   void startLevelBuilder() {
     Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
     view.createEmptyField();
+    if((querySelector("textarea") as TextAreaElement).value.toString().isNotEmpty) {
+      LevelLoader.getLevelFromJson((querySelector("textarea") as TextAreaElement).value);
+    }
     view.gameStateChange(gamestate = #levelbuilder);
     showCoordinatesOnField(false);
     view.drawBuildingBlocks();
@@ -185,23 +188,7 @@ class BattleGameController {
       final int x = int.parse(he.innerHtml.split(" ")[0]);
       final int y = int.parse(he.innerHtml.split(" ")[1]);
       if(spriteSelection.isNotEmpty) {
-        switch(LEVELBUILDINGBLOCKS[spriteSelection]) {
-          case "Background":
-            new Background(x, y, spriteSelection, #left);
-            break;
-          case "Scenery":
-            new Scenery(x, y, spriteSelection, #up);
-            break;
-          case "BasicTank":
-            new BasicTank(x, y, #up);
-            break;
-          case "Player":
-            new Player(x, y, #up);
-            break;
-          case "PowerupHeal":
-            new PowerupHeal(x, y);
-            break;
-        }
+        LevelLoader.instantiateEntity(LEVELBUILDINGBLOCKS[spriteSelection], x, y, baseSprite: spriteSelection, orientation: #up);
         print("Placed Selection: $spriteSelection");
       }
       view.update(Level.active);
