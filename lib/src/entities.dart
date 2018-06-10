@@ -27,7 +27,18 @@ class Player extends DynamicEntity {
     Level.active.reportChange(positionX, positionY);
   }
 
+  void addHP(int i) {
+    if((this.hp + i) >= MAXPLAYERHP) this.hp = MAXPLAYERHP;
+    else this.hp += i;
+  }
+
   bool moveDir(Symbol direction) {
+    final Entity moveTo = Level.active.getEntityAt(Level.getNewPosX(this.positionX, direction), Level.getNewPosY(this.positionY, direction));
+    if(moveTo is Powerup) {
+      final Powerup moveToP = moveTo;
+      moveToP.activate(this);
+    }
+
     //bool tmp = super.moveDir(direction);
     bool tmp = false;
     switch(direction.toString()) {
@@ -122,12 +133,12 @@ class Projectile extends DynamicEntity {
 
 class BasicTank extends Enemy {
   BasicTank(int posX, int posY, Symbol or) {
-    positionX = posX;
-    positionY = posY;
-    baseSprite = "enemyBasic";
-    sprite = baseSprite;
-    hp = 1;
-    orientation = or;
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = "enemyBasic";
+    this.sprite = baseSprite;
+    this.hp = 1;
+    this.orientation = or;
     Level.active.setEntity(posX, posY, this);
     this.addEventListener("slowspeed");
     Level.activeEnemies.add(this);
@@ -136,26 +147,39 @@ class BasicTank extends Enemy {
 
 class Scenery extends Entity {
   Scenery(int posX, int posY, String sprite, Symbol or) {
-    positionX = posX;
-    positionY = posY;
-    baseSprite = sprite;
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = sprite;
     this.sprite = baseSprite;
     this.orientation = or;
-    collision = true;
+    this.collision = true;
     Level.active.setEntity(posX, posY, this);
   }
 }
 
 class Background extends Entity {
   Background(int posX, int posY, String sprite, Symbol or) {
-    positionX = posX;
-    positionY = posY;
-    baseSprite = sprite;
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = sprite;
     this.sprite = baseSprite;
     this.orientation = or;
-    collision = false;
+    this.collision = false;
     Level.active.setBackground(posX, posY, this);
   }
 }
 
-class Powerup extends Entity {}
+class PowerupHeal extends Powerup {
+  PowerupHeal(int posX, int posY) {
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = "heart_full";
+    this.sprite = baseSprite;
+    Level.active.setEntity(posX, posY, this);
+  }
+
+  void activate(Player player) {
+    player.addHP(1);
+    this.destroy();
+  }
+}

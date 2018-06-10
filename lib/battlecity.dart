@@ -39,4 +39,5 @@ const Map<String, String> LEVELBUILDINGBLOCKS = const { "house":            "Sce
                                                           "road_intersection":"Background",
                                                           "road_L":           "Background",
                                                           "road_T":           "Background",
-                                                          "grass":            "Background"};
+                                                          "grass":            "Background",
+                                                          "heart_full":       "PowerupHeal"};

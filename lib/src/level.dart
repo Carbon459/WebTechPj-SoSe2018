@@ -308,6 +308,9 @@ class LevelLoader {
             case "BasicTank":
               new BasicTank(x["positionX"],x["positionY"], orientation);
               break;
+            case "PowerupHeal":
+              new PowerupHeal(x["positionX"],x["positionY"]);
+              break;
             default:
               if(DEBUG) print("LevelLoader from Json: Invalid Type");
               break;

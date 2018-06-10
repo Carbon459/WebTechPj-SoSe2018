@@ -14,6 +14,30 @@ class BattleGameController {
   bool get running => gamestate == #running;
   bool get levelbuilder => gamestate == #levelbuilder;
 
+
+  BattleGameController() {
+    syncSaveData();
+    view.drawMenu(MAXLEVEL);
+    view.unlockMenu(lastUnlockedLevel);
+
+    for(int i = 1; i <= MAXLEVEL; i++) {
+      querySelector("#level$i").onClick.listen((MouseEvent ev) {
+        start(i);
+      });
+    }
+
+    querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
+      var e = new JsObject.fromBrowserObject(document.body);
+      e.callMethod("webkitRequestFullScreen", []);
+    });
+    querySelector("#menuButton").onClick.listen((MouseEvent ev) {
+      view.gameStateChange(gamestate = #menu);
+    });
+    querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
+      startLevelBuilder();
+    });
+  }
+
   void start(int lvl) {
     Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
     view.createEmptyField();
@@ -58,74 +82,6 @@ class BattleGameController {
     });
 
   }
-  void startLevelBuilder() {
-    Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
-    view.createEmptyField();
-    view.gameStateChange(gamestate = #levelbuilder);
-    showCoordinatesOnField(false);
-    view.drawBuildingBlocks();
-    view.update(Level.active);
-
-    String spriteSelection = "";
-    bool rotateBackground = true;
-
-    querySelector("#levelBuilderControls").onClick.listen((Event e) {
-      HtmlElement he = e.target;
-      if(!he.id.contains("printLevel") && !he.id.contains("rotateSwitch")  && !he.id.contains("levelBuilderControls")) {
-        spriteSelection = he.id;
-        print("Current Selection: $spriteSelection");
-      }
-    });
-    querySelectorAll(".foreground").onClick.listen((Event e) {
-      HtmlElement he = e.target;
-      final int x = int.parse(he.innerHtml.split(" ")[0]);
-      final int y = int.parse(he.innerHtml.split(" ")[1]);
-      if(spriteSelection.isNotEmpty) {
-        switch(LEVELBUILDINGBLOCKS[spriteSelection]) {
-          case "Background":
-            new Background(x, y, spriteSelection, #left);
-            break;
-          case "Scenery":
-            new Scenery(x, y, spriteSelection, #up);
-            break;
-          case "BasicTank":
-            new BasicTank(x, y, #up);
-            break;
-          case "Player":
-            new Player(x, y, #up);
-            break;
-        }
-        print("Placed Selection: $spriteSelection");
-      }
-      view.update(Level.active);
-    });
-    querySelector("#rotateSwitch").onClick.listen((MouseEvent e) {
-      HtmlElement he = e.target;
-      if(rotateBackground) {
-        rotateBackground = false;
-        he.innerHtml = "Rotate Foreground";
-      }
-      else  {
-        rotateBackground = true;
-        he.innerHtml = "Rotate Background";
-      }
-    });
-
-    document.addEventListener("contextmenu", (e) {
-      HtmlElement he = e.target;
-      if(he.toString() == "div") {
-        e.preventDefault();
-        final int x = int.parse(he.innerHtml.split(" ")[0]);
-        final int y = int.parse(he.innerHtml.split(" ")[1]);
-        if(rotateBackground) Level.active.rotateBackgroundClockWise(x, y);
-        else Level.active.rotateEntityClockWise(x, y);
-        view.update(Level.active);
-      }
-    });
-    querySelector("#printLevel").onClick.listen((MouseEvent ev) {
-      LevelLoader.printLevelAsJson(Level.active);
-    });
-  }
 
   void stop() {
     tick.cancel();
@@ -143,29 +99,6 @@ class BattleGameController {
     Player.active = null;
     eventSubscriptions.clear();
     view.gameStateChange(gamestate = #gameover);
-  }
-
-  BattleGameController() {
-    syncSaveData();
-    view.drawMenu(MAXLEVEL);
-    view.unlockMenu(lastUnlockedLevel);
-
-    for(int i = 1; i <= MAXLEVEL; i++) {
-      querySelector("#level$i").onClick.listen((MouseEvent ev) {
-        start(i);
-      });
-    }
-
-    querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
-      var e = new JsObject.fromBrowserObject(document.body);
-      e.callMethod("webkitRequestFullScreen", []);
-    });
-    querySelector("#menuButton").onClick.listen((MouseEvent ev) {
-      view.gameStateChange(gamestate = #menu);
-    });
-    querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
-      startLevelBuilder();
-    });
   }
 
   void syncSaveData() {
@@ -202,7 +135,6 @@ class BattleGameController {
       stop();
     }
 
-
     window.dispatchEvent(new CustomEvent("fullspeed"));
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
@@ -228,6 +160,78 @@ class BattleGameController {
         }
       }
     }
+  }
+
+  void startLevelBuilder() {
+    Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
+    view.createEmptyField();
+    view.gameStateChange(gamestate = #levelbuilder);
+    showCoordinatesOnField(false);
+    view.drawBuildingBlocks();
+    view.update(Level.active);
+
+    String spriteSelection = "";
+    bool rotateBackground = true;
+
+    querySelector("#levelBuilderControls").onClick.listen((Event e) {
+      HtmlElement he = e.target;
+      if(!he.id.contains("printLevel") && !he.id.contains("rotateSwitch")  && !he.id.contains("levelBuilderControls")) {
+        spriteSelection = he.id;
+        print("Current Selection: $spriteSelection");
+      }
+    });
+    querySelectorAll(".foreground").onClick.listen((Event e) {
+      HtmlElement he = e.target;
+      final int x = int.parse(he.innerHtml.split(" ")[0]);
+      final int y = int.parse(he.innerHtml.split(" ")[1]);
+      if(spriteSelection.isNotEmpty) {
+        switch(LEVELBUILDINGBLOCKS[spriteSelection]) {
+          case "Background":
+            new Background(x, y, spriteSelection, #left);
+            break;
+          case "Scenery":
+            new Scenery(x, y, spriteSelection, #up);
+            break;
+          case "BasicTank":
+            new BasicTank(x, y, #up);
+            break;
+          case "Player":
+            new Player(x, y, #up);
+            break;
+          case "PowerupHeal":
+            new PowerupHeal(x, y);
+            break;
+        }
+        print("Placed Selection: $spriteSelection");
+      }
+      view.update(Level.active);
+    });
+    querySelector("#rotateSwitch").onClick.listen((MouseEvent e) {
+      HtmlElement he = e.target;
+      if(rotateBackground) {
+        rotateBackground = false;
+        he.innerHtml = "Rotate Foreground";
+      }
+      else  {
+        rotateBackground = true;
+        he.innerHtml = "Rotate Background";
+      }
+    });
+
+    document.addEventListener("contextmenu", (e) {
+      HtmlElement he = e.target;
+      if(he.toString() == "div") {
+        e.preventDefault();
+        final int x = int.parse(he.innerHtml.split(" ")[0]);
+        final int y = int.parse(he.innerHtml.split(" ")[1]);
+        if(rotateBackground) Level.active.rotateBackgroundClockWise(x, y);
+        else Level.active.rotateEntityClockWise(x, y);
+        view.update(Level.active);
+      }
+    });
+    querySelector("#printLevel").onClick.listen((MouseEvent ev) {
+      LevelLoader.printLevelAsJson(Level.active);
+    });
   }
 
 }

@@ -201,3 +201,10 @@ abstract class Enemy extends DynamicEntity {
     Level.activeEnemies.remove(this);
   }
 }
+
+/**
+ * Powerup "Interface"
+ */
+abstract class Powerup extends Entity {
+  void activate(Player player);
+}
