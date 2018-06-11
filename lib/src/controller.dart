@@ -22,14 +22,16 @@ class BattleGameController {
 
     for(int i = 1; i <= MAXLEVEL; i++) {
       querySelector("#level$i").onClick.listen((MouseEvent ev) {
+        var e = new JsObject.fromBrowserObject(document.body);
+        e.callMethod("webkitRequestFullScreen", []);
         start(i);
       });
     }
     
-    querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
+    /*querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
       var e = new JsObject.fromBrowserObject(document.body);
       e.callMethod("webkitRequestFullScreen", []);
-    });
+    });*/
     querySelector("#menuButton").onClick.listen((MouseEvent ev) {
       view.gameStateChange(gamestate = #menu);
     });
