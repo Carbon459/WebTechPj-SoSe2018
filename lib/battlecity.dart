@@ -34,7 +34,8 @@ const EXPLOSIONDUR = const Duration(milliseconds: 200);
 ///[TICKSPEED]*[TICKDIVIDERSLOW] = langsame Tickspeed für z.B. pathfinding
 const int TICKDIVIDERSLOW = 5;
 ///Map aller Objekte die im LevelBuilder verfügbar sind
-const Map<String, String> LEVELBUILDINGBLOCKS = const { "house":            "Scenery",
+const Map<String, String> LEVELBUILDINGBLOCKS = const { "x":                "removeForeground",
+                                                          "house":            "Scenery",
                                                           "player":           "Player",
                                                           "enemyBasic":       "BasicTank",
                                                           "road_basic":       "Background",

@@ -146,8 +146,8 @@ class Level{
    * Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
    */
   void removeEntity(int posX, int posY) {
-    reportChange(posX, posY);
     levelField[posY][posX] = null;
+    reportChange(posX, posY);
   }
   void rotateEntityClockWise(int posX, int posY) {
     if(getEntityAt(posX, posY) == null) return;
@@ -300,11 +300,11 @@ class LevelLoader {
         if(x["orientation"] != "null") {
           orientation = new Symbol(x["orientation"]);
         }
-        instantiateEntity(x["type"], x["positionX"], x["positionY"], baseSprite: x["baseSprite"], orientation: orientation);
+        createObject(x["type"], x["positionX"], x["positionY"], baseSprite: x["baseSprite"], orientation: orientation);
       }
     }
   }
-  static void instantiateEntity(String type, int posX, int posY, {String baseSprite, Symbol orientation}) {
+  static void createObject(String type, int posX, int posY, {String baseSprite, Symbol orientation}) {
     switch(type) {
       case "Player":
         new Player(posX,posY, orientation);
@@ -320,6 +320,9 @@ class LevelLoader {
         break;
       case "PowerupHeal":
         new PowerupHeal(posX,posY);
+        break;
+      case "removeForeground":
+        Level.active.removeEntity(posX, posY);
         break;
       default:
         if(DEBUG) print("LevelLoader from Json: Invalid Type");

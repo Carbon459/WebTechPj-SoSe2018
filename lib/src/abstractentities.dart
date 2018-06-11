@@ -217,5 +217,5 @@ abstract class Enemy extends DynamicEntity {
  * Powerup "Interface"
  */
 abstract class Powerup extends Entity {
-  void activate(Player player);
+  void apply(Player player);
 }

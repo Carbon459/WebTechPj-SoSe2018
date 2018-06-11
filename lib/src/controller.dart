@@ -165,9 +165,9 @@ class BattleGameController {
   void startLevelBuilder() {
     Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
     view.createEmptyField();
-    if((querySelector("textarea") as TextAreaElement).value.toString().isNotEmpty) {
+    /*if((querySelector("textarea") as TextAreaElement).value.toString().isNotEmpty) {
       LevelLoader.getLevelFromJson((querySelector("textarea") as TextAreaElement).value);
-    }
+    }*/
     view.gameStateChange(gamestate = #levelbuilder);
     showCoordinatesOnField(false);
     view.drawBuildingBlocks();
@@ -188,7 +188,7 @@ class BattleGameController {
       final int x = int.parse(he.innerHtml.split(" ")[0]);
       final int y = int.parse(he.innerHtml.split(" ")[1]);
       if(spriteSelection.isNotEmpty) {
-        LevelLoader.instantiateEntity(LEVELBUILDINGBLOCKS[spriteSelection], x, y, baseSprite: spriteSelection, orientation: #up);
+        LevelLoader.createObject(LEVELBUILDINGBLOCKS[spriteSelection], x, y, baseSprite: spriteSelection, orientation: #up);
         print("Placed Selection: $spriteSelection");
       }
       view.update(Level.active);

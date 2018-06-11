@@ -35,7 +35,7 @@ class Player extends DynamicEntity {
     final Entity moveTo = Level.active.getEntityAt(Level.getNewPosX(this.positionX, direction), Level.getNewPosY(this.positionY, direction));
     if(moveTo is Powerup) {
       final Powerup moveToP = moveTo;
-      moveToP.activate(this);
+      moveToP.apply(this);
     }
 
     //bool tmp = super.moveDir(direction);
@@ -174,7 +174,7 @@ class PowerupHeal extends Powerup {
     Level.active.setEntity(posX, posY, this);
   }
 
-  void activate(Player player) {
+  void apply(Player player) {
     player.addHP(1);
     this.destroy();
   }

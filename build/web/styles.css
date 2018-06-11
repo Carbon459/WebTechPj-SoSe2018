@@ -19,6 +19,7 @@ table {
     border-spacing: 0px;
     border-color: grey;
     width: 100%;
+    background-image: url("img/grass.png");
 }
 td {
     padding: 0px;
@@ -27,7 +28,7 @@ td {
     background-image: url("img/grass.png");
     width: calc(100%/18);
     height: 10%;
-    background-size: contain;
+    background-size: 100% 100%;
 }
 .foreground {
     padding-bottom: 100%;
