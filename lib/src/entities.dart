@@ -170,7 +170,7 @@ class PowerupHeal extends Powerup {
   PowerupHeal(int posX, int posY) {
     this.positionX = posX;
     this.positionY = posY;
-    this.baseSprite = "heart_full";
+    this.baseSprite = "1up";
     Level.active.setEntity(posX, posY, this);
   }
 

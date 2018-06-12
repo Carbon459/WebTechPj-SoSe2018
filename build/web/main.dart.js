@@ -4971,7 +4971,7 @@ break
 case"PowerupHeal":z=new M.id(null,null,-1,null,null,!0,P.al(null,P.o))
 z.a=b
 z.b=c
-z.d="heart_full"
+z.d="1up"
 y=$.j
 x=y.a
 if(c>>>0!==c||c>=x.length)return H.a(x,c)
@@ -5969,8 +5969,8 @@ C.Z=I.an(["HEAD","AREA","BASE","BASEFONT","BR","COL","COLGROUP","EMBED","FRAME",
 C.m=I.an([])
 C.n=H.w(I.an(["bind","if","ref","repeat","syntax"]),[P.o])
 C.o=H.w(I.an(["A::href","AREA::href","BLOCKQUOTE::cite","BODY::background","COMMAND::icon","DEL::cite","FORM::action","IMG::src","INPUT::src","INS::cite","Q::cite","VIDEO::poster"]),[P.o])
-C.Y=I.an(["x","house","player","enemyBasic","road_basic","road_end","road_intersection","road_L","road_T","grass","heart_full"])
-C.p=new H.d3(11,{x:"removeForeground",house:"Scenery",player:"Player",enemyBasic:"BasicTank",road_basic:"Background",road_end:"Background",road_intersection:"Background",road_L:"Background",road_T:"Background",grass:"Background",heart_full:"PowerupHeal"},C.Y,[null,null])
+C.Y=I.an(["x","house","player","enemyBasic","road_basic","road_end","road_intersection","road_L","road_T","grass","1up","block"])
+C.p=new H.d3(12,{x:"removeForeground",house:"Scenery",player:"Player",enemyBasic:"BasicTank",road_basic:"Background",road_end:"Background",road_intersection:"Background",road_L:"Background",road_T:"Background",grass:"Background","1up":"PowerupHeal",block:"Scenery"},C.Y,[null,null])
 C.a_=H.w(I.an([]),[P.bl])
 C.z=new H.d3(0,{},C.a_,[P.bl,null])
 C.k=new H.X("basic")
