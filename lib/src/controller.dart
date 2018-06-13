@@ -106,6 +106,8 @@ class BattleGameController {
 
     if(won) view.gameStateChange(gamestate = #gamewon);
     else view.gameStateChange(gamestate = #gameover);
+
+    view.unlockMenu(lastUnlockedLevel);
   }
 
   void syncSaveData() {

@@ -20,7 +20,7 @@ part 'src/controller.dart';
 const XFIELDSIZE = 18;
 const YFIELDSIZE = 10;
 ///Anzahl der Level
-const MAXLEVEL = 1;
+const MAXLEVEL = 2;
 ///Maximale Lebenspunktezahl des Spielers
 const MAXPLAYERHP = 3;
 ///Debug

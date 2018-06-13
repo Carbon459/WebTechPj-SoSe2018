@@ -218,4 +218,9 @@ abstract class Enemy extends DynamicEntity {
  */
 abstract class Powerup extends Entity {
   void apply(Player player);
+
+  void destroy() { //Nicht die destroy methode von Entity benutzen da sonst eine explosions animation abgespielt wird
+    Level.active.removeEntity(positionX, positionY);
+    Level.active.reportChange(this.positionX, this.positionY);
+  }
 }
