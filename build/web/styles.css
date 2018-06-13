@@ -86,15 +86,15 @@ td {
 #controls {
     visibility: hidden;
     position: fixed;
-    left: 135px;
+    left: 100px;
     bottom: 5px;
     transform: translateX(-50%);
-    width: 264px;
-    height: 175px;
+    width: 192px;
+    height: 128px;
 }
 .dpad {
-    width: 88px;
-    height: 88px;
+    width: 64px;
+    height: 64px;
     position: absolute;
     opacity: 0.4;
 }
@@ -104,14 +104,14 @@ td {
 #up {
     top: 0;
     left: 50%;
-    margin-left: -44px;
+    margin-left: -32px;
     background: url("img/dpadup.png") center center;
     background-size: cover;
 }
 #down {
     bottom: 0;
     left: 50%;
-    margin-left: -44px;
+    margin-left: -32px;
     background: url("img/dpaddown.png") center center;
     background-size: cover;
 }
