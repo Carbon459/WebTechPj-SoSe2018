@@ -38,6 +38,8 @@ const Map<String, String> LEVELBUILDINGBLOCKS = const { "x":                "rem
                                                           "house_red":        "Scenery",
                                                           "house_green":      "Scenery",
                                                           "house_blue":       "Scenery",
+                                                          "tree":             "Scenery",
+                                                          "tree2":            "Scenery",
                                                           "player":           "Player",
                                                           "enemyBasic":       "BasicTank",
                                                           "road_basic":       "Background",
@@ -46,5 +48,6 @@ const Map<String, String> LEVELBUILDINGBLOCKS = const { "x":                "rem
                                                           "road_L":           "Background",
                                                           "road_T":           "Background",
                                                           "grass":            "Background",
+                                                          "flower":           "Background",
                                                           "1up":              "PowerupHeal",
                                                           "block":            "Scenery"};
