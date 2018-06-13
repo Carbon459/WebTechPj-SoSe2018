@@ -35,7 +35,9 @@ const EXPLOSIONDUR = const Duration(milliseconds: 200);
 const int TICKDIVIDERSLOW = 5;
 ///Map aller Objekte die im LevelBuilder verfügbar sind
 const Map<String, String> LEVELBUILDINGBLOCKS = const { "x":                "removeForeground",
-                                                          "house":            "Scenery",
+                                                          "house_red":        "Scenery",
+                                                          "house_green":      "Scenery",
+                                                          "house_blue":       "Scenery",
                                                           "player":           "Player",
                                                           "enemyBasic":       "BasicTank",
                                                           "road_basic":       "Background",

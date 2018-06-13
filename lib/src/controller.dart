@@ -11,6 +11,7 @@ class BattleGameController {
 
   bool get menu => gamestate == #menu;
   bool get gameover => gamestate == #gameover;
+  bool get gamewon => gamestate == #gamewon;
   bool get running => gamestate == #running;
   bool get levelbuilder => gamestate == #levelbuilder;
 
@@ -34,7 +35,7 @@ class BattleGameController {
       var e = new JsObject.fromBrowserObject(document.body);
       e.callMethod("webkitRequestFullScreen", []);
     });*/
-    querySelector("#menuButton").onClick.listen((MouseEvent ev) {
+    querySelectorAll(".menuButton").onClick.listen((MouseEvent ev) {
       view.gameStateChange(gamestate = #menu);
     });
     querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
@@ -87,7 +88,7 @@ class BattleGameController {
 
   }
 
-  void stop() {
+  void stop(bool won) {
     tick.cancel();
     for(var x in eventSubscriptions) { //Alle Inputevents (außer Menübuttons!) canceln
       x.cancel();
@@ -102,7 +103,9 @@ class BattleGameController {
     Level.activeProjectiles.clear();
     Player.active = null;
     eventSubscriptions.clear();
-    view.gameStateChange(gamestate = #gameover);
+
+    if(won) view.gameStateChange(gamestate = #gamewon);
+    else view.gameStateChange(gamestate = #gameover);
   }
 
   void syncSaveData() {
@@ -130,13 +133,13 @@ class BattleGameController {
     view.updatePlayerHP(Player.active?.hp ?? 0);
 
     if(!Player.isAlive())
-      stop(); //Spieler tot -> Game over
-    if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
+      stop(false); //Spieler tot -> Game over
+    else if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
       if(lastUnlockedLevel != MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
         lastUnlockedLevel++;
         syncSaveData();
       }
-      stop();
+      stop(true);
     }
 
     window.dispatchEvent(new CustomEvent("fullspeed"));

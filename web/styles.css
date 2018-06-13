@@ -55,7 +55,7 @@ td {
     font-family: Arial;
     z-index: 100;
 }
-#gameover {
+#gameover{
     visibility: hidden;
     position: fixed;
     left: 50%;
@@ -63,6 +63,16 @@ td {
     font-size: 20pt;
     font-family: Arial;
     background-color: red;
+    z-index: 100;
+}
+#gamewon{
+    visibility: hidden;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    font-size: 20pt;
+    font-family: Arial;
+    background-color: green;
     z-index: 100;
 }
 #playerhp {
