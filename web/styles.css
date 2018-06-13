@@ -49,8 +49,9 @@ td {
 #menu {
     visibility: visible;
     position: fixed;
-    left: 25%;
-    top: 25%;
+    left: 50vw;
+    margin: -70px 0px 0px -68.922px;
+    top: 50vh;
     font-size: 20pt;
     font-family: Arial;
     z-index: 100;
