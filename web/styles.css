@@ -49,9 +49,9 @@ td {
 #menu {
     visibility: visible;
     position: fixed;
-    left: 50vw;
+    left: 50%;
+    top: 50%;
     margin: -70px 0px 0px -68.922px;
-    top: 50vh;
     font-size: 20pt;
     font-family: Arial;
     z-index: 100;
@@ -61,6 +61,7 @@ td {
     position: fixed;
     left: 50%;
     top: 50%;
+    margin: -31px 0px 0px -68.883px;
     font-size: 20pt;
     font-family: Arial;
     background-color: red;
@@ -71,6 +72,7 @@ td {
     position: fixed;
     left: 50%;
     top: 50%;
+    margin: -31px 0px 0px -68.883px;
     font-size: 20pt;
     font-family: Arial;
     background-color: green;
