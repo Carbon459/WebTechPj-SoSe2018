@@ -268,6 +268,35 @@ class Level{
     }
   }
 
+  bool hasLineOfSight(fromPosX, fromPosY, toPosX, toPosY) {
+    switch(Level.getDirection(fromPosX, fromPosY, toPosX, toPosY).toString()) { //Richtung in die das ziel ist
+      case 'Symbol("left")':
+        for(int i = 1; i <= ((fromPosX - toPosX).abs() - 1); i++) {
+          if(this.collisionAt(fromPosX - i, fromPosY)) return false;
+        }
+        break;
+      case 'Symbol("right")':
+        for(int i = 1; i <= ((fromPosX - toPosX).abs() - 1); i++) {
+          if(this.collisionAt(fromPosX + i, fromPosY)) return false;
+        }
+        break;
+      case 'Symbol("up")':
+        for(int i = 1; i <= ((fromPosY - toPosY).abs() - 1); i++) {
+          if(this.collisionAt(fromPosX, fromPosY - i)) return false;
+        }
+        break;
+      case 'Symbol("down")':
+        for(int i = 1; i <= ((fromPosY - toPosY).abs() - 1); i++) {
+          if(this.collisionAt(fromPosX, fromPosY + i)) return false;
+        }
+        break;
+      default: //Ziel ist nicht auf einer selben ebene wie der Ursprung
+        return false;
+    }
+
+    return true; //Keine Kollision erkannt -> LoS besteht
+  }
+
   /**
    * Konstruktor für ein komplett leeres Level
    */

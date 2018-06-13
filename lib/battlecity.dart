@@ -24,7 +24,7 @@ const MAXLEVEL = 2;
 ///Maximale Lebenspunktezahl des Spielers
 const MAXPLAYERHP = 3;
 ///Debug
-const bool DEBUG = false;
+const bool DEBUG = true;
 ///Ein tickUpdate wird so oft ausgeführt
 const TICKSPEED = const Duration(milliseconds: 100);
 ///Ein Schuss alle [shotSpeed] ms erlaubt

@@ -29,10 +29,10 @@ abstract class Entity {
     if(currentAnimation.isNotEmpty) {
       String tmp = currentAnimation.first;
       currentAnimation.removeFirst();
-      if(DEBUG) print("Sprite: $tmp.png");
+      //if(DEBUG) print("Sprite: $tmp.png");
       return tmp + ".png";
     } else {
-      if(DEBUG) print("BaseSprite: $baseSprite.png");
+      //if(DEBUG) print("BaseSprite: $baseSprite.png");
       return baseSprite + ".png";
     }
   }
@@ -129,52 +129,39 @@ abstract class DynamicEntity extends Entity {
 
 abstract class Enemy extends DynamicEntity {
   /**
-   * Gibt an ob sich etwas zwischen dem Spieler und diesem Entity befindet
-   */
-  bool hasLineOfSight() {
-    switch(Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY).toString()) { //Richtung in die der Spieler ist
-      case 'Symbol("left")':
-        for(int i = 1; i <= ((this.positionX - Player.active.positionX).abs() - 1); i++) {
-          if(Level.active.collisionAt(this.positionX - i, this.positionY)) return false;
-        }
-        break;
-      case 'Symbol("right")':
-        for(int i = 1; i <= ((this.positionX - Player.active.positionX).abs() - 1); i++) {
-          if(Level.active.collisionAt(this.positionX + i, this.positionY)) return false;
-        }
-        break;
-      case 'Symbol("up")':
-        for(int i = 1; i <= ((this.positionY - Player.active.positionY).abs() - 1); i++) {
-          if(Level.active.collisionAt(this.positionX, this.positionY - i)) return false;
-        }
-        break;
-      case 'Symbol("down")':
-        for(int i = 1; i <= ((this.positionY - Player.active.positionY).abs() - 1); i++) {
-          if(Level.active.collisionAt(this.positionX, this.positionY + i)) return false;
-        }
-        break;
-      default: //Spieler ist nicht auf einer selben ebene wie dieses Entity
-        return false;
-    }
-
-    return true; //Keine Kollision erkannt -> LoS besteht
-  }
-
-  /**
    * Bewegt den Gegner (und schießt wenn möglich)
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
   bool move() {
     if(!Player.isAlive()) return false; //Spieler existiert nicht auf dem Spielfeld
 
-    if(this.hasLineOfSight()) {
+    if(Level.active.hasLineOfSight(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY)) { //LoS zum Spieler? -> Schiessen
       final Symbol dirToPlayer = Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY);
-      if(dirToPlayer != null) this.orientation = dirToPlayer;
+      if(dirToPlayer != null) this.orientation = dirToPlayer; //Zum Spieler drehen
 
       this.shoot(#basic);
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
 
+    //Falls einer der umgebenen vier Felder LoS hat auf Spieler bewegt sich der Gegner dort hin
+    if(Level.active.hasLineOfSight(this.positionX + 1, this.positionY, Player.active.positionX, Player.active.positionY) && !Level.active.collisionAt(this.positionX + 1, this.positionY)) {
+      this.orientation = #right;
+      return super.move();
+    }
+    if(Level.active.hasLineOfSight(this.positionX - 1, this.positionY, Player.active.positionX, Player.active.positionY) && !Level.active.collisionAt(this.positionX - 1, this.positionY)) {
+      this.orientation = #left;
+      return super.move();
+    }
+    if(Level.active.hasLineOfSight(this.positionX, this.positionY + 1, Player.active.positionX, Player.active.positionY) && !Level.active.collisionAt(this.positionX, this.positionY + 1)) {
+      this.orientation = #down;
+      return super.move();
+    }
+    if(Level.active.hasLineOfSight(this.positionX, this.positionY - 1, Player.active.positionX, Player.active.positionY) && !Level.active.collisionAt(this.positionX, this.positionY - 1)) {
+      this.orientation = #up;
+      return super.move();
+    }
+
+    //Normale Wegfindung
     pickOrientation();
     return super.move();
   }
