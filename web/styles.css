@@ -80,15 +80,16 @@ button:disabled {
     border: 3px solid #e5e5e5;
 }
 #orientationWarning {
-    font-size: 30px;
-    width: 140px
+    font-size: 25px;
+    width: 137.844px;
+    color: darkred;
 }
 #gameover{
     visibility: hidden;
     position: fixed;
     left: 50%;
     top: 50%;
-    margin: -31px 0px 0px -68.883px;
+    margin: calc(-62px/2) 0px 0px calc(-137.766px/2);
     font-size: 20pt;
     font-family: Arial;
     background-color: red;
@@ -99,7 +100,7 @@ button:disabled {
     position: fixed;
     left: 50%;
     top: 50%;
-    margin: -31px 0px 0px -68.883px;
+    margin: calc(-62px/2) 0px 0px calc(-137.766px/2);
     font-size: 20pt;
     font-family: Arial;
     background-color: green;
