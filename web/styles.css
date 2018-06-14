@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Geo&subset=latin);
+@import url(https://fonts.googleapis.com/css?family=Geo&subset=latin);
 
 .preLoadTimeCriticalSprites {
     width: 0px;
@@ -64,7 +64,7 @@ button {
     border: 3px solid #555555;
     border-radius: 3px;
     height: 30px;
-    width: 100%;
+    width: 137.844px;
     padding: 0px 0px 0px 0px;
     font-family: 'Geo', bold;
     font-size: 15px;
@@ -76,8 +76,8 @@ button:hover {
 }
 button:disabled {
     background-color: #ffffff;
-    border: 3px solid #959595;
-    color: #404040;
+    border: 3px solid #e5e5e5;
+    color: #909090;
 }
 #gameover{
     visibility: hidden;
