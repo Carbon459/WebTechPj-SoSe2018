@@ -87,6 +87,8 @@ button:disabled {
 #gameover{
     visibility: hidden;
     position: fixed;
+    padding: 50px;
+    border-radius: 20px;
     left: 50%;
     top: 50%;
     margin: calc(-62px/2) 0px 0px calc(-137.766px/2);
@@ -98,6 +100,8 @@ button:disabled {
 #gamewon{
     visibility: hidden;
     position: fixed;
+    padding: 50px;
+    border-radius: 20px;
     left: 50%;
     top: 50%;
     margin: calc(-62px/2) 0px 0px calc(-137.766px/2);
