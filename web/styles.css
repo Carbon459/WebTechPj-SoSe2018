@@ -59,7 +59,7 @@ td {
     z-index: 100;
 }
 button {
-    background-color: white;
+    background-color: #e5e5e5;
     color: black;
     border: 3px solid #555555;
     border-radius: 3px;
@@ -69,6 +69,15 @@ button {
     font-family: 'Geo', bold;
     font-size: 15px;
     -webkit-font-smoothing: none;
+}
+button:hover {
+    background-color: #555555;
+    color: white;
+}
+button:disabled {
+    background-color: #ffffff;
+    border: 3px solid #959595;
+    color: #404040;
 }
 #gameover{
     visibility: hidden;
