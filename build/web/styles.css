@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Geo&subset=latin);
+
 .preLoadTimeCriticalSprites {
     width: 0px;
     height: 0px;
@@ -56,6 +58,27 @@ td {
     font-family: Arial;
     z-index: 100;
 }
+button {
+    background-color: #e5e5e5;
+    color: black;
+    border: 3px solid #555555;
+    border-radius: 3px;
+    height: 30px;
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+    font-family: 'Geo', bold;
+    font-size: 15px;
+    -webkit-font-smoothing: none;
+}
+button:hover {
+    background-color: #555555;
+    color: white;
+}
+button:disabled {
+    background-color: #ffffff;
+    border: 3px solid #959595;
+    color: #404040;
+}
 #gameover{
     visibility: hidden;
     position: fixed;
@@ -81,6 +104,8 @@ td {
 #playerhp {
     background-color: slategrey;
     position: fixed;
+    border-radius: 20px;
+    padding: 5px;
     z-index: 1;
     left: 1%;
     top: 1%;

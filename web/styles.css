@@ -104,6 +104,8 @@ button:disabled {
 #playerhp {
     background-color: slategrey;
     position: fixed;
+    border-radius: 20px;
+    padding: 5px;
     z-index: 1;
     left: 1%;
     top: 1%;
