@@ -53,7 +53,7 @@ td {
     position: fixed;
     left: 50%;
     top: 50%;
-    margin: -70px 0px 0px -68.922px;
+    margin: calc(-140px/2) 0px 0px calc(-137.844px/2);
     font-size: 20pt;
     font-family: Arial;
     z-index: 100;
@@ -76,8 +76,12 @@ button:hover {
 }
 button:disabled {
     background-color: #ffffff;
-    border: 3px solid #e5e5e5;
     color: #909090;
+    border: 3px solid #e5e5e5;
+}
+#orientationWarning {
+    font-size: 30px;
+    width: 140px
 }
 #gameover{
     visibility: hidden;
