@@ -24,8 +24,7 @@ class BattleGameController {
     for(int i = 1; i <= MAXLEVEL; i++) {
       querySelector("#level$i").onClick.listen((MouseEvent ev) {
         if(TouchEvent.supported) {
-          var e = new JsObject.fromBrowserObject(document.body);
-          e.callMethod("webkitRequestFullScreen", []);
+          fullscreenWorkaround(document.body);
         }
         start(i);
       });
@@ -228,6 +227,30 @@ class BattleGameController {
     querySelector("#printLevel").onClick.listen((MouseEvent ev) {
       LevelLoader.printLevelAsJson(Level.active);
     });
+  }
+
+  /**
+   * Fullscreen workaround: https://stackoverflow.com/a/29715395
+   */
+  void fullscreenWorkaround(Element element) {
+    var elem = new JsObject.fromBrowserObject(element);
+
+    if (elem.hasProperty("requestFullscreen")) {
+      elem.callMethod("requestFullscreen");
+    }
+    else {
+      List<String> vendors = ['moz', 'webkit', 'ms', 'o'];
+      for (String vendor in vendors) {
+        String vendorFullscreen = "${vendor}RequestFullscreen";
+        if (vendor == 'moz') {
+          vendorFullscreen = "${vendor}RequestFullScreen";
+        }
+        if (elem.hasProperty(vendorFullscreen)) {
+          elem.callMethod(vendorFullscreen);
+          return;
+        }
+      }
+    }
   }
 
 }
