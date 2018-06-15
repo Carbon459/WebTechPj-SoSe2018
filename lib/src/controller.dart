@@ -29,16 +29,18 @@ class BattleGameController {
         start(i);
       });
     }
-    
-    /*querySelector("#toggleFS").onClick.listen((MouseEvent ev) {
-      var e = new JsObject.fromBrowserObject(document.body);
-      e.callMethod("webkitRequestFullScreen", []);
-    });*/
+
     querySelectorAll(".menuButton").onClick.listen((MouseEvent ev) {
       view.gameStateChange(gamestate = #menu);
     });
-    querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
-      startLevelBuilder();
+    if(!TouchEvent.supported) {
+      querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
+        startLevelBuilder();
+      });
+    }
+    window.onDeviceOrientation.listen((DeviceOrientationEvent e) {
+      if(menu) view.drawMenu(MAXLEVEL);
+      print(e.alpha);
     });
   }
 

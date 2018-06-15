@@ -134,9 +134,7 @@ class BattleView {
     for(int i = 1; i <= levelCount; i++) {
       html += '<button id="level$i" type="button" disabled>Start Level $i</button><br>';
     }
-    //html += '<textarea class="input" rows="10" cols="10"></textarea>';
-    html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
-    //html += '<button id="toggleFS" type="button">Enable Fullscreen</button>';
+    if (!TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
     if(window.orientation == 0 || window.orientation == 180) html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
     querySelector("#menu").innerHtml = html;
   }

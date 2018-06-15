@@ -133,7 +133,7 @@ button:disabled {
     width: 64px;
     height: 64px;
     position: absolute;
-    opacity: 0.4;
+    opacity: 0.6;
 }
 .dpad:active {
     opacity: 1;
