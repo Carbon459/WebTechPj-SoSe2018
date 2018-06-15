@@ -37,17 +37,20 @@ class Level{
   List<Coordinates> changed = new List<Coordinates>();
 
   Map toJson() {
-    Map<String, dynamic> map = new Map();
+    Map<String, List<dynamic>> map = new Map();
+    List<dynamic> list = new List();
     for(int y = 0; y < YFIELDSIZE; y++) {
       for(int x = 0; x < XFIELDSIZE; x++) {
         if(levelField[y][x] != null) {
-          map.putIfAbsent("($x|$y)f", () => levelField[y][x]);
+          list.add(levelField[y][x]);
         }
         if(levelFieldBackground[y][x] != null) {
-          map.putIfAbsent("($x|$y)b", () => levelFieldBackground[y][x]);
+          list.add(levelFieldBackground[y][x]);
         }
       }
     }
+
+    map.putIfAbsent("Level", () => list);
     return map;
   }
 
@@ -323,7 +326,7 @@ class LevelLoader {
   static void getLevelfromString(String json) {
     Map<String, dynamic> jsonMap = JSON.decode(json);
 
-    for(Map<String, dynamic> x in jsonMap.values) {
+    for(dynamic x in jsonMap["Level"]) {
       if(x != null) {
         Symbol orientation = null;
         if(x["orientation"] != "null") {
