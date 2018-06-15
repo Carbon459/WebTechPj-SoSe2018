@@ -2,7 +2,7 @@ part of battlecity;
 
 class BattleView {
   /// Enthält die Referenzen zu den Tabellenzellen
-  List<List<Element>> tableFields = new List(YFIELDSIZE);
+  List<List<Element>> tableFields = new List(Config.YFIELDSIZE);
 
   void gameStateChange(Symbol gamestate) {
     switch(gamestate.toString()) {
@@ -78,7 +78,7 @@ class BattleView {
     }
     modelLvl.clearChanged();
 
-    if(DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
+    if(Config.DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
   void updatePlayerHP(int hp) {
@@ -86,7 +86,7 @@ class BattleView {
     for(int i = 0; i < hp; i++) {
       hpdiv += "<img src='img/heart_full.png'>";
     }
-    for(int i = 0; i < (MAXPLAYERHP-hp); i++) {
+    for(int i = 0; i < (Config.MAXPLAYERHP-hp); i++) {
       hpdiv += "<img src='img/heart_empty.png'>";
     }
     querySelector("#playerhp").innerHtml = hpdiv;
@@ -97,9 +97,9 @@ class BattleView {
    */
   void createEmptyField() {
     String table = "";
-    for (int y = 0; y < YFIELDSIZE; y++) {
+    for (int y = 0; y < Config.YFIELDSIZE; y++) {
       table += "<tr>";
-      for (int x = 0; x < XFIELDSIZE; x++) {
+      for (int x = 0; x < Config.XFIELDSIZE; x++) {
         final pos = "x${x}y${y}";
         table += "<td class='background' id='$pos'><div class='foreground'></div></td>";
       }
@@ -107,9 +107,9 @@ class BattleView {
     }
     querySelector('#gameTable').innerHtml = table;
 
-    for (int y = 0; y < YFIELDSIZE; y++) {
-      tableFields[y] = new List<Element>(XFIELDSIZE);
-      for (int x = 0; x < XFIELDSIZE; x++) {
+    for (int y = 0; y < Config.YFIELDSIZE; y++) {
+      tableFields[y] = new List<Element>(Config.XFIELDSIZE);
+      for (int x = 0; x < Config.XFIELDSIZE; x++) {
         tableFields[y][x] = querySelector("#x${x}y${y}");
       }
     }
@@ -142,7 +142,7 @@ class BattleView {
   void drawBuildingBlocks() {
     String html = '<button id="printLevel" type="button">Print Level JSON to Console</button><br>';
     html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';
-    for(String x in LEVELBUILDINGBLOCKS.keys) {
+    for(String x in Config.LEVELBUILDINGBLOCKS.keys) {
       html += "<img id='$x' src='img/$x.png'>";
     }
     querySelector("#levelBuilderControls").innerHtml = html;

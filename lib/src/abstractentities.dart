@@ -70,8 +70,8 @@ abstract class Entity {
   void destroy() {
     setAnimationSprite("explode");
     Level.active.reportChange(this.positionX, this.positionY);
-    new Timer(EXPLOSIONDUR, () => Level.active.removeEntity(positionX, positionY));
-    if(DEBUG) {print("${this} destroyed");}
+    new Timer(Config.EXPLOSIONDUR, () => Level.active.removeEntity(positionX, positionY));
+    if(Config.DEBUG) {print("${this} destroyed");}
   }
 
   /**
@@ -171,7 +171,7 @@ abstract class Enemy extends DynamicEntity {
    * und setzt die Orientierun dieses Entitys entsprechend
    */
   void pickOrientation() {
-    int tmp = XFIELDSIZE*YFIELDSIZE; //Höchster Wert
+    int tmp = Config.XFIELDSIZE*Config.YFIELDSIZE; //Höchster Wert
 
     //vorgemappte path mit niedrigsten wert auswählen
     List<Coordinates> list = new List();

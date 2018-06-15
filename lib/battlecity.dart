@@ -16,44 +16,45 @@ part 'src/view.dart';
 //Controller---------------
 part 'src/controller.dart';
 
-///Levelgröße
-const XFIELDSIZE = 18;
-const YFIELDSIZE = 10;
-///Anzahl der Level
-const MAXLEVEL = 2;
-///Maximale Lebenspunktezahl des Spielers
-const MAXPLAYERHP = 3;
-///Debug
-const bool DEBUG = false;
-///Ein tickUpdate wird so oft ausgeführt
-const TICKSPEED = const Duration(milliseconds: 100);
-///Ein Schuss alle [shotSpeed] ms erlaubt
-const SHOOTSPEED = const Duration(milliseconds: 500);
-///Animationsdauer Explosion
-const EXPLOSIONDUR = const Duration(milliseconds: 200);
-///[TICKSPEED]*[TICKDIVIDERSLOW] = langsame Tickspeed für z.B. pathfinding
-const int TICKDIVIDERSLOW = 5;
-///Map aller Objekte die im LevelBuilder verfügbar sind
-const Map<String, String> LEVELBUILDINGBLOCKS = const { "x":                "removeForeground",
-                                                          "house_red":        "Scenery",
-                                                          "house_green":      "Scenery",
-                                                          "house_blue":       "Scenery",
-                                                          "doublehouse_blue_left":"Scenery",
-                                                          "doublehouse_blue_right":"Scenery",
-                                                          "doublehouse_green_left":"Scenery",
-                                                          "doublehouse_green_right":"Scenery",
-                                                          "doublehouse_red_left":"Scenery",
-                                                          "doublehouse_red_right":"Scenery",
-                                                          "tree":             "Scenery",
-                                                          "tree2":            "Scenery",
-                                                          "player":           "Player",
-                                                          "enemyBasic":       "BasicTank",
-                                                          "road_basic":       "Background",
-                                                          "road_end":         "Background",
-                                                          "road_intersection":"Background",
-                                                          "road_L":           "Background",
-                                                          "road_T":           "Background",
-                                                          "grass":            "Background",
-                                                          "flower":           "Background",
-                                                          "1up":              "PowerupHeal",
-                                                          "block":            "Scenery"};
+
+
+class Config {
+  ///-------------------DEFAULT WERTE-----------------------
+  ///Levelgröße
+  static int XFIELDSIZE = 18;
+  static int YFIELDSIZE = 10;
+  ///Anzahl der Level
+  static int MAXLEVEL = 2;
+  ///Maximale Lebenspunktezahl des Spielers
+  static int MAXPLAYERHP = 3;
+  ///Debug
+  static bool DEBUG = false;
+  ///Ein tickUpdate wird so oft ausgeführt
+  static Duration TICKSPEED = const Duration(milliseconds: 100);
+  ///Ein Schuss alle [shotSpeed] ms erlaubt
+  static Duration SHOOTSPEED = const Duration(milliseconds: 500);
+  ///Animationsdauer Explosion
+  static Duration EXPLOSIONDUR = const Duration(milliseconds: 200);
+  ///[TICKSPEED]*[TICKDIVIDERSLOW] = langsame Tickspeed für z.B. pathfinding
+  static int TICKDIVIDERSLOW = 5;
+  ///Map aller Objekte die im LevelBuilder verfügbar sind
+  static Map<String, String> LEVELBUILDINGBLOCKS = const {};
+
+  static Future<int> load() async {
+    String json = await HttpRequest.getString("config.json");
+    Map<String, dynamic> jsonMap = JSON.decode(json);
+
+    XFIELDSIZE = jsonMap["XFIELDSIZE"];
+    YFIELDSIZE = jsonMap["YFIELDSIZE"];
+    MAXLEVEL = jsonMap["MAXLEVEL"];
+    MAXPLAYERHP = jsonMap["MAXPLAYERHP"];
+    DEBUG = jsonMap["DEBUG"] == "true";
+    TICKSPEED = new Duration(milliseconds: jsonMap["TICKSPEED"]);
+    SHOOTSPEED = new Duration(milliseconds: jsonMap["SHOOTSPEED"]);
+    EXPLOSIONDUR = new Duration(milliseconds: jsonMap["EXPLOSIONDUR"]);
+    TICKDIVIDERSLOW = jsonMap["TICKDIVIDERSLOW"];
+    LEVELBUILDINGBLOCKS = jsonMap["LEVELBUILDINGBLOCKS"];
+
+    return 0;
+  }
+}

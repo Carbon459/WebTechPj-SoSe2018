@@ -15,7 +15,7 @@ class Player extends DynamicEntity {
     this.positionX = posX;
     positionY = posY;
     baseSprite = "player";
-    hp = MAXPLAYERHP;
+    hp = Config.MAXPLAYERHP;
     orientation = or;
     Level.active.setEntity(posX, posY, this);
     Player.active = this;
@@ -27,7 +27,7 @@ class Player extends DynamicEntity {
   }
 
   void addHP(int i) {
-    if((this.hp + i) >= MAXPLAYERHP) this.hp = MAXPLAYERHP;
+    if((this.hp + i) >= Config.MAXPLAYERHP) this.hp = Config.MAXPLAYERHP;
     else this.hp += i;
   }
 
@@ -63,7 +63,7 @@ class Player extends DynamicEntity {
     if(shootPermission) {
       new Projectile(this.positionX, this.positionY, this.orientation, #basic);
       shootPermission = false;
-      shootReset = new Timer.periodic(SHOOTSPEED, (_) {shootReset.cancel(); shootPermission = true;});
+      shootReset = new Timer.periodic(Config.SHOOTSPEED, (_) {shootReset.cancel(); shootPermission = true;});
     }
   }
 }

@@ -1,7 +1,7 @@
 part of battlecity;
 
 class BattleGameController {
-  final view = new BattleView();
+  BattleView view;
 
   Timer tick;
   int tickCounter = 0;
@@ -17,43 +17,46 @@ class BattleGameController {
 
 
   BattleGameController() {
-    syncSaveData();
-    view.drawMenu(MAXLEVEL);
-    view.unlockMenu(lastUnlockedLevel);
+    Config.load().then((x) {
+      view = new BattleView();
 
-    for(int i = 1; i <= MAXLEVEL; i++) {
-      querySelector("#level$i").onClick.listen((MouseEvent ev) {
-        if(TouchEvent.supported) {
-          fullscreenWorkaround(document.body);
-        }
-        start(i);
-      });
-    }
+      syncSaveData();
+      view.drawMenu(Config.MAXLEVEL);
+      view.unlockMenu(lastUnlockedLevel);
 
-    querySelectorAll(".menuButton").onClick.listen((MouseEvent ev) {
-      view.gameStateChange(gamestate = #menu);
-    });
-    if(!TouchEvent.supported) {
-      querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
-        startLevelBuilder();
+      for(int i = 1; i <= Config.MAXLEVEL; i++) {
+        querySelector("#level$i").onClick.listen((MouseEvent ev) {
+          if(TouchEvent.supported) fullscreenWorkaround(document.body);
+          start(i);
+        });
+      }
+
+      querySelectorAll(".menuButton").onClick.listen((MouseEvent ev) {
+        view.gameStateChange(gamestate = #menu);
       });
-    }
-    window.onDeviceOrientation.listen((DeviceOrientationEvent e) {
-      if(menu) view.drawMenu(MAXLEVEL);
-      print(e.alpha);
-    });
+
+
+      if(!TouchEvent.supported) {
+        querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
+          startLevelBuilder();
+        });
+      }
+      window.addEventListener('orientationchange',(x) {
+        if(menu) view.drawMenu(Config.MAXLEVEL);
+      });
+   });
   }
 
   void start(int lvl) {
-    Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
+    Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
     LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
-      if(DEBUG) print("LevelLoader: done");
+      if(Config.DEBUG) print("LevelLoader: done");
 
       Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
       view.gameStateChange(gamestate = #running);
       view.update(Level.active);
-      tick = new Timer.periodic(TICKSPEED, (_) => _tickUpdate());
+      tick = new Timer.periodic(Config.TICKSPEED, (_) => _tickUpdate());
 
       eventSubscriptions.add(window.onKeyUp.listen((KeyboardEvent ev) {if(ev.keyCode == KeyCode.SPACE) ev.preventDefault();})); //Workaround für Firefox, da sonst mit Leertaste Click Events auf den Level Startbuttons augelöst werden.
 
@@ -66,7 +69,7 @@ class BattleGameController {
           case KeyCode.UP:    if (Player.isAlive()) Player.active.moveDir(#up); break;
           case KeyCode.DOWN:  if (Player.isAlive()) Player.active.moveDir(#down); break;
           case KeyCode.SPACE: if (Player.isAlive()) Player.active.shoot(#basic); break;
-          case KeyCode.P:     if(DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
+          case KeyCode.P:     if(Config.DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
         }
         view.update(Level.active);
       }));
@@ -138,7 +141,7 @@ class BattleGameController {
     if(!Player.isAlive())
       stop(false); //Spieler tot -> Game over
     else if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
-      if(lastUnlockedLevel != MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
+      if(lastUnlockedLevel != Config.MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
         lastUnlockedLevel++;
         syncSaveData();
       }
@@ -149,21 +152,22 @@ class BattleGameController {
     if(tickCounter == 0) {
       window.dispatchEvent(new CustomEvent("slowspeed"));
 
-      if(DEBUG) showCoordinatesOnField(true); //pathing debug
+      if(Config.DEBUG) showCoordinatesOnField(true); //pathing debug
 
-      tickCounter = TICKDIVIDERSLOW;
+      tickCounter = Config.TICKDIVIDERSLOW;
     }
 
     view.update(Level.active);
     tickCounter--;
   }
 
+
   void showCoordinatesOnField(bool withCounter) {
     for(int y = 0; y < Level.active.pathToPlayer.length; y++) {
       for(int x = 0; x < Level.active.pathToPlayer[y].length; x++) {
         if(withCounter) {
           view.setFieldText(x, y, "x${x}y${y}:<br> ${Level.active.pathToPlayer[y][x].counter}");
-          if(Level.active.pathToPlayer[y][x].counter == YFIELDSIZE*XFIELDSIZE) view.setFieldColor(x, y, "black");
+          if(Level.active.pathToPlayer[y][x].counter == Config.YFIELDSIZE*Config.XFIELDSIZE) view.setFieldColor(x, y, "black");
           else view.setFieldColor(x, y, "lightgreen");
         } else {
           view.setFieldText(x, y, "${x} ${y}");
@@ -173,11 +177,8 @@ class BattleGameController {
   }
 
   void startLevelBuilder() {
-    Level.active = new Level(XFIELDSIZE, YFIELDSIZE);
+    Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
-    /*if((querySelector("textarea") as TextAreaElement).value.toString().isNotEmpty) {
-      LevelLoader.getLevelFromJson((querySelector("textarea") as TextAreaElement).value);
-    }*/
     view.gameStateChange(gamestate = #levelbuilder);
     showCoordinatesOnField(false);
     view.drawBuildingBlocks();
@@ -198,7 +199,7 @@ class BattleGameController {
       final int x = int.parse(he.innerHtml.split(" ")[0]);
       final int y = int.parse(he.innerHtml.split(" ")[1]);
       if(spriteSelection.isNotEmpty) {
-        LevelLoader.createObject(LEVELBUILDINGBLOCKS[spriteSelection], x, y, baseSprite: spriteSelection, orientation: #up);
+        LevelLoader.createObject(Config.LEVELBUILDINGBLOCKS[spriteSelection], x, y, baseSprite: spriteSelection, orientation: #up);
         print("Placed Selection: $spriteSelection");
       }
       view.update(Level.active);

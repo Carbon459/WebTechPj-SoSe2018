@@ -39,8 +39,8 @@ class Level{
   Map toJson() {
     Map<String, List<dynamic>> map = new Map();
     List<dynamic> list = new List();
-    for(int y = 0; y < YFIELDSIZE; y++) {
-      for(int x = 0; x < XFIELDSIZE; x++) {
+    for(int y = 0; y < Config.YFIELDSIZE; y++) {
+      for(int x = 0; x < Config.XFIELDSIZE; x++) {
         if(levelField[y][x] != null) {
           list.add(levelField[y][x]);
         }
@@ -108,9 +108,9 @@ class Level{
       return; //Fortschritte beim Pathing verwerfen
     }
 
-    for(int y = 0; y < YFIELDSIZE; y++) {//2d Liste reinitialisieren
-      for(int x = 0; x < XFIELDSIZE; x++) {
-        pathToPlayer[y][x] = new Coordinates.withCounter(x, y, XFIELDSIZE*YFIELDSIZE);
+    for(int y = 0; y < Config.YFIELDSIZE; y++) {//2d Liste reinitialisieren
+      for(int x = 0; x < Config.XFIELDSIZE; x++) {
+        pathToPlayer[y][x] = new Coordinates.withCounter(x, y, Config.XFIELDSIZE*Config.YFIELDSIZE);
       }
     }
 
@@ -118,7 +118,7 @@ class Level{
       pathToPlayer[ph.positionY][ph.positionX] = ph;
     }
 
-    if(DEBUG && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
+    if(Config.DEBUG && (window.performance.now() - time) > 1) print('pathfinding executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms, mapped ${queue.length} tiles');
   }
 
   /**
@@ -181,7 +181,7 @@ class Level{
    * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
    */
   static bool isInvalid(int atPosX, int atPosY) {
-    if(atPosX < 0 || atPosX >= XFIELDSIZE || atPosY < 0 || atPosY >= YFIELDSIZE) {
+    if(atPosX < 0 || atPosX >= Config.XFIELDSIZE || atPosY < 0 || atPosY >= Config.YFIELDSIZE) {
       return true;
     }
     return false;
@@ -357,7 +357,7 @@ class LevelLoader {
         Level.active.removeEntity(posX, posY);
         break;
       default:
-        if(DEBUG) print("LevelLoader from Json: Invalid Type");
+        if(Config.DEBUG) print("LevelLoader from Json: Invalid Type");
         break;
     }
   }
