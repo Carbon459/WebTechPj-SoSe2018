@@ -26,7 +26,7 @@ class Config {
   static int XFIELDSIZE = 18;
   static int YFIELDSIZE = 10;
   ///Anzahl der Level
-  static int MAXLEVEL = 2;
+  static int MAXLEVEL = 3;
   ///Maximale Lebenspunktezahl des Spielers
   static int MAXPLAYERHP = 3;
   ///Debug

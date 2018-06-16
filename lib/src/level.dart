@@ -367,7 +367,10 @@ class LevelLoader {
         new Background(posX,posY, baseSprite, orientation);
         break;
       case "BasicTank":
-        new BasicTank(posX,posY, orientation);
+        new BasicTank(posX, posY, orientation);
+        break;
+      case "FastTank":
+        new FastTank(posX, posY, orientation);
         break;
       case "PowerupHeal":
         new PowerupHeal(posX,posY);

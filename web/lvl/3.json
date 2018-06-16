@@ -1,0 +1,18 @@
+{
+  "Level": [
+    {
+      "type": "FastTank",
+      "positionX": 16,
+      "positionY": 1,
+      "baseSprite": "enemyFast",
+      "orientation": "left"
+    },
+    {
+      "type": "Player",
+      "positionX": 1,
+      "positionY": 4,
+      "baseSprite": "player",
+      "orientation": "right"
+    }
+  ]
+}

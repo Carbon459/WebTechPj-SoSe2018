@@ -123,6 +123,7 @@ abstract class DynamicEntity extends Entity {
   void removeEventListener() {
     if(ev != null) {
       window.removeEventListener("fullspeed", this.ev);
+      window.removeEventListener("middlespeed", this.ev);
       window.removeEventListener("slowspeed", this.ev);
     }
   }

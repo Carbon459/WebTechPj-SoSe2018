@@ -60,7 +60,7 @@ class BattleGameController {
       Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
       view.gameStateChange(gamestate = #running);
       view.update(Level.active);
-      tick = new Timer.periodic(Config.TICKSPEED, (_) => _tickUpdate());
+      tick = new Timer.periodic(Config.TICKSPEED, (_) => tickUpdate());
 
       eventSubscriptions.add(window.onKeyUp.listen((KeyboardEvent ev) {if(ev.keyCode == KeyCode.SPACE) ev.preventDefault();})); //Workaround für Firefox, da sonst mit Leertaste Click Events auf den Level Startbuttons augelöst werden.
 
@@ -149,7 +149,7 @@ class BattleGameController {
   /**
    * Wird alle [TICKSPEED] Millisekunden durchgeführt, um Bewegungen von Gegnern und Projektilen durchzuführen.
    */
-  void _tickUpdate() {
+  void tickUpdate() {
     view.updatePlayerHP(Player.active?.hp ?? 0);
 
     if(!Player.isAlive())
@@ -162,17 +162,20 @@ class BattleGameController {
       stop(true);
     }
 
-    window.dispatchEvent(new CustomEvent("fullspeed"));
-    if(tickCounter == 0) {
+    if(tickCounter == 0) { //Jeden [Config.TICKDIVIVERSLOW] tick ausgeführt
       window.dispatchEvent(new CustomEvent("slowspeed"));
-
       if(Config.DEBUG) showCoordinatesOnField(true); //pathing debug
 
       tickCounter = Config.TICKDIVIDERSLOW;
     }
+    if(tickCounter % 2 == 0) { //Jeden [Config.TICKDIVIVERSLOW]/2 tick ausgeführt
+      window.dispatchEvent(new CustomEvent("middlespeed"));
+    }
 
-    view.update(Level.active);
     tickCounter--;
+
+    window.dispatchEvent(new CustomEvent("fullspeed"));
+    view.update(Level.active);
   }
 
   /**

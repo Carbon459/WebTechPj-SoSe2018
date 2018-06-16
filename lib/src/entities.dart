@@ -142,6 +142,18 @@ class BasicTank extends Enemy {
     Level.activeEnemies.add(this);
   }
 }
+class FastTank extends Enemy {
+  FastTank(int posX, int posY, Symbol or) {
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = "enemyFast";
+    this.hp = 1;
+    this.orientation = or;
+    Level.active.setEntity(posX, posY, this);
+    this.addEventListener("middlespeed");
+    Level.activeEnemies.add(this);
+  }
+}
 
 class Scenery extends Entity {
   Scenery(int posX, int posY, String sprite, Symbol or) {
