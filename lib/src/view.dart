@@ -144,7 +144,7 @@ class BattleView {
 
   /// Erstellt und zeigt das Hauptbedienungselement des LevelBuilders
   void drawBuildingBlocks() {
-    String html = '<button id="printLevel" type="button">Print Level JSON to Console</button><br>';
+    String html = '<button id="printLevel" type="button">Print Level JSON</button> ';
     html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';
     for(String x in Config.LEVELBUILDINGBLOCKS.keys) {
       html += "<img id='$x' src='img/$x.png'>";

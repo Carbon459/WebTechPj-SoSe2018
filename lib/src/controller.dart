@@ -6,6 +6,7 @@ class BattleGameController {
   Timer tick;
   int tickCounter = 0;
   Symbol gamestate = #menu;
+  int currentLevel = 0;
   int lastUnlockedLevel = 1;
   ///Enthält Steuerungsevent subscriptions
   List<StreamSubscription> eventSubscriptions = new List<StreamSubscription>();
@@ -32,8 +33,11 @@ class BattleGameController {
         });
       }
 
-      querySelectorAll(".menuButton").onClick.listen((MouseEvent ev) {
+      querySelectorAll(".btm").onClick.listen((MouseEvent ev) {
         view.gameStateChange(gamestate = #menu);
+      });
+      querySelector("#retry").onClick.listen((MouseEvent ev) {
+        start(currentLevel);
       });
 
 
@@ -52,6 +56,7 @@ class BattleGameController {
    * Startet das Level mit der Nummer [lvl]
    */
   void start(int lvl) {
+    currentLevel = lvl;
     Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
     LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
