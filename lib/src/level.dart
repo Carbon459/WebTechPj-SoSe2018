@@ -24,16 +24,23 @@ class Coordinates {
  * Stellt ein Level dar
  */
 class Level{
+  ///Das momentan aktive Level
   static Level active;
 
+  ///Eine Liste aller Gegner, die noch am Leben sind. Wird vom Pathfinding genutzt.
   static List<Enemy> activeEnemies = new List<Enemy>();
+  ///Eine Liste aller Projektile, die noch "in der Luft" sind (Zu Aufräumzwecken getrackt)
   static List<Projectile> activeProjectiles = new List<Projectile>();
 
+  ///Das Spielfeld aller Objekte mit Kollision
   List<List<Entity>> levelField;
+  ///Das Spielfeld aller Hintergrund Objekte ohne Kollision
   List<List<Background>> levelFieldBackground;
+
   ///Enthält das Ergebnis des Pathfindings
   List<List<Coordinates>> pathToPlayer;
-  ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen
+  ///Enthält alle Koordinaten von Entities, die beim nächsten Tick neu gerendet werden müssen.
+  ///Existiert aus Optimierungsgründen
   List<Coordinates> changed = new List<Coordinates>();
 
   Map toJson() {
@@ -57,6 +64,8 @@ class Level{
   /**
    * ManyToOne Pathfinding
    * Wie beschrieben in https://en.wikipedia.org/wiki/Pathfinding#Sample_algorithm
+   * [mapFrom] ist eine Liste der Entitäten für die der Pfad gemappt werden soll (Startpunkte der Pfade)
+   * [mapTo] ist das Ziel der Pfade
    */
   void mapPathToEntity(List<Entity> mapFrom, Entity mapTo) {
     if(mapFrom.isEmpty || mapTo == null) return;
@@ -135,9 +144,7 @@ class Level{
     this.changed.clear();
   }
 
-  /**
-   * Setzt im Level der aktuellen Instanz eine Entität auf das Spielfeld.
-   */
+  /// Setzt im Level der aktuellen Instanz eine Entität in den Vordergrund auf das Spielfeld.
   void setEntity(int posX, int posY, Entity ent) {
     levelField[posY][posX] = ent;
     reportChange(posX, posY);
@@ -145,13 +152,19 @@ class Level{
     ent.positionY = posY;
   }
 
-  /**
-   * Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
-   */
+  /// Äquivalent von [setEntity(x,y,e)] für den Hintergrund
+  void setBackground(int posX, int posY, Background bck) {
+    reportChange(posX, posY);
+    levelFieldBackground[posY][posX] = bck;
+  }
+
+  /// Entfernt im Level der aktuellen Instanz eine Entität vom Spielfeld.
   void removeEntity(int posX, int posY) {
     levelField[posY][posX] = null;
     reportChange(posX, posY);
   }
+
+  /// Dreht eine Entität aus dem Vordergrund an der Position [posX][posY] im Uhrzeigersinn
   void rotateEntityClockWise(int posX, int posY) {
     if(getEntityAt(posX, posY) == null) return;
     switch(getEntityAt(posX, posY).orientation.toString()) {
@@ -162,6 +175,8 @@ class Level{
     }
     reportChange(posX, posY);
   }
+
+  /// Äquivalent von [rotateEntityClockWise(x,y)] für den Hintergrund
   void rotateBackgroundClockWise(int posX, int posY) {
     if(getBackgroundAt(posX, posY) == null) return;
     switch(getBackgroundAt(posX, posY).orientation.toString()) {
@@ -172,14 +187,8 @@ class Level{
     }
     reportChange(posX, posY);
   }
-  void setBackground(int posX, int posY, Background bck) {
-    reportChange(posX, posY);
-    levelFieldBackground[posY][posX] = bck;
-  }
 
-  /**
-   * Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
-   */
+  /// Prüft, ob die angegebene Koordinate außerhalb des Spielfeldes liegt.
   static bool isInvalid(int atPosX, int atPosY) {
     if(atPosX < 0 || atPosX >= Config.XFIELDSIZE || atPosY < 0 || atPosY >= Config.YFIELDSIZE) {
       return true;
@@ -212,10 +221,14 @@ class Level{
     if(isInvalid(atPosX, atPosY)) return null;
     return levelField[atPosY][atPosX];
   }
+
+  /// Äquivalent von [getEntityAt(x,y)] für den Hintergrund
   Background getBackgroundAt(int atPosX, int atPosY) {
     if(isInvalid(atPosX, atPosY)) return null;
     return levelFieldBackground[atPosY][atPosX];
   }
+
+  /// Gibt die Koordinate in die [direction] auf der X Ebene an
   static int getNewPosX(int posX, Symbol direction) {
     int newPosX = posX;
     switch(direction.toString()) {
@@ -228,6 +241,7 @@ class Level{
     }
     return newPosX;
   }
+  ///Gibt die Koordinate in die [direction] auf der Y Ebene an
   static int getNewPosY(int posY, Symbol direction) {
     int newPosY = posY;
     switch(direction.toString()) {
@@ -271,6 +285,7 @@ class Level{
     }
   }
 
+  /// Hat die Position [fromPosX][fromPosY] eine freie Sicht zur Position [toPosX][toPosY]?
   bool hasLineOfSight(fromPosX, fromPosY, toPosX, toPosY) {
     switch(Level.getDirection(fromPosX, fromPosY, toPosX, toPosY).toString()) { //Richtung in die das ziel ist
       case 'Symbol("left")':
@@ -317,12 +332,14 @@ class Level{
 }
 
 class LevelLoader {
+  ///Lädt aus [url] ein im JSON Format gespeichertes Level
   static Future<int> getLevelFromJson (String url) async {
     String s = await HttpRequest.getString(url);
     getLevelfromString(s);
     return 0;
   }
 
+  ///Lädt aus dem [json] String ein im JSON Format gespeichertes Level
   static void getLevelfromString(String json) {
     Map<String, dynamic> jsonMap = JSON.decode(json);
 
@@ -336,6 +353,8 @@ class LevelLoader {
       }
     }
   }
+
+  ///Instanziiert dem angegebenen [type] entsprechend ein Objekt, welches dadurch auf das Spielfeld platziert wird.
   static void createObject(String type, int posX, int posY, {String baseSprite, Symbol orientation}) {
     switch(type) {
       case "Player":
@@ -362,6 +381,7 @@ class LevelLoader {
     }
   }
 
+  ///Debugfunktion
   static void printLevelAsJson(Level lvl) {
     print(JSON.encode(lvl));
   }

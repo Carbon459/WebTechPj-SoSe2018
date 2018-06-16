@@ -17,7 +17,9 @@ part 'src/view.dart';
 part 'src/controller.dart';
 
 
-
+/**
+ * Klasse für Spielkonstanten
+ */
 class Config {
   ///-------------------DEFAULT WERTE-----------------------
   ///Levelgröße

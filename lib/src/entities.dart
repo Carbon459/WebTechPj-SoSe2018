@@ -1,13 +1,14 @@
 part of battlecity;
 
 class Player extends DynamicEntity {
-
+  ///Der aktive Spieler. Falls null ist der Spieler nicht am Leben
   static Player active;
 
   static bool isAlive() {
     return Player.active != null;
   }
 
+  ///Wird für die Begrenzung der Schussrate verwendet
   Timer shootReset;
   bool shootPermission = true;
 
@@ -26,6 +27,7 @@ class Player extends DynamicEntity {
     Level.active.reportChange(positionX, positionY);
   }
 
+  /// Fügt Lebenspunkte hinzu
   void addHP(int i) {
     if((this.hp + i) >= Config.MAXPLAYERHP) this.hp = Config.MAXPLAYERHP;
     else this.hp += i;
@@ -35,7 +37,7 @@ class Player extends DynamicEntity {
     final Entity moveTo = Level.active.getEntityAt(Level.getNewPosX(this.positionX, direction), Level.getNewPosY(this.positionY, direction));
     if(moveTo is Powerup) {
       final Powerup moveToP = moveTo;
-      moveToP.apply(this);
+      moveToP.apply(this); //Wendet den Effekt des Powerups auf den Spieler an
     }
 
     //bool tmp = super.moveDir(direction);
@@ -51,17 +53,16 @@ class Player extends DynamicEntity {
     return tmp;
   }
 
-  /**
-   * Entfernt den Spieler vom Spielfeld und die Referenz.
-   */
+  /// Entfernt den Spieler vom Spielfeld.
   void destroy() {
     super.destroy();
     Player.active = null;
   }
-  
-  void shoot(Symbol projectile) {
+
+  /// Kümmert sich um die Schussratenbegrenzung
+  void shoot() {
     if(shootPermission) {
-      new Projectile(this.positionX, this.positionY, this.orientation, #basic);
+      new Projectile(this.positionX, this.positionY, this.orientation);
       shootPermission = false;
       shootReset = new Timer.periodic(Config.SHOOTSPEED, (_) {shootReset.cancel(); shootPermission = true;});
     }
@@ -72,15 +73,12 @@ class Projectile extends DynamicEntity {
   ///Schaden den das Projektil anrichtet
   int dmg = 1;
 
-
   /**
    * Der Konstruktor erzeugt das Projektilelement und setzt es direkt in die Spielwelt falls möglich.
-   * @positionX, positionY X und Y Koordinate vom Schützen
-   * @orientation Blickrichtung vom Schützen
-   * @type Art des Schusses
+   * [positionX], [positionY] X und Y Koordinate vom Schützen
+   * [orientation] Blickrichtung vom Schützen
    */
-  Projectile(int positionX, int positionY, Symbol orientation, Symbol type) {
-    //TODO verschiedene schusstypen implementieren nach [type]
+  Projectile(int positionX, int positionY, Symbol orientation) {
     this.positionX = positionX;
     this.positionY = positionY;
     this.orientation = orientation;
@@ -123,7 +121,8 @@ class Projectile extends DynamicEntity {
     return output;
   }
 
-  void destroy() { //kein super.destroy() da das Projektil sonst auch eine explosionsanimation abspielt
+  /// Override, da das Projektil nicht explodieren soll
+  void destroy() {
     Level.active.removeEntity(positionX, positionY);
     this.removeEventListener();
     Level.activeProjectiles.remove(this);
@@ -150,7 +149,6 @@ class Scenery extends Entity {
     this.positionY = posY;
     this.baseSprite = sprite;
     this.orientation = or;
-    this.collision = true;
     Level.active.setEntity(posX, posY, this);
   }
 }
@@ -161,7 +159,6 @@ class Background extends Entity {
     this.positionY = posY;
     this.baseSprite = sprite;
     this.orientation = or;
-    this.collision = false;
     Level.active.setBackground(posX, posY, this);
   }
 }
@@ -174,6 +171,7 @@ class PowerupHeal extends Powerup {
     Level.active.setEntity(posX, posY, this);
   }
 
+  /// Wendet den Heileffekt auf den [player] an
   void apply(Player player) {
     player.addHP(1);
     this.destroy();

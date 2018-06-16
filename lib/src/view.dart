@@ -4,6 +4,7 @@ class BattleView {
   /// Enthält die Referenzen zu den Tabellenzellen
   List<List<Element>> tableFields = new List(Config.YFIELDSIZE);
 
+  /// Kümmert sich darum, das immer die richtigen divs entsprechend dem [gamestate] sichtbar sind
   void gameStateChange(Symbol gamestate) {
     switch(gamestate.toString()) {
       case 'Symbol("menu")':
@@ -44,9 +45,8 @@ class BattleView {
     }
 
   }
-  /**
-   * Bringt das angezeigte Spielfeld auf den Stand des Modelles.
-   */
+
+  /// Bringt das angezeigte Spielfeld auf den Stand des Modelles [modelLvl].
   void update(Level modelLvl) {
     num time = window.performance.now();
 
@@ -81,6 +81,7 @@ class BattleView {
     if(Config.DEBUG && (window.performance.now() - time) > 1) print('model to view mapping executed in ${(window.performance.now() - time).toStringAsFixed(2)}ms');
   }
 
+  /// Aktualisiert die Lebenspunkteanzeige
   void updatePlayerHP(int hp) {
     String hpdiv = "";
     for(int i = 0; i < hp; i++) {
@@ -92,9 +93,7 @@ class BattleView {
     querySelector("#playerhp").innerHtml = hpdiv;
   }
 
-  /**
-   * Erzeugt eine leere Tabelle und initialisiert die [tableFields] Liste.
-   */
+  /// Erzeugt eine leere Tabelle und initialisiert die [tableFields] Liste.
   void createEmptyField() {
     String table = "";
     for (int y = 0; y < Config.YFIELDSIZE; y++) {
@@ -115,20 +114,24 @@ class BattleView {
     }
   }
 
+  /// Zeigt den Text [txt] an der Koordinate [x][y] an
   void setFieldText(int x, int y, String txt) {
     tableFields[y][x].querySelector("div").innerHtml = txt;
   }
 
+  /// Färbt die Koordinate [x][y] in der Farbe [clr] ein.
   void setFieldColor(int x, int y, String clr) {
     tableFields[y][x].querySelector("div").style.color = clr;
   }
 
+  /// Entsperrt alle Buttons bis Level [lastUnlockedLevel]
   void unlockMenu(int lastUnlockedLevel) {
     for(int i = 1; i <= lastUnlockedLevel; i++) {
       querySelector("#level$i").attributes.remove("disabled");
     }
   }
 
+  /// Zeigt das Menü an. Es werden [levelCount] Buttons für die Auswahl der Level erstellt.
   void drawMenu(int levelCount) {
     String html = "Hauptmenü<br>";
     for(int i = 1; i <= levelCount; i++) {
@@ -139,6 +142,7 @@ class BattleView {
     querySelector("#menu").innerHtml = html;
   }
 
+  /// Erstellt und zeigt das Hauptbedienungselement des LevelBuilders
   void drawBuildingBlocks() {
     String html = '<button id="printLevel" type="button">Print Level JSON to Console</button><br>';
     html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';

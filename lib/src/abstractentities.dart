@@ -11,12 +11,14 @@ abstract class Entity {
 
   int positionX;
   int positionY;
-  ///Lebenspunkte (hp<0 = Unzerstörbar)
+  /// Lebenspunkte (hp<0 = Unzerstörbar)
   int hp = -1;
+  /// Das Hauptsprite der Entität
   String baseSprite;
+  /// Richtung in die die Entität zeigt
   Symbol orientation;
-  bool collision = true;
-  ///Queue für in den nächsten Ticks zu anzeigende Sprites (für Animationen)
+
+  /// Queue für in den nächsten Ticks zu anzeigende Sprites (für Animationen)
   Queue<String> currentAnimation = new Queue<String>();
 
   String getOrientationAsString() {
@@ -25,6 +27,7 @@ abstract class Entity {
     return exp.firstMatch(this.orientation.toString()).group(0);
   }
 
+  /// Bestimmt ob das Hauptsprite oder eine Variation (für Animationen) benutzt wird
   String getSprite() {
     if(currentAnimation.isNotEmpty) {
       String tmp = currentAnimation.first;
@@ -37,9 +40,9 @@ abstract class Entity {
     }
   }
 
+  /// Reiht eine Animation in die Warteschlange ein, die von [getSprite()] abgearbeitet wird
   void setAnimationSprite(String action) {
     currentAnimation.clear(); //Vorhandene Animation abbrechen.
-
     switch(action) {
       case 'shoot':
         currentAnimation.add(baseSprite + "_shoot");
@@ -65,7 +68,7 @@ abstract class Entity {
   }
 
   /**
-   * Entfernt eine Entität aus dem Modellfeld.
+   * Entfernt eine Entität aus dem Modellfeld. Spielt eine Explosionsanimation ab
    */
   void destroy() {
     setAnimationSprite("explode");
@@ -73,6 +76,7 @@ abstract class Entity {
     new Timer(Config.EXPLOSIONDUR, () => Level.active.removeEntity(positionX, positionY));
     if(Config.DEBUG) {print("${this} destroyed");}
   }
+
 
   /**
    * Schadensberechnung
@@ -85,28 +89,34 @@ abstract class Entity {
 
 }
 
-
+/**
+ * Eine Entität, die sich auf dem Spielfeld bewegt
+ */
 abstract class DynamicEntity extends Entity {
   ///EventListener für die nötigen Bewegungen bei jedem Tick
   EventListener ev;
 
-  void shoot(Symbol projectile) {
+  /// Gibt einen Schuss in Richtung [orientation] ab
+  void shoot() {
     Level.active.reportChange(positionX, positionY); //Sicherstellen das die Orientierung richtig gerendert ist
-    new Projectile(this.positionX, this.positionY, this.orientation, #basic);
+    new Projectile(this.positionX, this.positionY, this.orientation);
   }
 
   /**
    * Bewegt die Entität auf dem Modellfeld entsprechend der [orientation]
-   * Gibt true zurück, falls bewegt wurde. Bei Kollision/outOfBounds false
+   * Gibt true zurück, falls bewegt wurde. Bei Kollision oder outOfBounds false
    */
   bool move() {
     return Level.active.moveEntityRelative(this.positionX, this.positionY, this.orientation);
   }
+
+  /// Bewegt die Entität entsprechend [direction]
   bool moveDir(Symbol direction) {
     this.orientation = direction;
     return move();
   }
 
+  /// Eventlistener für Aktionen bei jedem Tick
   void addEventListener(String type) {
     window.addEventListener(type, this.ev = (e) => this.move());
   }
@@ -129,7 +139,7 @@ abstract class DynamicEntity extends Entity {
 
 abstract class Enemy extends DynamicEntity {
   /**
-   * Bewegt den Gegner (und schießt wenn möglich)
+   * Beschreibt das Verhalten der Gegner
    * Gibt true zurück, falls bewegt wurde. Ansonsten false
    */
   bool move() {
@@ -139,7 +149,7 @@ abstract class Enemy extends DynamicEntity {
       final Symbol dirToPlayer = Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY);
       if(dirToPlayer != null) this.orientation = dirToPlayer; //Zum Spieler drehen
 
-      this.shoot(#basic);
+      this.shoot();
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
 
@@ -167,21 +177,21 @@ abstract class Enemy extends DynamicEntity {
   }
 
   /**
-   * Wählt aus dem im aktiven Level vorhandenen Pathmapping den kürzesten nächsten Schritt
-   * und setzt die Orientierun dieses Entitys entsprechend
+   * Wählt aus dem im aktiven Level vorhandenen Pathmapping [Level.active.pathToPlayer] den kürzesten nächsten Schritt
+   * und dreht den Gegner in die daraus berechnete Richtung
    */
   void pickOrientation() {
     int tmp = Config.XFIELDSIZE*Config.YFIELDSIZE; //Höchster Wert
 
-    //vorgemappte path mit niedrigsten wert auswählen
+    //Die vier möglichen Bewegungsrichtungen
     List<Coordinates> list = new List();
     if(!Level.active.collisionAt(this.positionX + 1, this.positionY)) list.add(Level.active.pathToPlayer[this.positionY][this.positionX + 1]); //right
     if(!Level.active.collisionAt(this.positionX - 1, this.positionY)) list.add(Level.active.pathToPlayer[this.positionY][this.positionX - 1]); //left
     if(!Level.active.collisionAt(this.positionX, this.positionY + 1)) list.add(Level.active.pathToPlayer[this.positionY + 1][this.positionX]); //down
     if(!Level.active.collisionAt(this.positionX, this.positionY - 1)) list.add(Level.active.pathToPlayer[this.positionY - 1][this.positionX]); //up
 
-    for(Coordinates cord in list) {
-      if(cord.counter == tmp) {
+    for(Coordinates cord in list) { //Wähle die Richtung, mit dem niedrigsten Counter Wert
+      if(cord.counter == tmp) { //Falls die Richtung den selben Counter wert hat wie das aktuelle Feld -> Zufällige Richtung
         var rng = new Random();
         if(rng.nextBool()) {
           tmp = cord.counter;
@@ -194,6 +204,7 @@ abstract class Enemy extends DynamicEntity {
     }
   }
 
+  /// Entfernt den Gegner außerdem noch aus der Liste vom Level.
   void destroy() {
     super.destroy();
     Level.activeEnemies.remove(this);

@@ -7,6 +7,7 @@ class BattleGameController {
   int tickCounter = 0;
   Symbol gamestate = #menu;
   int lastUnlockedLevel = 1;
+  ///Enthält Steuerungsevent subscriptions
   List<StreamSubscription> eventSubscriptions = new List<StreamSubscription>();
 
   bool get menu => gamestate == #menu;
@@ -47,6 +48,9 @@ class BattleGameController {
    });
   }
 
+  /**
+   * Startet das Level mit der Nummer [lvl]
+   */
   void start(int lvl) {
     Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
@@ -68,7 +72,7 @@ class BattleGameController {
           case KeyCode.RIGHT: if (Player.isAlive()) Player.active.moveDir(#right); break;
           case KeyCode.UP:    if (Player.isAlive()) Player.active.moveDir(#up); break;
           case KeyCode.DOWN:  if (Player.isAlive()) Player.active.moveDir(#down); break;
-          case KeyCode.SPACE: if (Player.isAlive()) Player.active.shoot(#basic); break;
+          case KeyCode.SPACE: if (Player.isAlive()) Player.active.shoot(); break;
           case KeyCode.P:     if(Config.DEBUG) LevelLoader.printLevelAsJson(Level.active); break;
         }
         view.update(Level.active);
@@ -83,7 +87,7 @@ class BattleGameController {
 
         eventSubscriptions.add(querySelector("#gameTable").onClick.listen((MouseEvent event) {
           if (Player.isAlive()) {
-            Player.active.shoot(#basic);
+            Player.active.shoot();
           }
           view.update(Level.active);
         }));
@@ -92,6 +96,10 @@ class BattleGameController {
 
   }
 
+  /**
+   * Stoppt das aktive Level
+   * [won] gibt an ob das Level beendet wurde weil der Spieler gestorben ist oder weil alle Gegner besiegt wurden
+   */
   void stop(bool won) {
     tick.cancel();
     for(var x in eventSubscriptions) { //Alle Inputevents (außer Menübuttons!) canceln
@@ -114,6 +122,9 @@ class BattleGameController {
     view.unlockMenu(lastUnlockedLevel);
   }
 
+  /**
+   * Synchronisiert die Variable [lastUnlockedLevel] mit dem Local Storage des Browsers
+   */
   void syncSaveData() {
     if(!window.localStorage.containsKey("lastUnlockedLevel")) {
       window.localStorage["lastUnlockedLevel"] = lastUnlockedLevel.toString();
@@ -124,6 +135,9 @@ class BattleGameController {
     }
   }
 
+  /**
+   * Verarbeitet die Events für das DPad
+   */
   void dpadEvent(MouseEvent event) {
     if (Player.isAlive()) {
       HtmlElement he = event.target;
@@ -161,7 +175,9 @@ class BattleGameController {
     tickCounter--;
   }
 
-
+  /**
+   * Zeigt zu Debugzwecken die Koordinaten der einzelnen Felder an
+   */
   void showCoordinatesOnField(bool withCounter) {
     for(int y = 0; y < Level.active.pathToPlayer.length; y++) {
       for(int x = 0; x < Level.active.pathToPlayer[y].length; x++) {
@@ -176,6 +192,9 @@ class BattleGameController {
     }
   }
 
+  /**
+   * Initialisiert den LevelBuilder
+   */
   void startLevelBuilder() {
     Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
