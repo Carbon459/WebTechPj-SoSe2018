@@ -47,7 +47,10 @@ class BattleGameController {
         });
       }
       window.addEventListener('orientationchange',(x) {
-        if(menu) view.drawMenu(Config.MAXLEVEL);
+        if(menu) {
+          view.drawMenu(Config.MAXLEVEL);
+          view.unlockMenu(lastUnlockedLevel);
+        }
       });
    });
   }
