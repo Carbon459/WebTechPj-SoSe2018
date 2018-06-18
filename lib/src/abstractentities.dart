@@ -27,15 +27,11 @@ abstract class Entity {
     return exp.firstMatch(this.orientation.toString()).group(0);
   }
 
-  /// Bestimmt ob das Hauptsprite oder eine Variation (für Animationen) benutzt wird
+  /// Bestimmt ob das Basissprite oder eine Variation (für Animationen) benutzt wird
   String getSprite() {
     if(currentAnimation.isNotEmpty) {
-      String tmp = currentAnimation.first;
-      currentAnimation.removeFirst();
-      //if(DEBUG) print("Sprite: $tmp.png");
-      return tmp + ".png";
+      return currentAnimation.removeFirst() + ".png";
     } else {
-      //if(DEBUG) print("BaseSprite: $baseSprite.png");
       return baseSprite + ".png";
     }
   }
@@ -147,9 +143,7 @@ abstract class Enemy extends DynamicEntity {
     if(!Player.isAlive()) return false; //Spieler existiert nicht auf dem Spielfeld
 
     if(Level.active.hasLineOfSight(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY)) { //LoS zum Spieler? -> Schiessen
-      final Symbol dirToPlayer = Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY);
-      if(dirToPlayer != null) this.orientation = dirToPlayer; //Zum Spieler drehen
-
+      this.orientation = Level.getDirection(this.positionX, this.positionY, Player.active.positionX, Player.active.positionY); //Zum Spieler drehen
       this.shoot();
       return false; //falls geschossen wurde wird keine bewegung durchgeführt
     }
@@ -213,7 +207,7 @@ abstract class Enemy extends DynamicEntity {
 }
 
 /**
- * Powerup "Interface"
+ * Basis für alle Powerup Klassen
  */
 abstract class Powerup extends Entity {
   void apply(Player player);

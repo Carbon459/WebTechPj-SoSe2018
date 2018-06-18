@@ -146,8 +146,11 @@ class BattleView {
   void drawBuildingBlocks() {
     String html = '<button id="printLevel" type="button">Print Level JSON</button> ';
     html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';
+    int i = 0;
     for(String x in Config.LEVELBUILDINGBLOCKS.keys) {
+      if(i % 10 == 0) html+="<br>";
       html += "<img id='$x' src='img/$x.png'>";
+      i++;
     }
     querySelector("#levelBuilderControls").innerHtml = html;
   }

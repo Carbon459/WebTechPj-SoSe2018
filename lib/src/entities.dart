@@ -86,9 +86,11 @@ class Projectile extends DynamicEntity {
     setAnimationSprite("shoot");
     this.hp = 1;
 
+    //Position an dem das Projektil erzeugt wird
     final int startPosX = Level.getNewPosX(positionX, orientation);
     final int startPosY = Level.getNewPosY(positionY, orientation);
 
+    //Prüft, ob kein anderes Objekt bereits am gewünschten Erzeugungsort ist
     if(!Level.active.collisionAt(startPosX, startPosY)) {
       this.positionX = startPosX;
       this.positionY = startPosY;

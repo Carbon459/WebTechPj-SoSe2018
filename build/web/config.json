@@ -24,6 +24,7 @@
     "player": "Player",
     "enemyBasic": "BasicTank",
     "enemyFast": "FastTank",
+    "enemyBasic": "ArmoredTank",
     "road_basic": "Background",
     "road_end": "Background",
     "road_intersection": "Background",
