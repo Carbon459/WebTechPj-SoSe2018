@@ -52,6 +52,9 @@ class BattleGameController {
           view.unlockMenu(lastUnlockedLevel);
         }
       });
+
+      //Workaround für Firefox, da sonst mit Leertaste Click Events auf den Level Startbuttons augelöst werden.
+      window.onKeyUp.listen((KeyboardEvent ev) {if(ev.keyCode == KeyCode.SPACE) ev.preventDefault();});
    });
   }
 
@@ -69,8 +72,6 @@ class BattleGameController {
       view.gameStateChange(gamestate = #running);
       view.update(Level.active);
       tick = new Timer.periodic(Config.TICKSPEED, (_) => tickUpdate());
-
-      eventSubscriptions.add(window.onKeyUp.listen((KeyboardEvent ev) {if(ev.keyCode == KeyCode.SPACE) ev.preventDefault();})); //Workaround für Firefox, da sonst mit Leertaste Click Events auf den Level Startbuttons augelöst werden.
 
       //Tastatursteuerung Events
       eventSubscriptions.add(window.onKeyDown.listen((KeyboardEvent ev) {

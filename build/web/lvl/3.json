@@ -1,10 +1,10 @@
 {
   "Level": [
     {
-      "type": "FastTank",
+      "type": "ArmoredTank",
       "positionX": 16,
       "positionY": 1,
-      "baseSprite": "enemyFast",
+      "baseSprite": "enemyBasic",
       "orientation": "left"
     },
     {

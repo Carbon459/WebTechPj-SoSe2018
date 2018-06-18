@@ -154,7 +154,25 @@ class FastTank extends Enemy {
     Level.activeEnemies.add(this);
   }
 }
+class ArmoredTank extends Enemy {
+  ArmoredTank(int posX, int posY, Symbol or) {
+    this.positionX = posX;
+    this.positionY = posY;
+    this.baseSprite = "enemyBasic";
+    this.hp = 2;
+    this.orientation = or;
+    Level.active.setEntity(posX, posY, this);
+    this.addEventListener("slowspeed");
+    Level.activeEnemies.add(this);
+  }
 
+  ///Zeigt andere Sprite bei Schaden
+  void damage(int dmg) {
+    super.damage(dmg);
+    this.baseSprite = "enemyFast";
+    Level.active.reportChange(this.positionX, this.positionY);
+  }
+}
 class Scenery extends Entity {
   Scenery(int posX, int posY, String sprite, Symbol or) {
     this.positionX = posX;

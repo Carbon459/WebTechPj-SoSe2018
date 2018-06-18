@@ -372,6 +372,9 @@ class LevelLoader {
       case "FastTank":
         new FastTank(posX, posY, orientation);
         break;
+      case "ArmoredTank":
+        new ArmoredTank(posX, posY, orientation);
+        break;
       case "PowerupHeal":
         new PowerupHeal(posX,posY);
         break;
