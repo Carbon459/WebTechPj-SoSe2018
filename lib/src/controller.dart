@@ -65,6 +65,8 @@ class BattleGameController {
     currentLevel = lvl;
     Level.active = new Level(Config.XFIELDSIZE, Config.YFIELDSIZE);
     view.createEmptyField();
+    view.setGameSize(Config.XFIELDSIZE); //Damit das Stylesheet für die Breite richtig eingestellt ist
+
     LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
       if(Config.DEBUG) print("LevelLoader: done");
 

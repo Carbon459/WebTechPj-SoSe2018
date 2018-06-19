@@ -124,6 +124,12 @@ class BattleView {
     tableFields[y][x].querySelector("div").style.color = clr;
   }
 
+  ///Passt das Stylesheet an die aktuelle Spielfeldgröße an
+  void setGameSize(int xSize) {
+    querySelectorAll("td").style.setProperty("width", "calc(100%/${xSize})");
+    querySelector("#game").style.setProperty("max-width", "${xSize}0vh");
+  }
+
   /// Entsperrt alle Buttons bis Level [lastUnlockedLevel]
   void unlockMenu(int lastUnlockedLevel) {
     for(int i = 1; i <= lastUnlockedLevel; i++) {
