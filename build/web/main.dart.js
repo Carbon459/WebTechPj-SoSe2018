@@ -5293,7 +5293,9 @@ C.a.si(z,0)
 z=this.a
 if(b){this.d=C.A
 z.av(C.A)}else{this.d=C.z
-z.av(C.z)}this.a.dC(this.f)},
+z.av(C.z)}z=document.querySelector("#controls").style
+z.visibility="hidden"
+this.a.dC(this.f)},
 cl:function(){if(window.localStorage.getItem("lastUnlockedLevel")==null)window.localStorage.setItem("lastUnlockedLevel",J.Q(this.f))
 else{var z=H.bp(window.localStorage.getItem("lastUnlockedLevel"),null,null)
 if(J.d1(this.f,z))window.localStorage.setItem("lastUnlockedLevel",J.Q(this.f))

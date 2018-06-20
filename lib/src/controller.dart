@@ -130,6 +130,7 @@ class BattleGameController {
     if(won) view.gameStateChange(gamestate = #gamewon);
     else view.gameStateChange(gamestate = #gameover);
 
+    querySelector("#controls").style.visibility = "hidden";
     view.unlockMenu(lastUnlockedLevel);
   }
 
