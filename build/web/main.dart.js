@@ -6069,7 +6069,7 @@ fq:function(a){var z,y
 if(typeof a!=="number")return H.o(a)
 z="Hauptmen\xfc<br>"
 y=1
-for(;y<=a;++y)z+='<button id="level'+y+'" type="button" disabled>Start Level '+y+"</button>"
+for(;y<=a;++y)z+='<button id="level'+y+'" type="button" disabled>Level '+y+"</button>"
 z=(!P.bJ("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+'<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>'
 J.aV(document.querySelector("#menu"),z)},
 fp:function(){var z,y,x,w
