@@ -53,7 +53,7 @@ td {
     position: fixed;
     left: 50%;
     top: 50%;
-    margin: calc(-381px/2) 0px 0px calc(-138px/2);
+    margin: calc(-25vh/2) 0px 0px calc(-25vw/2);
     font-size: 20pt;
     font-family: Arial;
     z-index: 100;
@@ -80,8 +80,9 @@ button:disabled {
     border: 3px solid #e5e5e5;
 }
 #orientationWarning {
-    font-size: 18px;
-    width: 138px;
+    visibility: visible;
+    font-size: 25px;
+    width: 137px;
     color: darkred;
 }
 #gameover{
@@ -92,7 +93,7 @@ button:disabled {
     border-radius: 20px;
     left: 50%;
     top: 50%;
-    margin: calc(-166px/2) 0px 0px calc(-383px/2);
+    margin: calc(-50vh/2) 0px 0px calc(-50vw/2);
     font-size: 20pt;
     font-family: Arial;
     background-color: red;
@@ -106,7 +107,7 @@ button:disabled {
     border-radius: 20px;
     left: 50%;
     top: 50%;
-    margin: calc(-166px/2) 0px 0px calc(-238px/2);
+    margin: calc(-50vh/2) 0px 0px calc(-50vw/2);
     font-size: 20pt;
     font-family: Arial;
     background-color: green;
