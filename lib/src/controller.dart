@@ -48,8 +48,8 @@ class BattleGameController {
       }
       window.addEventListener('orientationchange',(x) {
         if(menu) {
-          view.drawMenu(Config.MAXLEVEL);
-          view.unlockMenu(lastUnlockedLevel);
+          if(window.orientation == 0 || window.orientation == 180) view.showOrientationWarning(true);
+          else view.showOrientationWarning(false);
         }
       });
 

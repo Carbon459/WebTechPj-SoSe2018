@@ -144,8 +144,13 @@ class BattleView {
       html += '<button id="level$i" type="button" disabled>Start Level $i</button><br>';
     }
     if (!TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
-    if(window.orientation == 0 || window.orientation == 180) html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
+    html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
     querySelector("#menu").innerHtml = html;
+  }
+
+  ///Zeigt oder versteckt die Orientierungswarnung
+  void showOrientationWarning(bool show) {
+    querySelector("#orientationWarning").style.visibility = show ? "visible" : "hidden";
   }
 
   /// Erstellt und zeigt das Hauptbedienungselement des LevelBuilders

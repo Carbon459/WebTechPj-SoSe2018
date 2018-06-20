@@ -80,8 +80,9 @@ button:disabled {
     border: 3px solid #e5e5e5;
 }
 #orientationWarning {
+    visibility: visible;
     font-size: 25px;
-    width: 137.844px;
+    width: 137px;
     color: darkred;
 }
 #gameover{
