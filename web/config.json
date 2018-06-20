@@ -2,7 +2,7 @@
   "DEBUG": "false",
   "XFIELDSIZE": 18,
   "YFIELDSIZE": 10,
-  "MAXLEVEL": 3,
+  "MAXLEVEL": 9,
   "MAXPLAYERHP": 3,
   "TICKSPEED": 100,
   "SHOOTSPEED": 500,

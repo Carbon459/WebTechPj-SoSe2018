@@ -141,7 +141,7 @@ class BattleView {
   void drawMenu(int levelCount) {
     String html = "Hauptmenü<br>";
     for(int i = 1; i <= levelCount; i++) {
-      html += '<button id="level$i" type="button" disabled>Start Level $i</button><br>';
+      html += '<button id="level$i" type="button" disabled>Start Level $i</button>';
     }
     if (!TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
     html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
