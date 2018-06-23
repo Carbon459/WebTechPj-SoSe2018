@@ -6071,7 +6071,7 @@ y.getAttribute("disabled")
 y.removeAttribute("disabled")}},
 fq:function(a){var z,y
 if(typeof a!=="number")return H.o(a)
-z="Hauptmen\xfc<br>"
+z="Main menu<br>"
 y=1
 for(;y<=a;++y)z+='<button id="level'+y+'" type="button" disabled>Level '+y+"</button>"
 z=(!P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+'<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>'

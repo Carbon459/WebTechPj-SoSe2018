@@ -139,7 +139,7 @@ class BattleView {
 
   /// Zeigt das Menü an. Es werden [levelCount] Buttons für die Auswahl der Level erstellt.
   void drawMenu(int levelCount) {
-    String html = "Hauptmenü<br>";
+    String html = "Main menu<br>";
     for(int i = 1; i <= levelCount; i++) {
       html += '<button id="level$i" type="button" disabled>Level $i</button>';
     }
