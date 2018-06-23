@@ -28,9 +28,9 @@ class Level{
   static Level active;
 
   ///Eine Liste aller Gegner, die noch am Leben sind. Wird vom Pathfinding genutzt.
-  static List<Enemy> activeEnemies = new List<Enemy>();
+  List<Enemy> activeEnemies = new List<Enemy>();
   ///Eine Liste aller Projektile, die noch "in der Luft" sind (Zu Aufräumzwecken getrackt)
-  static List<Projectile> activeProjectiles = new List<Projectile>();
+  List<Projectile> activeProjectiles = new List<Projectile>();
 
   ///Das Spielfeld aller Objekte mit Kollision
   List<List<Entity>> levelField;

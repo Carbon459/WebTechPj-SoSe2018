@@ -49,7 +49,7 @@ class Player extends DynamicEntity {
       case 'Symbol("left")': if(this.orientation == #left) tmp = super.moveDir(direction); else this.orientation = #left; break;
     }
     Level.active.reportChange(this.positionX, this.positionY);
-    Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
+    Level.active.mapPathToEntity(Level.active.activeEnemies, Player.active);
     return tmp;
   }
 
@@ -103,7 +103,7 @@ class Projectile extends DynamicEntity {
     //Projektil ins modellFeld setzen falls in die gewünschte Richtung überhaupt Platz ist(Kein Platz = eventListener leer).
     if(this.ev != null) {
       Level.active.setEntity(this.positionX, this.positionY, this);
-      Level.activeProjectiles.add(this);
+      Level.active.activeProjectiles.add(this);
     }
   }
 
@@ -127,7 +127,7 @@ class Projectile extends DynamicEntity {
   void destroy() {
     Level.active.removeEntity(positionX, positionY);
     this.removeEventListener();
-    Level.activeProjectiles.remove(this);
+    Level.active.activeProjectiles.remove(this);
   }
 
 }
@@ -141,7 +141,7 @@ class BasicTank extends Enemy {
     this.orientation = or;
     Level.active.setEntity(posX, posY, this);
     this.addEventListener("slowspeed");
-    Level.activeEnemies.add(this);
+    Level.active.activeEnemies.add(this);
   }
 }
 class FastTank extends Enemy {
@@ -153,7 +153,7 @@ class FastTank extends Enemy {
     this.orientation = or;
     Level.active.setEntity(posX, posY, this);
     this.addEventListener("middlespeed");
-    Level.activeEnemies.add(this);
+    Level.active.activeEnemies.add(this);
   }
 }
 class ArmoredTank extends Enemy {
@@ -165,7 +165,7 @@ class ArmoredTank extends Enemy {
     this.orientation = or;
     Level.active.setEntity(posX, posY, this);
     this.addEventListener("slowspeed");
-    Level.activeEnemies.add(this);
+    Level.active.activeEnemies.add(this);
   }
 
   ///Zeigt andere Sprite bei Schaden

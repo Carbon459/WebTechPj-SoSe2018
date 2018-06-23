@@ -70,7 +70,7 @@ class BattleGameController {
     LevelLoader.getLevelFromJson("lvl/$lvl.json").then((x) {
       if(Config.DEBUG) print("LevelLoader: done");
 
-      Level.active.mapPathToEntity(Level.activeEnemies, Player.active);
+      Level.active.mapPathToEntity(Level.active.activeEnemies, Player.active);
       view.gameStateChange(gamestate = #running);
       view.update(Level.active);
       tick = new Timer.periodic(Config.TICKSPEED, (_) => tickUpdate());
@@ -116,14 +116,14 @@ class BattleGameController {
     for(var x in eventSubscriptions) { //Alle Inputevents (außer Menübuttons!) canceln
       x.cancel();
     }
-    for(Enemy x in Level.activeEnemies) { //Gegnerevents canceln
+    for(Enemy x in Level.active.activeEnemies) { //Gegnerevents canceln
       x.removeEventListener();
     }
-    for(Projectile x in Level.activeProjectiles) { //Projektilevent canceln (könnten noch welche in der luft sein)
+    for(Projectile x in Level.active.activeProjectiles) { //Projektilevent canceln (könnten noch welche in der luft sein)
       x.removeEventListener();
     }
-    Level.activeEnemies.clear();
-    Level.activeProjectiles.clear();
+    Level.active.activeEnemies.clear();
+    Level.active.activeProjectiles.clear();
     Player.active = null;
     eventSubscriptions.clear();
 
@@ -166,7 +166,7 @@ class BattleGameController {
 
     if(!Player.isAlive())
       stop(false); //Spieler tot -> Game over
-    else if(Level.activeEnemies.isEmpty) {//Alle Gegner tot
+    else if(Level.active.activeEnemies.isEmpty) {//Alle Gegner tot
       if(lastUnlockedLevel != Config.MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
         lastUnlockedLevel++;
         syncSaveData();

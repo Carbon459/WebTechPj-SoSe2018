@@ -202,7 +202,7 @@ abstract class Enemy extends DynamicEntity {
   /// Entfernt den Gegner außerdem noch aus der Liste vom Level.
   void destroy() {
     super.destroy();
-    Level.activeEnemies.remove(this);
+    Level.active.activeEnemies.remove(this);
   }
 }
 
