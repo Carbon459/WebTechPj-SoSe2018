@@ -160,7 +160,7 @@ class ArmoredTank extends Enemy {
   ArmoredTank(int posX, int posY, Symbol or) {
     this.positionX = posX;
     this.positionY = posY;
-    this.baseSprite = "enemyBasic";
+    this.baseSprite = "enemyHeavy";
     this.hp = 2;
     this.orientation = or;
     Level.active.setEntity(posX, posY, this);
@@ -171,7 +171,7 @@ class ArmoredTank extends Enemy {
   ///Zeigt andere Sprite bei Schaden
   void damage(int dmg) {
     super.damage(dmg);
-    this.baseSprite = "enemyFast";
+    this.baseSprite = "enemyHeavy_damaged";
     Level.active.reportChange(this.positionX, this.positionY);
   }
 }
