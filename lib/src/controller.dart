@@ -8,6 +8,7 @@ class BattleGameController {
   Symbol gamestate = #menu;
   int currentLevel = 0;
   int lastUnlockedLevel = 1;
+
   ///Enthält Steuerungsevent subscriptions
   List<StreamSubscription> eventSubscriptions = new List<StreamSubscription>();
 
@@ -167,7 +168,7 @@ class BattleGameController {
     if(!Player.isAlive())
       stop(false); //Spieler tot -> Game over
     else if(Level.active.activeEnemies.isEmpty) {//Alle Gegner tot
-      if(lastUnlockedLevel != Config.MAXLEVEL) {  //Nächste Level freischalten falls vorhanden
+      if(lastUnlockedLevel != Config.MAXLEVEL && currentLevel == lastUnlockedLevel) {  //Nächste Level freischalten falls vorhanden
         lastUnlockedLevel++;
         syncSaveData();
       }

@@ -5467,7 +5467,7 @@ x=$.G
 x=x==null?x:x.c
 y.hc(x==null?0:x)
 if($.G==null)z.cg(0,!1)
-else if($.i.a.length===0){if(!J.u(z.f,$.bD)){z.f=J.C(z.f,1)
+else if($.i.a.length===0){if(!J.u(z.f,$.bD)&&z.e===z.f){z.f=J.C(z.f,1)
 z.cl()}z.cg(0,!0)}if(J.u(z.c,0)){window.dispatchEvent(W.ch("slowspeed",!0,!0,null))
 if($.at)z.cd(!0)
 z.c=$.di}if(J.fv(z.c,2)===0)window.dispatchEvent(W.ch("middlespeed",!0,!0,null))
