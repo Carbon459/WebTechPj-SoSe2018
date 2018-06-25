@@ -159,7 +159,7 @@ class BattleView {
     html += '<button id="rotateSwitch" type="button">Rotate Background</button><br>';
     int i = 0;
     for(String x in Config.LEVELBUILDINGBLOCKS.keys) {
-      if(i % 10 == 0) html+="<br>";
+      if(i % 20 == 0) html+="<br>";
       html += "<img id='$x' src='img/$x.png'>";
       i++;
     }

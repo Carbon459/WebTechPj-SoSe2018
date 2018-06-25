@@ -5062,7 +5062,7 @@ break
 case"ArmoredTank":z=new M.fV(null,null,null,-1,null,null,P.ai(null,P.n))
 z.a=b
 z.b=c
-z.d="enemyBasic"
+z.d="enemyHeavy"
 z.c=2
 z.e=e
 y=$.i
@@ -5626,7 +5626,7 @@ hH:{"^":"bJ;r,a,b,c,d,e,f"},
 fV:{"^":"bJ;r,a,b,c,d,e,f",
 bO:function(a){var z,y,x,w
 this.dX(a)
-this.d="enemyFast"
+this.d="enemyHeavy_damaged"
 z=$.i
 y=this.a
 x=this.b
@@ -6078,7 +6078,7 @@ z=(!P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder<
 J.aU(document.querySelector("#menu"),z)},
 fp:function(){var z,y,x,w
 for(z=J.ae(J.fG($.cg)),y='<button id="printLevel" type="button">Print Level JSON</button> <button id="rotateSwitch" type="button">Rotate Background</button><br>',x=0;z.l();){w=z.gp()
-if(x%10===0)y+="<br>"
+if(x%20===0)y+="<br>"
 y+="<img id='"+H.e(w)+"' src='img/"+H.e(w)+".png'>";++x}J.aU(document.querySelector("#levelBuilderControls"),y)}}}],["","",,F,{"^":"",
 nz:[function(){return M.fZ()},"$0","fn",0,0,1]},1]]
 setupProgram(dart,0)
