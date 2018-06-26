@@ -143,7 +143,7 @@ class BattleView {
     for(int i = 1; i <= levelCount; i++) {
       html += '<button id="level$i" type="button" disabled>Level $i</button>';
     }
-    if (TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
+    if (!TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
     html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
     querySelector("#menu").innerHtml = html;
   }

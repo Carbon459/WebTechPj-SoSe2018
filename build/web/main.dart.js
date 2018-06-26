@@ -5399,7 +5399,7 @@ W.R(y.a,y.b,new M.h_(z,x),!1,H.r(y,0));++x}y=document
 new W.eG(new W.cH(y.querySelectorAll(".btm"),[null]),!1,"click",[W.ar]).dh(new M.h0(z))
 w=J.af(y.querySelector("#retry"))
 W.R(w.a,w.b,new M.h1(z),!1,H.r(w,0))
-if(P.bH("TouchEvent")){y=J.af(y.querySelector("#levelbuilder"))
+if(!P.bH("TouchEvent")){y=J.af(y.querySelector("#levelbuilder"))
 W.R(y.a,y.b,new M.h2(z),!1,H.r(y,0))}C.j.aW(window,"orientationchange",new M.h3(z),null)
 W.R(window,"keyup",new M.h4(),!1,W.bk)},null,null,2,0,null,2,"call"]},
 h_:{"^":"d:4;a,b",
@@ -6074,7 +6074,7 @@ if(typeof a!=="number")return H.o(a)
 z="Main menu<br>"
 y=1
 for(;y<=a;++y)z+='<button id="level'+y+'" type="button" disabled>Level '+y+"</button>"
-z=(P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+'<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>'
+z=(!P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+'<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>'
 J.aU(document.querySelector("#menu"),z)},
 fp:function(){var z,y,x,w
 for(z=J.ae(J.fG($.cg)),y='<button id="printLevel" type="button">Print Level JSON</button> <button id="rotateSwitch" type="button">Rotate Background</button><br>',x=0;z.l();){w=z.gp()

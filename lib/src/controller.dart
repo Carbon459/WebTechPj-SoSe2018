@@ -42,7 +42,7 @@ class BattleGameController {
       });
 
 
-      if(TouchEvent.supported) {
+      if(!TouchEvent.supported) {
         querySelector("#levelbuilder").onClick.listen((MouseEvent ev) {
           startLevelBuilder();
         });
