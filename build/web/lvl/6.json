@@ -37,6 +37,13 @@
     },
     {
       "type": "Scenery",
+      "positionX": 6,
+      "positionY": 5,
+      "baseSprite": "burger",
+      "orientation": "up"
+    },
+    {
+      "type": "Scenery",
       "positionX": 12,
       "positionY": 0,
       "baseSprite": "tree2",

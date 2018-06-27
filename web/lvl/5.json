@@ -4,7 +4,7 @@
       "type": "Scenery",
       "positionX": 0,
       "positionY": 0,
-      "baseSprite": "hightower",
+      "baseSprite": "hightower3",
       "orientation": "right"
     },
     {
@@ -494,7 +494,7 @@
       "type": "Scenery",
       "positionX": 2,
       "positionY": 3,
-      "baseSprite": "hightower_right",
+      "baseSprite": "hightower2_right",
       "orientation": "down"
     },
     {
@@ -508,7 +508,7 @@
       "type": "Scenery",
       "positionX": 3,
       "positionY": 3,
-      "baseSprite": "hightower_left",
+      "baseSprite": "hightower2_left",
       "orientation": "down"
     },
     {
@@ -543,7 +543,7 @@
       "type": "Scenery",
       "positionX": 7,
       "positionY": 3,
-      "baseSprite": "hightower",
+      "baseSprite": "hightower4",
       "orientation": "up"
     },
     {
@@ -557,14 +557,14 @@
       "type": "Scenery",
       "positionX": 9,
       "positionY": 3,
-      "baseSprite": "hightower_left",
+      "baseSprite": "hightower3_left",
       "orientation": "up"
     },
     {
       "type": "Scenery",
       "positionX": 10,
       "positionY": 3,
-      "baseSprite": "hightower_right",
+      "baseSprite": "hightower3_right",
       "orientation": "up"
     },
     {
