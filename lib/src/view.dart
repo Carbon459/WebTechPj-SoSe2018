@@ -13,6 +13,8 @@ class BattleView {
         querySelector("#gameover").style.visibility = "hidden";
         querySelector("#gamewon").style.visibility = "hidden";
         querySelector("#levelBuilderControls").style.visibility = "hidden";
+        querySelector("#backtankblue").style.visibility = "visible";
+        querySelector("#backtankred").style.visibility = "visible";
         break;
       case 'Symbol("running")':
         querySelector("#game").style.visibility = "visible";
@@ -20,6 +22,8 @@ class BattleView {
         querySelector("#gameover").style.visibility = "hidden";
         querySelector("#gamewon").style.visibility = "hidden";
         querySelector("#levelBuilderControls").style.visibility = "hidden";
+        querySelector("#backtankblue").style.visibility = "hidden";
+        querySelector("#backtankred").style.visibility = "hidden";
         break;
       case 'Symbol("gameover")':
         querySelector("#game").style.visibility = "visible";
@@ -27,6 +31,8 @@ class BattleView {
         querySelector("#gameover").style.visibility = "visible";
         querySelector("#gamewon").style.visibility = "hidden";
         querySelector("#levelBuilderControls").style.visibility = "hidden";
+        querySelector("#backtankblue").style.visibility = "hidden";
+        querySelector("#backtankred").style.visibility = "hidden";
         break;
       case 'Symbol("gamewon")':
         querySelector("#game").style.visibility = "visible";
@@ -34,6 +40,8 @@ class BattleView {
         querySelector("#gameover").style.visibility = "hidden";
         querySelector("#gamewon").style.visibility = "visible";
         querySelector("#levelBuilderControls").style.visibility = "hidden";
+        querySelector("#backtankblue").style.visibility = "hidden";
+        querySelector("#backtankred").style.visibility = "hidden";
         break;
       case 'Symbol("levelbuilder")':
         querySelector("#game").style.visibility = "visible";
@@ -41,6 +49,8 @@ class BattleView {
         querySelector("#gameover").style.visibility = "hidden";
         querySelector("#gamewon").style.visibility = "hidden";
         querySelector("#levelBuilderControls").style.visibility = "visible";
+        querySelector("#backtankblue").style.visibility = "hidden";
+        querySelector("#backtankred").style.visibility = "hidden";
         break;
     }
 
@@ -145,6 +155,8 @@ class BattleView {
     }
     if (!TouchEvent.supported) html += '<button id="levelbuilder" type="button">Level Builder</button><br>';
     html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
+    html += "<img id='backtankblue' src='img/back_tank_blue.png'>";
+    html += "<img id='backtankred' src='img/back_tank_red.png'>";
     querySelector("#menu").innerHtml = html;
   }
 
