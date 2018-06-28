@@ -88,7 +88,11 @@ button:disabled {
 #orientationWarning {
     font-size: 23px;
     width: 276px;
-    color: darkred;
+    color: red;
+    text-shadow:    1px  1px 1px black,
+                    1px -1px 1px black,
+                    -1px  1px 1px black,
+                    -1px -1px 1px black;
 }
 #gameover{
     visibility: hidden;
@@ -180,4 +184,22 @@ button:disabled {
     left: 10%;
     opacity: 0.5;
     padding: 5px;
+}
+#backtankblue {
+    position: fixed;
+    visibility: visible;
+    width: 50vw;
+    max-width: 60vh;
+    right: 0%;
+    top: 0%;
+    z-index: -1;
+}
+#backtankred {
+    position: fixed;
+    visibility: visible;
+    width: 50vw;
+    max-width: 60vh;
+    left: 0%;
+    bottom: 0%;
+    z-index: -1;
 }

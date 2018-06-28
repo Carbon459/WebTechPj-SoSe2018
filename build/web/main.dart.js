@@ -5918,8 +5918,12 @@ y=z.querySelector("#gameover").style
 y.visibility="hidden"
 y=z.querySelector("#gamewon").style
 y.visibility="hidden"
-z=z.querySelector("#levelBuilderControls").style
-z.visibility="hidden"
+y=z.querySelector("#levelBuilderControls").style
+y.visibility="hidden"
+y=z.querySelector("#backtankblue").style
+y.visibility="visible"
+z=z.querySelector("#backtankred").style
+z.visibility="visible"
 break
 case'Symbol("running")':z=document
 y=z.querySelector("#game").style
@@ -5930,7 +5934,11 @@ y=z.querySelector("#gameover").style
 y.visibility="hidden"
 y=z.querySelector("#gamewon").style
 y.visibility="hidden"
-z=z.querySelector("#levelBuilderControls").style
+y=z.querySelector("#levelBuilderControls").style
+y.visibility="hidden"
+y=z.querySelector("#backtankblue").style
+y.visibility="hidden"
+z=z.querySelector("#backtankred").style
 z.visibility="hidden"
 break
 case'Symbol("gameover")':z=document
@@ -5942,7 +5950,11 @@ y=z.querySelector("#gameover").style
 y.visibility="visible"
 y=z.querySelector("#gamewon").style
 y.visibility="hidden"
-z=z.querySelector("#levelBuilderControls").style
+y=z.querySelector("#levelBuilderControls").style
+y.visibility="hidden"
+y=z.querySelector("#backtankblue").style
+y.visibility="hidden"
+z=z.querySelector("#backtankred").style
 z.visibility="hidden"
 break
 case'Symbol("gamewon")':z=document
@@ -5954,7 +5966,11 @@ y=z.querySelector("#gameover").style
 y.visibility="hidden"
 y=z.querySelector("#gamewon").style
 y.visibility="visible"
-z=z.querySelector("#levelBuilderControls").style
+y=z.querySelector("#levelBuilderControls").style
+y.visibility="hidden"
+y=z.querySelector("#backtankblue").style
+y.visibility="hidden"
+z=z.querySelector("#backtankred").style
 z.visibility="hidden"
 break
 case'Symbol("levelbuilder")':z=document
@@ -5966,8 +5982,12 @@ y=z.querySelector("#gameover").style
 y.visibility="hidden"
 y=z.querySelector("#gamewon").style
 y.visibility="hidden"
-z=z.querySelector("#levelBuilderControls").style
-z.visibility="visible"
+y=z.querySelector("#levelBuilderControls").style
+y.visibility="visible"
+y=z.querySelector("#backtankblue").style
+y.visibility="hidden"
+z=z.querySelector("#backtankred").style
+z.visibility="hidden"
 break}},
 a9:function(a){var z,y,x,w,v,u,t,s,r,q,p,o,n,m,l,k,j
 z=window.performance.now()
@@ -6074,7 +6094,7 @@ if(typeof a!=="number")return H.o(a)
 z="Main menu<br>"
 y=1
 for(;y<=a;++y)z+='<button id="level'+y+'" type="button" disabled>Level '+y+"</button>"
-z=(!P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+'<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>'
+z=(!P.bH("TouchEvent")?z+'<button id="levelbuilder" type="button">Level Builder</button><br>':z)+"<div id=\"orientationWarning\">Playing in Landscape mode is strongly advised!</div><img id='backtankblue' src='img/back_tank_blue.png'><img id='backtankred' src='img/back_tank_red.png'>"
 J.aU(document.querySelector("#menu"),z)},
 fp:function(){var z,y,x,w
 for(z=J.ae(J.fG($.cg)),y='<button id="printLevel" type="button">Print Level JSON</button> <button id="rotateSwitch" type="button">Rotate Background</button><br>',x=0;z.l();){w=z.gp()
