@@ -157,6 +157,7 @@ class BattleView {
     html+= '<div id="orientationWarning">Playing in Landscape mode is strongly advised!</div>';
     html += "<img id='backtankblue' src='img/back_tank_blue.png'>";
     html += "<img id='backtankred' src='img/back_tank_red.png'>";
+
     querySelector("#menu").innerHtml = html;
   }
 
