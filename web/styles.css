@@ -63,6 +63,10 @@ td {
     font-family: Arial;
     text-align: center;
     z-index: 100;
+    text-shadow:    1px  1px 1px white,
+    1px -1px 1px white,
+    -1px  1px 1px white,
+    -1px -1px 1px white;
 }
 button {
     background-color: #e5e5e5;
