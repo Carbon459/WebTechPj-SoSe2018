@@ -170,6 +170,7 @@ class ArmoredTank extends Enemy {
   ///Zeigt andere Sprite bei Schaden
   void damage(int dmg) {
     super.damage(dmg);
+    this.currentAnimation.addFirst("enemyHeavy_damaged"); //Workaround. Ohne dies wird explosionsanimation bei ArmoredTank nicht angezeigt.
     this.baseSprite = "enemyHeavy_damaged";
     Level.active.reportChange(this.positionX, this.positionY);
   }
