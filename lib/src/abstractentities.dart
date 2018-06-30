@@ -47,6 +47,7 @@ abstract class Entity {
         currentAnimation.add("explosion");
         break;
     }
+    Level.active.reportChange(this.positionX, this.positionY);
   }
 
   /**
@@ -68,7 +69,6 @@ abstract class Entity {
    */
   void destroy() {
     setAnimationSprite("explode");
-    Level.active.reportChange(this.positionX, this.positionY);
     new Timer(Config.EXPLOSIONDUR, () => Level.active.removeEntity(positionX, positionY));
     if(Config.DEBUG) {print("${this} destroyed");}
   }

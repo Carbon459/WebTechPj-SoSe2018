@@ -129,7 +129,6 @@ class Projectile extends DynamicEntity {
     this.removeEventListener();
     Level.active.activeProjectiles.remove(this);
   }
-
 }
 
 class BasicTank extends Enemy {

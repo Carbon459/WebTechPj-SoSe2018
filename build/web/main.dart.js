@@ -5110,28 +5110,27 @@ return z[0]},
 c5:function(){var z=this.f
 if(!z.gq(z))return J.C(z.bW(),".png")
 else return J.C(this.d,".png")},
-c9:function(a){var z=this.f
+c9:function(a){var z,y,x,w
+z=this.f
 z.a5(0)
 switch(a){case"shoot":z.N(J.C(this.d,"_shoot"))
 break
 case"explode":z.N("explosion")
-break}},
-c6:function(){var z=this.e
-if(z==null)return 0
-switch(z.j(0)){case'Symbol("up")':return 0
-case'Symbol("right")':return 90
-case'Symbol("down")':return 180
-case'Symbol("left")':return 270}return 0},
-a6:["dY",function(){var z,y,x,w
-this.c9("explode")
-z=$.i
+break}z=$.i
 y=this.a
 x=this.b
 z=z.f
 w=new M.y(null,null,null)
 w.a=y
 w.b=x
-z.push(w)
+z.push(w)},
+c6:function(){var z=this.e
+if(z==null)return 0
+switch(z.j(0)){case'Symbol("up")':return 0
+case'Symbol("right")':return 90
+case'Symbol("down")':return 180
+case'Symbol("left")':return 270}return 0},
+a6:["dY",function(){this.c9("explode")
 P.ei($.dg,new M.hE(this))
 if($.at)P.ad(H.bm(this)+" destroyed")}],
 bO:["dX",function(a){if(J.b3(this.c,0))return
